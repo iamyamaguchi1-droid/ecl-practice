@@ -233,6 +233,13 @@
 
                     <div class="bg-white p-3 rounded-lg border border-slate-200 md:col-span-2">
                         <span class="font-bold text-indigo-900 block mb-1">
+                            <i class="fa-solid fa-language text-purple-500 mr-1"></i>スクリプト / 本文の日本語訳
+                        </span>
+                        <div id="explTranslation" class="text-slate-700 whitespace-pre-line leading-relaxed"></div>
+                    </div>
+
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 md:col-span-2">
+                        <span class="font-bold text-indigo-900 block mb-1">
                             <i class="fa-solid fa-code-branch text-amber-500 mr-1"></i>文法ポイント
                         </span>
                         <div id="explGrammar" class="text-slate-700"></div>
@@ -240,9 +247,9 @@
 
                     <div class="bg-white p-3 rounded-lg border border-slate-200 md:col-span-2">
                         <span class="font-bold text-indigo-900 block mb-1">
-                            <i class="fa-solid fa-quote-left text-blue-500 mr-1"></i>追加の実践例文
+                            <i class="fa-solid fa-quote-left text-blue-500 mr-1"></i>多様な用法による3つの実践例文
                         </span>
-                        <div id="explExample" class="text-slate-700 italic"></div>
+                        <div id="explExamples" class="text-slate-700 space-y-1.5 font-sans"></div>
                     </div>
                 </div>
             </div>
@@ -324,57 +331,345 @@
     <script>
         // --- 1. 語彙・基本データバンク ---
         const wordBank = [
-            { word: "abandon", jp: "放棄する・見捨てる", syn: "give up", ant: "continue", ex: "The crew had to abandon the damaged vehicle.", grammar: "動詞。abandon + 名詞で「〜を放棄する」。" },
-            { word: "accurate", jp: "正確な・精密な", syn: "correct", ant: "incorrect", ex: "Please provide accurate information on the form.", grammar: "形容詞。名詞形は accuracy、反対語は inaccurate。" },
-            { word: "achieve", jp: "達成する・成し遂げる", syn: "accomplish", ant: "fail", ex: "The team achieved its goal ahead of schedule.", grammar: "動詞。achieve a goal / target のコロケーションで頻出。" },
-            { word: "adequate", jp: "十分な・適切な", syn: "sufficient", ant: "insufficient", ex: "We have adequate supplies for the trip.", grammar: "形容詞。adequate for + 名詞。「〜に十分な」。" },
-            { word: "admit", jp: "認める・許可する", syn: "acknowledge", ant: "deny", ex: "He admitted that he had made a mistake.", grammar: "動詞。admit that + 文、または admit doing の形。" },
-            { word: "advance", jp: "前進する・進歩する", syn: "progress", ant: "retreat", ex: "The unit advanced slowly through the valley.", grammar: "動詞・名詞。advance toward + 目的地。" },
-            { word: "advantage", jp: "利点・強み", syn: "benefit", ant: "disadvantage", ex: "One advantage of planning is saving time.", grammar: "名詞。an advantage of + 名詞/動名詞。" },
-            { word: "affect", jp: "影響を与える", syn: "influence", ant: "leave unchanged", ex: "Heavy rain may affect the flight schedule.", grammar: "動詞。affectは動詞、effectは多くの場合名詞。" },
-            { word: "alert", jp: "警戒した・警告する", syn: "watchful", ant: "unaware", ex: "The guard remained alert throughout the night.", grammar: "形容詞・動詞。remain alert で「警戒を怠らない」。" },
-            { word: "allow", jp: "許可する・可能にする", syn: "permit", ant: "forbid", ex: "The officer allowed us to enter the building.", grammar: "動詞。allow + 人 + to不定詞「人が〜するのを許す」。" },
-            { word: "announce", jp: "発表する・告知する", syn: "declare", ant: "conceal", ex: "The airport announced a delay due to fog.", grammar: "動詞。announce a decision / schedule。" },
-            { word: "anxious", jp: "心配して・切望して", syn: "worried", ant: "calm", ex: "She was anxious about the inspection.", grammar: "形容詞。anxious about (心配) / anxious to do (切望)。" },
-            { word: "apparent", jp: "明らかな・一目瞭然の", syn: "obvious", ant: "unclear", ex: "It became apparent that the road was closed.", grammar: "形容詞。It is apparent that + 節。" },
-            { word: "approach", jp: "近づく・接近する", syn: "come near", ant: "withdraw", ex: "The vehicle approached the checkpoint slowly.", grammar: "動詞。approachは他動詞のため前置詞toは不要。" },
-            { word: "appropriate", jp: "ふさわしい・適切な", syn: "suitable", ant: "inappropriate", ex: "Wear appropriate clothing for cold weather.", grammar: "形容詞。appropriate for + 名詞。" },
-            { word: "arrange", jp: "手配する・整列させる", syn: "organize", ant: "disorganize", ex: "We arranged transportation for the visitors.", grammar: "動詞。arrange to do / arrange for + 名詞。" },
-            { word: "assess", jp: "評価する・査定する", syn: "evaluate", ant: "ignore", ex: "The supervisor assessed the risk before departure.", grammar: "動詞。assess the situation / risk / performance。" },
-            { word: "assist", jp: "支援する・手伝う", syn: "help", ant: "hinder", ex: "Two technicians assisted with the repair.", grammar: "動詞。assist 人 with 名詞 / assist in doing。" },
-            { word: "assume", jp: "仮定する・引き受ける", syn: "suppose", ant: "know for certain", ex: "Do not assume the gate is open.", grammar: "動詞。assume that + 文「〜と思い込む」。" },
-            { word: "attempt", jp: "試みる・挑戦する", syn: "try", ant: "give up", ex: "They attempted to restart the engine.", grammar: "動詞・名詞。attempt to do「〜することを試みる」。" },
-            { word: "available", jp: "利用可能な・入手できる", syn: "accessible", ant: "unavailable", ex: "A doctor is available after 1400 hours.", grammar: "形容詞。be available for / to。" },
-            { word: "avoid", jp: "避ける・回避する", syn: "prevent", ant: "face", ex: "Avoid using your phone during the briefing.", grammar: "動詞。avoid の後ろは動名詞 (-ing) を取る。" },
-            { word: "brief", jp: "簡潔な・要約する", syn: "short", ant: "lengthy", ex: "The pilot gave a brief report after landing.", grammar: "形容詞・動詞。brief someone on + 内容。" },
-            { word: "confirm", jp: "確認する・確証する", syn: "verify", ant: "deny", ex: "Please confirm your arrival time by email.", grammar: "動詞。confirm a reservation / details。" },
-            { word: "consider", jp: "検討する・よく考える", syn: "think about", ant: "dismiss", ex: "We should consider another route.", grammar: "動詞。consider の目的語は動名詞 (-ing)。" },
-            { word: "consistent", jp: "一貫した・ブレない", syn: "steady", ant: "inconsistent", ex: "Her performance has been consistent this month.", grammar: "形容詞。be consistent with「〜と一致している」。" },
-            { word: "contribute", jp: "貢献する・寄付する", syn: "help", ant: "undermine", ex: "Every member contributed to the success.", grammar: "動詞。contribute to + 名詞/動名詞。" },
-            { word: "convenient", jp: "便利な・都合が良い", syn: "practical", ant: "inconvenient", ex: "The earlier bus is more convenient for us.", grammar: "形容詞。convenient for 人。" },
-            { word: "decline", jp: "辞退する・減少する", syn: "refuse", ant: "accept", ex: "He declined the offer because he was busy.", grammar: "動詞・名詞。decline an offer「申し出を断る」。" },
-            { word: "delay", jp: "遅らせる・延期する", syn: "postpone", ant: "advance", ex: "The storm delayed our departure by two hours.", grammar: "動詞・名詞。delay A by 時間。" }
+            {
+                word: "abandon",
+                jp: "放棄する・見捨てる",
+                syn: "give up",
+                ant: "continue",
+                examples: [
+                    "【他動詞 (物理的放棄)】 The crew had to abandon the damaged vehicle in the desert.",
+                    "【他動詞 (計画の計画・中止)】 The unit decided to abandon the mission due to severe weather.",
+                    "【名詞 (放漫・没頭)】 He played the game with total abandon and energy."
+                ],
+                grammar: "動詞。abandon + 名詞で「〜を捨てる・中止する」。名詞形も存在。"
+            },
+            {
+                word: "accurate",
+                jp: "正確な・精密な",
+                syn: "correct",
+                ant: "incorrect",
+                examples: [
+                    "【形容詞 (データ・情報)】 Please provide accurate information on the registration form.",
+                    "【形容詞 (計算・測定)】 An accurate measurement is essential for structural stability.",
+                    "【派生語 (副詞 accurately)】 The radar system accurately tracked the target position."
+                ],
+                grammar: "形容詞。名詞形は accuracy、反対語は inaccurate。副詞 accurately。"
+            },
+            {
+                word: "achieve",
+                jp: "達成する・成し遂げる",
+                syn: "accomplish",
+                ant: "fail",
+                examples: [
+                    "【目標の達成】 The team achieved its goal ahead of the strict deadline.",
+                    "【成果・結果の達成】 She achieved excellent results on the final evaluation test.",
+                    "【派生語 (名詞 achievement)】 Finishing the training program was a major achievement."
+                ],
+                grammar: "動詞。achieve a goal / result のコロケーションで多用。"
+            },
+            {
+                word: "adequate",
+                jp: "十分な・適切な",
+                syn: "sufficient",
+                ant: "insufficient",
+                examples: [
+                    "【必要十分な】 We have adequate supplies for the upcoming three-day trip.",
+                    "【目的への適合】 His training was adequate for the initial task requirement.",
+                    "【前置詞連携】 Ensure the safety equipment is adequate for the conditions."
+                ],
+                grammar: "形容詞。adequate for + 名詞「〜に必要な分だけ十分な」。"
+            },
+            {
+                word: "admit",
+                jp: "認める・許可する",
+                syn: "acknowledge",
+                ant: "deny",
+                examples: [
+                    "【事実を認める】 He admitted that he had made a mistake during the briefing.",
+                    "【入場・入会を許可する】 This pass admits one person to the restricted area.",
+                    "【動名詞の目的語】 The pilot admitted making an incorrect calculation."
+                ],
+                grammar: "動詞。admit that + 節、admit doing、admit A to B（AのBへの入場を許す）。"
+            },
+            {
+                word: "advance",
+                jp: "前進する・進歩する",
+                syn: "progress",
+                ant: "retreat",
+                examples: [
+                    "【自動詞 (前進)】 The troops advanced slowly through the dense forest.",
+                    "【名詞 (進歩・事前)】 Scientific advances have improved flight safety significantly.",
+                    "【形容詞 (事前の)】 We received advance warning about the upcoming severe storm."
+                ],
+                grammar: "動詞・名詞・形容詞 (in advance = 事前に, advance notice = 事前通知)。"
+            },
+            {
+                word: "advantage",
+                jp: "利点・強み",
+                syn: "benefit",
+                ant: "disadvantage",
+                examples: [
+                    "【名詞 (利点)】 One advantage of planning is saving precious time.",
+                    "【熟語 (take advantage of)】 You should take advantage of this training opportunity.",
+                    "【対比 (disadvantage)】 Knowing the terrain gives us a distinct advantage."
+                ],
+                grammar: "名詞。an advantage of 名詞 / take advantage of 〜 (〜を活用する)。"
+            },
+            {
+                word: "affect",
+                jp: "影響を与える",
+                syn: "influence",
+                ant: "leave unchanged",
+                examples: [
+                    "【動詞 (直接的影響)】 Heavy rain and fog may affect the flight schedule.",
+                    "【動詞 (感情・情緒)】 The news affected everyone in the operational unit deeply.",
+                    "【混同注意 (effectとの比較)】 The change did not affect the outcome (The effect was minimal)."
+                ],
+                grammar: "動詞。affectは動詞（〜に影響する）、effectは主に名詞（効果・影響）。"
+            },
+            {
+                word: "alert",
+                jp: "警戒した・警告する",
+                syn: "watchful", ant: "unaware",
+                examples: [
+                    "【形容詞 (状態)】 The security guard remained alert throughout the night shift.",
+                    "【動詞 (警告・注意喚起)】 The tower alerted the pilot to the changing wind conditions.",
+                    "【名詞 (警報・警戒状態)】 The base was put on high alert following the incident."
+                ],
+                grammar: "形容詞・動詞・名詞。remain alert (警戒を怠らない)、alert A to B (AにBを警告)。"
+            },
+            {
+                word: "allow",
+                jp: "許可する・可能にする",
+                syn: "permit", ant: "forbid",
+                examples: [
+                    "【allow 人 to do】 The commanding officer allowed us to enter the facility.",
+                    "【 allow for (考慮・見込み)】 We must allow for traffic delays on the main route.",
+                    "【受動態 (be allowed to)】 Smoking is not allowed anywhere inside the building."
+                ],
+                grammar: "動詞。allow + 人 + to不定詞 / allow for 名詞「〜を考慮に入れる」。"
+            },
+            {
+                word: "announce",
+                jp: "発表する・告知する",
+                syn: "declare", ant: "conceal",
+                examples: [
+                    "【公式発表】 The spokesperson announced the new policy at the press briefing.",
+                    "【アナウンス】 The airport announced a two-hour flight delay due to maintenance.",
+                    "【名詞形 (announcement)】 An important announcement will be made shortly."
+                ],
+                grammar: "動詞。announce A to B / announce that + 節。"
+            },
+            {
+                word: "anxious",
+                jp: "心配して・切望して",
+                syn: "worried", ant: "calm",
+                examples: [
+                    "【anxious about (心配)】 She was anxious about the upcoming safety inspection.",
+                    "【anxious to do (切望)】 The trainees were anxious to start their practical lessons.",
+                    "【派生語 (名詞 anxiety)】 Proper preparation can reduce anxiety before exams."
+                ],
+                grammar: "形容詞。anxious about 名詞 (〜を心配して) / anxious to do (〜したがっている)。"
+            },
+            {
+                word: "apparent",
+                jp: "明らかな・一目瞭然の",
+                syn: "obvious", ant: "unclear",
+                examples: [
+                    "【形式主語構文】 It quickly became apparent that the system had malfunctioned.",
+                    "【名詞の前修飾】 There was no apparent damage to the exterior of the aircraft.",
+                    "【副詞 (apparently)】 Apparently, the meeting has been rescheduled for tomorrow."
+                ],
+                grammar: "形容詞。It is apparent that 節 (〜なのは明らかだ)。副詞 apparently。"
+            },
+            {
+                word: "approach",
+                jp: "近づく・方法",
+                syn: "come near", ant: "withdraw",
+                examples: [
+                    "【他動詞 (接近する)】 The rescue vehicle approached the target area with caution.",
+                    "【名詞 (アプローチ・対処法)】 We need a fresh approach to solve this logistics issue.",
+                    "【名詞 (航空着陸進入)】 The aircraft is currently on final approach to runway 09."
+                ],
+                grammar: "動詞 (他動詞のため approach to a place ではなく approach a place) / 名詞。"
+            },
+            {
+                word: "appropriate",
+                jp: "ふさわしい・適切な",
+                syn: "suitable", ant: "inappropriate",
+                examples: [
+                    "【形容詞 (適切な)】 Please wear appropriate protective gear in the workshop.",
+                    "【前置詞 (appropriate for/to)】 This response is appropriate for the current situation.",
+                    "【副詞 (appropriately)】 Make sure all equipment is labeled appropriately."
+                ],
+                grammar: "形容詞。appropriate for/to 名詞。反対語は inappropriate。"
+            },
+            {
+                word: "arrange",
+                jp: "手配する・整列させる",
+                syn: "organize", ant: "disorganize",
+                examples: [
+                    "【手配・準備】 We arranged ground transportation for the visiting dignitaries.",
+                    "【arrange to do】 The mechanics arranged to meet at midnight for repairs.",
+                    "【配置・整理】 The chairs were neatly arranged in rows inside the auditorium."
+                ],
+                grammar: "動詞。arrange A for B / arrange to do / arrange A in order。"
+            },
+            {
+                word: "assess",
+                jp: "評価する・査定する",
+                syn: "evaluate", ant: "ignore",
+                examples: [
+                    "【リスク・状況の評価】 The officer assessed the operational risk before departure.",
+                    "【能力・成果の測定】 Instructors assess student performance every two weeks.",
+                    "【派生語 (名詞 assessment)】 Risk assessment is a mandatory part of flight planning."
+                ],
+                grammar: "動詞。assess the situation / risk / value / performance。"
+            },
+            {
+                word: "assist",
+                jp: "支援する・手伝う",
+                syn: "help", ant: "hinder",
+                examples: [
+                    "【assist with 名詞】 Two senior technicians assisted with the engine overhaul.",
+                    "【assist 人 in doing】 She assisted the crew in completing the paperwork.",
+                    "【名詞形 (assistance)】 Call this emergency number if you need immediate assistance."
+                ],
+                grammar: "動詞。assist 人 with 名詞 / assist 人 in doing / 名詞 assistance。"
+            },
+            {
+                word: "assume",
+                jp: "仮定する・引き受ける",
+                syn: "suppose", ant: "know for certain",
+                examples: [
+                    "【思い込む・仮定する】 Do not assume the clearance has been granted without confirmation.",
+                    "【責任・任務を引き受ける】 Commander Smith will assume command of the base next month.",
+                    "【態度・性質を帯びる】 The situation quickly assumed serious proportions."
+                ],
+                grammar: "動詞。assume that 節 / assume responsibility (責任を引き受ける)。"
+            },
+            {
+                word: "attempt",
+                jp: "試みる・挑戦する",
+                syn: "try", ant: "give up",
+                examples: [
+                    "【動詞 (attempt to do)】 The pilot attempted to land despite the heavy crosswind.",
+                    "【名詞 (試み・挑戦)】 Their first attempt to restore power was successful.",
+                    "【名詞 (at -ing)】 He made an attempt at repairing the broken communication line."
+                ],
+                grammar: "動詞・名詞。attempt to do / make an attempt at -ing。"
+            },
+            {
+                word: "available",
+                jp: "利用可能な・入手できる",
+                syn: "accessible", ant: "unavailable",
+                examples: [
+                    "【人手が空いている】 The duty officer will be available after 1400 hours.",
+                    "【モノが手に入る】 Fresh water supplies are available at the base depot.",
+                    "【available to 人 / for 用途】 This facility is available for official use only."
+                ],
+                grammar: "形容詞。be available for/to。反対語は unavailable。"
+            },
+            {
+                word: "avoid",
+                jp: "避ける・回避する",
+                syn: "prevent", ant: "face",
+                examples: [
+                    "【動名詞を伴う用法】 Drivers should avoid taking the narrow bridge during peak hours.",
+                    "【危険・衝突の回避】 The captain turned sharply to avoid a collision with debris.",
+                    "【派生語 (形容詞 avoidable)】 Double-checking helps prevent avoidable mistakes."
+                ],
+                grammar: "動詞。avoid の目的語は動名詞 (-ing)。avoid to do は不可。"
+            },
+            {
+                word: "brief",
+                jp: "簡潔な・要約する",
+                syn: "short", ant: "lengthy",
+                examples: [
+                    "【形容詞 (短時間の)】 The commander gave a brief speech before the ceremony.",
+                    "【動詞 (事前説明をする)】 The pilot briefed the crew on the expected weather conditions.",
+                    "【名詞 (in brief)】 In brief, the project was completed on time and within budget."
+                ],
+                grammar: "形容詞・動詞・名詞。brief A on B (AにBについて要点説明する)。"
+            },
+            {
+                word: "confirm",
+                jp: "確認する・確証する",
+                syn: "verify", ant: "deny",
+                examples: [
+                    "【事実・予定の確認】 Please confirm your estimated arrival time via radio.",
+                    "【confirm that 節】 Radar tracking confirmed that the target had changed heading.",
+                    "【名詞形 (confirmation)】 We are still waiting for official confirmation from headquarters."
+                ],
+                grammar: "動詞。confirm a reservation / schedule / details。"
+            },
+            {
+                word: "consider",
+                jp: "検討する・よく考える",
+                syn: "think about", ant: "dismiss",
+                examples: [
+                    "【動名詞を伴う用法】 We should consider changing our flight plan due to turbulence.",
+                    "【consider A B (AをBとみなす)】 The committee considers this issue a top priority.",
+                    "【派生語 (形容詞 considerable)】 A considerable amount of fuel was saved."
+                ],
+                grammar: "動詞。consider の目的語は動名詞 (-ing)。consider A (to be) B。"
+            },
+            {
+                word: "consistent",
+                jp: "一貫した・ブレない",
+                syn: "steady", ant: "inconsistent",
+                examples: [
+                    "【一致・一貫性】 Her performance has been consistent throughout the evaluation.",
+                    "【be consistent with】 The test results are consistent with our earlier predictions.",
+                    "【副詞 (consistently)】 He consistently achieves high scores in listening comprehension."
+                ],
+                grammar: "形容詞。be consistent with 〜 (〜と一致している)。対義語 inconsistent。"
+            },
+            {
+                word: "contribute",
+                jp: "貢献する・寄与する",
+                syn: "help", ant: "undermine",
+                examples: [
+                    "【contribute to 名詞/動名詞】 Every team member contributed to the mission's success.",
+                    "【要因となる】 Fatigue can contribute to poor decision-making during flight.",
+                    "【提供・寄付する】 Local businesses contributed supplies to the disaster relief effort."
+                ],
+                grammar: "動詞。contribute to + 名詞/動名詞 (toは前置詞)。"
+            },
+            {
+                word: "convenient",
+                jp: "便利な・都合が良い",
+                syn: "practical", ant: "inconvenient",
+                examples: [
+                    "【都合がよい】 Please visit our office at a time that is convenient for you.",
+                    "【便利・使いやすい】 The new location is convenient to public transportation.",
+                    "【It構文】 It is very convenient to have a maintenance depot nearby."
+                ],
+                grammar: "形容詞。convenient for 人 / to 場所。It is convenient to do。"
+            },
+            {
+                word: "decline",
+                jp: "辞退する・減少する",
+                syn: "refuse", ant: "accept",
+                examples: [
+                    "【丁寧な拒絶】 He politely declined the invitation to speak at the conference.",
+                    "【自動詞 (減少・低下)】 Fuel levels began to decline rapidly after the leak.",
+                    "【名詞 (減少・衰退)】 There has been a steady decline in equipment failures this year."
+                ],
+                grammar: "動詞・名詞。decline an offer (断る) / a decline in numbers (減少)。"
+            },
+            {
+                word: "delay",
+                jp: "遅らせる・延期する",
+                syn: "postpone", ant: "advance",
+                examples: [
+                    "【他動詞 (遅らせる)】 Severe thunderstorm delayed our flight departure by three hours.",
+                    "【自動詞 (停滞する)】 Do not delay in reporting any safety hazards to the supervisor.",
+                    "【名詞 (遅延)】 Passengers experienced a long delay at the security checkpoint."
+                ],
+                grammar: "動詞・名詞。delay A by [時間] / without delay (遅滞なく)。"
+            }
         ];
-
-        // 決定論的疑似乱数（ハッシュ）関数
-        function hashCode(str) {
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                hash = (hash * 31 + str.charCodeAt(i)) | 0;
-            }
-            return Math.abs(hash);
-        }
-
-        function seededShuffle(array, seed) {
-            let arr = array.slice();
-            let x = seed || 1;
-            for (let i = arr.length - 1; i > 0; i--) {
-                x = (x * 1664525 + 1013904223) >>> 0;
-                let j = x % (i + 1);
-                [arr[i], arr[j]] = [arr[j], arr[i]];
-            }
-            return arr;
-        }
 
         // --- 2. 問題生成エンジン ---
         function generateQuestions(type) {
@@ -390,6 +685,8 @@
 
                 let script = "";
                 let passage = "";
+                let scriptJp = "";
+                let passageJp = "";
                 let question = "";
                 let correct = "";
                 let wrong = [];
@@ -402,7 +699,15 @@
                         `Speaker A: The report emphasizes "${baseItem.word}." What is our next action?\nSpeaker B: We must follow the procedure precisely.`,
                         `Instructor: Please use "${baseItem.word}" correctly in your final report.\nTrainee: I will review the guidelines carefully.`
                     ];
+                    const scriptsJp = [
+                        `話者A: ブリーフィングの前に、詳細を${baseItem.jp}することを忘れないでください。\n話者B: 了解しました。すぐに確認します。`,
+                        `監督者: チームが出発する前に、この問題について${baseItem.jp}する必要があります。\n担当者: 直ちに対応いたします。`,
+                        `話者A: なぜこの任務において「${baseItem.jp}（${baseItem.word}）」が重要なのですか？\n話者B: 安全かつ予定通りに作戦を完了するのに役立つからです。`,
+                        `話者A: 報告書は「${baseItem.jp}（${baseItem.word}）」を強調しています。次の行動は何ですか？\n話者B: 手順通り正確に従う必要があります。`,
+                        `教官: 最終報告書では「${baseItem.word}」を正確に使用してください。\n訓練生: ガイドラインを注意深く見直します。`
+                    ];
                     script = scripts[variant];
+                    scriptJp = scriptsJp[variant];
 
                     if (variant === 0) {
                         question = `会話で使用されている "${baseItem.word}" の意味として最も適切なものはどれですか。`;
@@ -433,7 +738,15 @@
                         `The operations office sent an urgent update regarding the revised schedule. Personnel were requested to ${baseItem.word} the new instructions and contact the duty officer for clarification if needed.`,
                         `At the conclusion of the exercise, the instructor evaluated the performance. Everyone was encouraged to ${baseItem.word} what went well and what required further improvement in future sessions.`
                     ];
+                    const passagesJp = [
+                        `朝のブリーフィング中、監督者はチームがなぜ最新情報を${baseItem.jp}する必要があるのかを説明しました。全員が出発前に詳細を確認し、問題があれば報告するよう求められました。周到な準備が全体の安全を確実にします。`,
+                        `訓練センターは今月、新しい手順を導入しました。要員はすべての指令を${baseItem.jp}し、必要な場合は質問し、潜在的なエラーを減らすために結果を記録するよう指示されました。`,
+                        `演習の前、部隊は装備を点検しチェックリストを確認しました。ある幹部は、記憶に頼るのではなく関連する事実を${baseItem.jp}するようグループに喚起しました。正確な記録がより良い判断を促します。`,
+                        `運用室から変更されたスケジュールに関する緊急の連絡が送信されました。要員は新しい指示内容を${baseItem.jp}し、必要に応じて確認のため当直幹部に連絡するよう求められました。`,
+                        `演習の終わりに、教官はパフォーマンスを評価しました。今後のセッションに向けて、何がうまくいき、何に更なる改善が必要かを全員が${baseItem.jp}することが推奨されました。`
+                    ];
                     passage = passages[variant];
+                    passageJp = passagesJp[variant];
 
                     if (variant === 0) {
                         question = `本文中の "${baseItem.word}" の意味として最も適切なものはどれですか。`;
@@ -474,6 +787,8 @@
                     wordItem: baseItem,
                     script,
                     passage,
+                    scriptJp,
+                    passageJp,
                     question,
                     options,
                     answerIndex,
@@ -734,7 +1049,7 @@
             });
             userRecords.history = userRecords.history.slice(0, 30);
 
-            // localStorage に確実に永続化
+            // localStorage に確実保存
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(userRecords));
             } catch (e) {
@@ -753,8 +1068,16 @@
             $('explText').textContent = q.explanation;
             $('explWord').innerHTML = `<strong class="text-indigo-900">${q.wordItem.word}</strong> : ${q.wordItem.jp}`;
             $('explSynAnt').innerHTML = `同意語: <span class="font-semibold text-emerald-700">${q.wordItem.syn}</span> ／ 反対語: <span class="font-semibold text-rose-700">${q.wordItem.ant}</span>`;
+            
+            // 日本語訳の挿入
+            $('explTranslation').textContent = q.type === 'L' ? q.scriptJp : q.passageJp;
+
             $('explGrammar').textContent = q.wordItem.grammar;
-            $('explExample').textContent = `"${q.wordItem.ex}"`;
+
+            // 3つの例文を表示
+            $('explExamples').innerHTML = q.wordItem.examples.map(ex => `
+                <div class="p-2 bg-slate-50 border border-slate-200 rounded text-xs md:text-sm leading-relaxed">${ex}</div>
+            `).join('');
 
             $('explanationCard').classList.remove('hidden');
 
