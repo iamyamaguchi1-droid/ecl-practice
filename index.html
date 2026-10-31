@@ -1,62 +1,891 @@
-<!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#12345a"><title>ECL対策 1000問トレーナー</title>
-<style>
-:root{--navy:#12345a;--blue:#2368a0;--pale:#edf5fc;--green:#176b45;--red:#a32b35}*{box-sizing:border-box}body{margin:0;background:#f4f7fb;color:#182230;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}.top{background:var(--navy);color:white;padding:20px 16px}.top h1{font-size:1.35rem;margin:0 0 5px}.top p{margin:0;font-size:.92rem}.wrap{max-width:850px;margin:auto;padding:14px}.card{background:white;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 2px 12px #152d4610}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.row>*{flex:1}.tabs button,.btn{border:0;border-radius:10px;padding:12px 14px;font-size:1rem;background:var(--blue);color:white;font-weight:650;cursor:pointer}.tabs button{background:#dce9f5;color:#12345a}.tabs button.active{background:var(--navy);color:white}.btn.secondary{background:#e7edf4;color:#14263a}.btn.green{background:var(--green)}.btn.red{background:var(--red)}button:disabled{opacity:.45}select,input[type=range]{width:100%;padding:10px;border:1px solid #bbc8d6;border-radius:8px;background:white}label{font-weight:650;font-size:.93rem}.small{font-size:.87rem;color:#506071}.pill{display:inline-block;background:var(--pale);color:var(--navy);padding:4px 9px;border-radius:20px;font-size:.82rem;font-weight:700}.qtitle{font-size:1.13rem;font-weight:750;margin:10px 0}.passage{background:#f7faff;border-left:4px solid #83b2db;padding:12px;border-radius:7px;margin:12px 0}.options{display:grid;gap:9px;margin:14px 0}.opt{text-align:left;background:white;color:#182230;border:1px solid #c7d1dc;border-radius:10px;padding:12px;font-size:1rem}.opt.selected{border:2px solid var(--blue);background:#eaf4ff}.opt.correct{border:2px solid var(--green);background:#e9f7ef}.opt.wrong{border:2px solid var(--red);background:#fff0f0}.feedback{padding:12px;border-radius:10px;margin-top:12px;background:#f1f5f9}.feedback h3{margin:0 0 7px}.exgrid{display:grid;gap:8px}.exitem{background:#f7f9fc;padding:10px;border-radius:8px}.exitem b{display:block;color:var(--navy)}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:var(--pale);padding:10px;border-radius:10px;text-align:center}.stat strong{font-size:1.3rem;display:block}.hidden{display:none!important}footer{font-size:.8rem;color:#667;padding:18px 5px}.bar{height:8px;background:#e0e6ed;border-radius:10px;overflow:hidden}.bar>div{height:100%;background:#2675b9;width:0}.notice{background:#fff8df;padding:12px;border-radius:10px;font-size:.9rem}.historyrow{padding:8px 0;border-bottom:1px solid #e3e8ee}
-</style></head><body><header class="top"><h1>🎧 ECL対策 1000問トレーナー</h1><p>中級・標準｜リスニング500問＋リーディング500問｜解答・日本語解説・語彙・文法・例文</p></header><main class="wrap">
-<section class="card"><div class="stats"><div class="stat"><strong id="totalN">1000</strong><span>全問題</span></div><div class="stat"><strong id="doneN">0</strong><span>回答済み</span></div><div class="stat"><strong id="rateN">—</strong><span>正答率</span></div></div><div class="bar" style="margin-top:12px"><div id="progress"></div></div><p class="small">回答履歴はこのiPhoneのブラウザ内に保存されます。同じブラウザを使ってください。</p></section>
-<section class="card"><div class="row tabs"><button id="listenTab" class="active">🎧 リスニング 500問</button><button id="readTab">📖 リーディング 500問</button><button id="statsTab">📊 成績記録</button></div><div id="settings" style="margin-top:14px"><div class="row"><div><label for="mode">出題方法</label><select id="mode"><option value="all">この分野の全問題から順番に</option><option value="random">この分野からランダム</option><option value="unanswered">未回答の問題から</option></select></div><div><label for="voiceA">音声A（男性候補）</label><select id="voiceA"><option value="auto">自動選択</option></select></div><div><label for="voiceB">音声B（女性候補）</label><select id="voiceB"><option value="auto">自動選択</option></select></div></div><p class="small">音声の性別・種類はiPhoneに搭載された音声によって異なります。初回は音声選択欄が読み込まれるまで数秒かかることがあります。</p></div></section>
-<section id="quiz" class="card"><div class="row"><span class="pill" id="kind">LISTENING</span><span class="pill" id="number">問題 1 / 500</span><span class="pill" id="difficulty">中級・標準</span></div><div id="audioBox" class="passage"><b>音声スクリプト</b><p id="script" style="margin-bottom:0"></p><div class="row" style="margin-top:10px"><button class="btn" id="playBtn">▶ 音声を再生</button><button class="btn secondary" id="stopBtn">■ 停止</button></div></div><div id="readingBox" class="passage hidden"><b>英文を読んでください</b><p id="passage" style="margin-bottom:0"></p></div><div class="qtitle" id="question"></div><div class="options" id="options"></div><div class="row"><button class="btn green" id="checkBtn">解答・解説を見る</button><button class="btn secondary" id="nextBtn" disabled>次の問題 →</button></div><div id="feedback" class="feedback hidden" aria-live="polite"></div></section>
-<section id="stats" class="card hidden"><h2>成績記録</h2><div class="stats"><div class="stat"><strong id="listenScore">0/500</strong><span>リスニング正解</span></div><div class="stat"><strong id="readScore">0/500</strong><span>リーディング正解</span></div><div class="stat"><strong id="accuracy">0%</strong><span>全体正答率</span></div></div><h3>最近の回答</h3><div id="history"></div><button class="btn red" id="resetBtn" style="margin-top:12px">成績をリセット</button></section>
-<section class="card"><h3>使い方</h3><ol><li>リスニングまたはリーディングを選びます。</li><li>リスニングは「音声を再生」を押してから選択肢を選びます。スクリプトは学習用に表示しています。</li><li>「解答・解説を見る」を押すと正解、日本語解説、同意語・反対語、文法、追加例文が表示されます。</li><li>「次の問題」で続けます。成績記録は「成績記録」タブで確認できます。</li></ol><div class="notice">この教材はECL形式を参考にした練習用オリジナル問題です。公式問題そのものではありません。1000問は語彙・場面・設問形式を組み合わせた練習問題です。</div></section><footer>iPhoneではSafariで開いてください。音声再生が動かない場合は、ページを一度タップしてから再生ボタンを押し、iPhoneの消音設定や音量も確認してください。</footer></main>
-<script>
-const bank = [{"word": "abandon", "jp": "放棄する", "syn": "give up", "ant": "continue", "ex": "The crew had to abandon the damaged vehicle.", "grammar": "動詞。abandon + 名詞で「〜を放棄する」。"}, {"word": "accurate", "jp": "正確な", "syn": "correct", "ant": "incorrect", "ex": "Please provide accurate information on the form.", "grammar": "形容詞。名詞は accuracy、反対語は inaccurate。"}, {"word": "achieve", "jp": "達成する", "syn": "accomplish", "ant": "fail", "ex": "The team achieved its goal ahead of schedule.", "grammar": "動詞。achieve a goal/target の形でよく使う。"}, {"word": "adequate", "jp": "十分な", "syn": "sufficient", "ant": "insufficient", "ex": "We have adequate supplies for the trip.", "grammar": "形容詞。adequate for + 名詞。「必要を満たす程度に十分」。"}, {"word": "admit", "jp": "認める", "syn": "acknowledge", "ant": "deny", "ex": "He admitted that he had made a mistake.", "grammar": "動詞。admit that + 文、または admit doing の形を取る。"}, {"word": "advance", "jp": "前進する・進歩", "syn": "progress", "ant": "retreat", "ex": "The unit advanced slowly through the valley.", "grammar": "動詞・名詞。advance toward + 場所/目標。"}, {"word": "advantage", "jp": "利点", "syn": "benefit", "ant": "disadvantage", "ex": "One advantage of planning is that it saves time.", "grammar": "名詞。an advantage of + 名詞/動名詞。"}, {"word": "affect", "jp": "影響する", "syn": "influence", "ant": "leave unchanged", "ex": "Heavy rain may affect the flight schedule.", "grammar": "動詞。affect は動詞、effect は多くの場合名詞。"}, {"word": "alert", "jp": "警戒した・警告する", "syn": "watchful", "ant": "unaware", "ex": "The guard remained alert throughout the night.", "grammar": "形容詞・動詞・名詞。remain + 形容詞で状態を表す。"}, {"word": "allow", "jp": "許可する", "syn": "permit", "ant": "forbid", "ex": "The officer allowed us to enter the building.", "grammar": "allow + 人 + to不定詞。「人が〜するのを許す」。"}, {"word": "announce", "jp": "発表する", "syn": "declare", "ant": "conceal", "ex": "The airport announced a delay due to fog.", "grammar": "動詞。announce that + 文、announce a decision の形。"}, {"word": "anxious", "jp": "心配して・切望して", "syn": "worried", "ant": "calm", "ex": "She was anxious about the inspection.", "grammar": "形容詞。anxious about + 名詞、anxious to do は「ぜひ〜したい」。"}, {"word": "apparent", "jp": "明らかな", "syn": "obvious", "ant": "unclear", "ex": "It became apparent that the road was closed.", "grammar": "形容詞。It is apparent that + 文。「〜は明らかだ」。"}, {"word": "approach", "jp": "近づく・方法", "syn": "come near", "ant": "withdraw", "ex": "The vehicle approached the checkpoint slowly.", "grammar": "動詞・名詞。approach a place は前置詞なしで目的語を取る。"}, {"word": "appropriate", "jp": "適切な", "syn": "suitable", "ant": "inappropriate", "ex": "Wear appropriate clothing for cold weather.", "grammar": "形容詞。appropriate for + 名詞。「〜に適した」。"}, {"word": "arrange", "jp": "手配する", "syn": "organize", "ant": "disorganize", "ex": "We arranged transportation for the visitors.", "grammar": "動詞。arrange to do / arrange for + 名詞。"}, {"word": "assess", "jp": "評価する", "syn": "evaluate", "ant": "ignore", "ex": "The supervisor assessed the risk before departure.", "grammar": "動詞。assess the situation/risk/performance がよく使われる。"}, {"word": "assist", "jp": "手伝う", "syn": "help", "ant": "hinder", "ex": "Two technicians assisted with the repair.", "grammar": "動詞。assist 人 with + 名詞 / assist 人 in doing。"}, {"word": "assume", "jp": "仮定する・引き受ける", "syn": "suppose", "ant": "know for certain", "ex": "Do not assume the gate is open.", "grammar": "動詞。assume that + 文。「当然〜と思い込む」の意味にも注意。"}, {"word": "attempt", "jp": "試みる", "syn": "try", "ant": "give up", "ex": "They attempted to restart the engine.", "grammar": "動詞・名詞。attempt to do。「〜しようと試みる」。"}, {"word": "available", "jp": "利用できる", "syn": "accessible", "ant": "unavailable", "ex": "A doctor is available after 1400 hours.", "grammar": "形容詞。be available for/to。「利用可能な・手が空いている」。"}, {"word": "avoid", "jp": "避ける", "syn": "prevent", "ant": "face", "ex": "Avoid using your phone during the briefing.", "grammar": "動詞。avoid の後は名詞または動名詞 -ing。"}, {"word": "brief", "jp": "簡潔な・説明する", "syn": "short", "ant": "lengthy", "ex": "The pilot gave a brief report after landing.", "grammar": "形容詞・動詞・名詞。brief someone on + 内容。"}, {"word": "confirm", "jp": "確認する", "syn": "verify", "ant": "deny", "ex": "Please confirm your arrival time by email.", "grammar": "動詞。confirm that + 文 / confirm a reservation。"}, {"word": "consider", "jp": "検討する", "syn": "think about", "ant": "dismiss", "ex": "We should consider another route.", "grammar": "動詞。consider の後は名詞または動名詞 -ing。"}, {"word": "consistent", "jp": "一貫した", "syn": "steady", "ant": "inconsistent", "ex": "Her performance has been consistent this month.", "grammar": "形容詞。consistent with は「〜と一致して」。"}, {"word": "contribute", "jp": "貢献する", "syn": "help", "ant": "undermine", "ex": "Every member contributed to the success of the mission.", "grammar": "動詞。contribute to + 名詞/動名詞。to は前置詞。"}, {"word": "convenient", "jp": "便利な", "syn": "practical", "ant": "inconvenient", "ex": "The earlier bus is more convenient for us.", "grammar": "形容詞。convenient for + 人、convenient to do。"}, {"word": "decline", "jp": "断る・減少する", "syn": "refuse", "ant": "accept", "ex": "He declined the offer because he was busy.", "grammar": "動詞・名詞。decline an offer politely。「申し出を断る」。"}, {"word": "delay", "jp": "遅らせる・遅延", "syn": "postpone", "ant": "advance", "ex": "The storm delayed our departure by two hours.", "grammar": "動詞・名詞。delay A by + 時間。「Aを〜だけ遅らせる」。"}, {"word": "depend", "jp": "依存する", "syn": "rely", "ant": "be independent", "ex": "The schedule depends on the weather.", "grammar": "動詞。depend on/upon + 名詞。「〜次第である」。"}, {"word": "determine", "jp": "決定する・特定する", "syn": "decide", "ant": "leave undecided", "ex": "The test will determine your current level.", "grammar": "動詞。determine whether/what/how + 文。"}, {"word": "efficient", "jp": "効率的な", "syn": "effective", "ant": "inefficient", "ex": "An efficient plan reduces wasted time.", "grammar": "形容詞。efficient は少ない時間・労力で成果を出すこと。"}, {"word": "emergency", "jp": "緊急事態", "syn": "crisis", "ant": "routine", "ex": "Call this number in an emergency.", "grammar": "名詞。in an emergency は「緊急時には」。"}, {"word": "encourage", "jp": "励ます・促す", "syn": "motivate", "ant": "discourage", "ex": "The instructor encouraged everyone to ask questions.", "grammar": "動詞。encourage 人 to do。「人に〜するよう促す」。"}, {"word": "ensure", "jp": "確実にする", "syn": "make certain", "ant": "jeopardize", "ex": "Check the list to ensure that nothing is missing.", "grammar": "動詞。ensure that + 文。「確実に〜となるようにする」。"}, {"word": "equipment", "jp": "装備・機器", "syn": "gear", "ant": "—", "ex": "All equipment must be inspected before use.", "grammar": "不可算名詞。通常 equipments とはしない。"}, {"word": "estimate", "jp": "見積もる・推定", "syn": "approximate", "ant": "measure exactly", "ex": "We estimate that the trip will take three hours.", "grammar": "動詞・名詞。estimate that + 文 / estimate the cost。"}, {"word": "evidence", "jp": "証拠", "syn": "proof", "ant": "disproof", "ex": "There is no evidence of damage to the aircraft.", "grammar": "不可算名詞として使うことが多い。evidence of/for。"}, {"word": "expand", "jp": "拡大する", "syn": "increase", "ant": "shrink", "ex": "The base plans to expand its training program.", "grammar": "動詞。expand into/over。「拡大する」。"}, {"word": "familiar", "jp": "よく知っている", "syn": "knowledgeable", "ant": "unfamiliar", "ex": "Are you familiar with this procedure?", "grammar": "形容詞。be familiar with + 物事。「〜に詳しい」。"}, {"word": "frequent", "jp": "頻繁な", "syn": "regular", "ant": "rare", "ex": "Frequent practice improves listening skills.", "grammar": "形容詞。frequently は副詞。「頻繁に」。"}, {"word": "identify", "jp": "特定する", "syn": "recognize", "ant": "misidentify", "ex": "The team identified the source of the noise.", "grammar": "動詞。identify A as B / identify the cause。"}, {"word": "immediate", "jp": "即時の", "syn": "instant", "ant": "delayed", "ex": "Report any immediate danger to the supervisor.", "grammar": "形容詞。immediately は副詞。「直ちに」。"}, {"word": "improve", "jp": "改善する", "syn": "enhance", "ant": "worsen", "ex": "Daily review can improve your vocabulary.", "grammar": "動詞。improve at + 活動 / improve something。"}, {"word": "indicate", "jp": "示す", "syn": "show", "ant": "conceal", "ex": "The sign indicates the correct entrance.", "grammar": "動詞。indicate that + 文。「〜を示す」。"}, {"word": "maintain", "jp": "維持する・整備する", "syn": "preserve", "ant": "neglect", "ex": "We maintain the vehicles every Friday.", "grammar": "動詞。maintain equipment / maintain contact。"}, {"word": "obtain", "jp": "得る", "syn": "acquire", "ant": "lose", "ex": "You must obtain permission before entering.", "grammar": "動詞。obtain permission/information。「許可・情報を得る」。"}, {"word": "prevent", "jp": "防ぐ", "syn": "stop", "ant": "allow", "ex": "A checklist helps prevent mistakes.", "grammar": "動詞。prevent A from -ing。「Aが〜するのを防ぐ」。"}, {"word": "require", "jp": "必要とする・要求する", "syn": "need", "ant": "waive", "ex": "This position requires strong communication skills.", "grammar": "動詞。require + 名詞 / require someone to do。"}, {"word": "reliable", "jp": "信頼できる", "syn": "dependable", "ant": "unreliable", "ex": "We need reliable information before deciding.", "grammar": "形容詞。reliable source/person/equipment。"}, {"word": "reduce", "jp": "減らす", "syn": "decrease", "ant": "increase", "ex": "The new procedure reduced the waiting time.", "grammar": "動詞。reduce A by 10%（10%減らす）/ reduce A to 10（10まで減らす）。"}, {"word": "remain", "jp": "〜のままでいる", "syn": "stay", "ant": "change", "ex": "Please remain seated until the aircraft stops.", "grammar": "動詞。remain + 形容詞/名詞/分詞。「〜のままでいる」。"}, {"word": "request", "jp": "依頼する・依頼", "syn": "ask for", "ant": "demand", "ex": "The passenger requested a window seat.", "grammar": "動詞・名詞。request that + 主語 + 動詞原形 が使われることがある。"}, {"word": "respond", "jp": "返答する", "syn": "reply", "ant": "ignore", "ex": "Please respond to the message by noon.", "grammar": "動詞。respond to + 名詞。「〜に返答する」。"}, {"word": "significant", "jp": "重要な・かなりの", "syn": "important", "ant": "minor", "ex": "The change had a significant effect on safety.", "grammar": "形容詞。significantly は副詞。significant effect/change。"}, {"word": "specific", "jp": "具体的な", "syn": "particular", "ant": "general", "ex": "Please give a specific example.", "grammar": "形容詞。specific information/details。「具体的な情報」。"}, {"word": "temporary", "jp": "一時的な", "syn": "short-term", "ant": "permanent", "ex": "The road closure is temporary.", "grammar": "形容詞。temporary solution/job。「一時的な」。"}, {"word": "transfer", "jp": "移す・乗り換える", "syn": "move", "ant": "retain", "ex": "Passengers must transfer to another bus.", "grammar": "動詞・名詞。transfer to + 場所/乗り物/部署。"}, {"word": "urgent", "jp": "緊急の", "syn": "pressing", "ant": "nonurgent", "ex": "This is an urgent request from the control room.", "grammar": "形容詞。urgent matter/request。「緊急の案件」。"}, {"word": "verify", "jp": "検証する・確認する", "syn": "confirm", "ant": "falsify", "ex": "Verify the information before you submit the form.", "grammar": "動詞。verify that + 文 / verify information。"}, {"word": "voluntary", "jp": "自発的な・任意の", "syn": "optional", "ant": "compulsory", "ex": "Attendance at the extra session is voluntary.", "grammar": "形容詞。voluntary work/service。「自発的な・任意の」。"}, {"word": "adapt", "jp": "適応する", "syn": "adjust", "ant": "resist", "ex": "New staff must adapt to the work environment.", "grammar": "動詞。adapt to + 名詞。「〜に適応する」。"}, {"word": "briefing", "jp": "説明会・事前説明", "syn": "orientation", "ant": "debriefing", "ex": "The briefing begins at 0800.", "grammar": "名詞。briefing on + topic。「〜についての説明」。"}, {"word": "capable", "jp": "能力がある", "syn": "able", "ant": "incapable", "ex": "She is capable of solving the problem.", "grammar": "形容詞。capable of + 名詞/動名詞。"}, {"word": "cautious", "jp": "慎重な", "syn": "careful", "ant": "reckless", "ex": "Be cautious when driving on wet roads.", "grammar": "形容詞。cautious about/with。「〜に慎重な」。"}, {"word": "challenge", "jp": "課題・挑戦", "syn": "difficulty", "ant": "ease", "ex": "The new assignment presents a challenge.", "grammar": "名詞・動詞。challenge someone to do。"}, {"word": "cooperate", "jp": "協力する", "syn": "collaborate", "ant": "oppose", "ex": "All sections must cooperate during the exercise.", "grammar": "動詞。cooperate with + 人 / on + task。"}, {"word": "critical", "jp": "重大な・批判的な", "syn": "crucial", "ant": "unimportant", "ex": "Clear communication is critical in an emergency.", "grammar": "形容詞。critical to/for。「〜に不可欠な」。"}, {"word": "deliver", "jp": "届ける・伝える", "syn": "provide", "ant": "withhold", "ex": "The courier delivered the package this morning.", "grammar": "動詞。deliver A to B。「AをBに届ける」。"}, {"word": "distribute", "jp": "配布する", "syn": "hand out", "ant": "collect", "ex": "Staff will distribute maps at the entrance.", "grammar": "動詞。distribute A to/among B。"}, {"word": "establish", "jp": "設立する・確立する", "syn": "set up", "ant": "abolish", "ex": "The team established a new safety procedure.", "grammar": "動詞。establish a rule/system/relationship。"}, {"word": "flexible", "jp": "柔軟な", "syn": "adaptable", "ant": "rigid", "ex": "Our schedule is flexible this afternoon.", "grammar": "形容詞。flexible schedule/approach。「柔軟な」。"}, {"word": "forecast", "jp": "予報・予測する", "syn": "predict", "ant": "review the past", "ex": "The forecast calls for strong winds.", "grammar": "名詞・動詞。weather forecast。「天気予報」。"}, {"word": "handle", "jp": "対処する・扱う", "syn": "manage", "ant": "mishandle", "ex": "Can you handle this task alone?", "grammar": "動詞。handle a problem/task。「対処する」。"}, {"word": "inform", "jp": "知らせる", "syn": "notify", "ant": "misinform", "ex": "Please inform the team of any changes.", "grammar": "動詞。inform 人 of/about + 名詞。"}, {"word": "inspect", "jp": "点検する", "syn": "examine", "ant": "overlook", "ex": "Mechanics inspect the aircraft before each flight.", "grammar": "動詞。inspect A for B。「BがないかAを点検する」。"}, {"word": "instruct", "jp": "指示する・教える", "syn": "direct", "ant": "mislead", "ex": "The guide instructed us to remain behind the line.", "grammar": "動詞。instruct 人 to do。"}, {"word": "interrupt", "jp": "中断する", "syn": "disturb", "ant": "continue", "ex": "Do not interrupt the speaker during the briefing.", "grammar": "動詞。interrupt a meeting/conversation。"}, {"word": "locate", "jp": "位置を特定する", "syn": "find", "ant": "lose", "ex": "We located the missing equipment near the gate.", "grammar": "動詞。locate A。「Aの場所を突き止める」。"}, {"word": "monitor", "jp": "監視する", "syn": "observe", "ant": "ignore", "ex": "Operators monitor the system continuously.", "grammar": "動詞・名詞。monitor progress/conditions。"}, {"word": "negotiate", "jp": "交渉する", "syn": "bargain", "ant": "refuse to discuss", "ex": "They negotiated a new delivery schedule.", "grammar": "動詞。negotiate with + 人 / for + 条件。"}, {"word": "notify", "jp": "通知する", "syn": "inform", "ant": "keep secret", "ex": "Notify the supervisor if the alarm sounds.", "grammar": "動詞。notify 人 of + 名詞。"}, {"word": "objective", "jp": "目標・客観的な", "syn": "goal", "ant": "bias", "ex": "Our main objective is to improve safety.", "grammar": "名詞・形容詞。objective of + 名詞。"}, {"word": "participate", "jp": "参加する", "syn": "take part", "ant": "withdraw", "ex": "All trainees must participate in the exercise.", "grammar": "動詞。participate in + 名詞。"}, {"word": "perform", "jp": "実行する・演じる", "syn": "carry out", "ant": "neglect", "ex": "The crew performed the inspection carefully.", "grammar": "動詞。perform a task/test/duty。"}, {"word": "priority", "jp": "優先事項", "syn": "precedence", "ant": "low priority", "ex": "Safety is our highest priority.", "grammar": "名詞。priority over + 名詞。「〜より優先」。"}, {"word": "procedure", "jp": "手順", "syn": "process", "ant": "improvisation", "ex": "Follow the procedure exactly as written.", "grammar": "名詞。procedure for + 名詞。「〜の手順」。"}, {"word": "protect", "jp": "守る", "syn": "defend", "ant": "endanger", "ex": "These gloves protect your hands from chemicals.", "grammar": "動詞。protect A from B。"}, {"word": "recover", "jp": "回復する・取り戻す", "syn": "regain", "ant": "lose", "ex": "The system recovered after a brief outage.", "grammar": "動詞。recover from + 名詞。「〜から回復する」。"}, {"word": "replace", "jp": "交換する・取って代わる", "syn": "substitute", "ant": "keep", "ex": "We need to replace the damaged cable.", "grammar": "動詞。replace A with B。「AをBに交換」。"}, {"word": "schedule", "jp": "予定・予定する", "syn": "timetable", "ant": "cancel", "ex": "The meeting is scheduled for Thursday.", "grammar": "名詞・動詞。be scheduled for + 時刻/日付。"}, {"word": "select", "jp": "選ぶ", "syn": "choose", "ant": "reject", "ex": "Select the correct answer.", "grammar": "動詞。select A from B。"}, {"word": "separate", "jp": "分ける・別々の", "syn": "divide", "ant": "combine", "ex": "Keep the clean and used tools separate.", "grammar": "形容詞・動詞。separate A from B。"}, {"word": "submit", "jp": "提出する", "syn": "hand in", "ant": "withdraw", "ex": "Submit the report before the deadline.", "grammar": "動詞。submit A to B。「AをBに提出」。"}, {"word": "sufficient", "jp": "十分な", "syn": "enough", "ant": "inadequate", "ex": "We have sufficient fuel for the return trip.", "grammar": "形容詞。sufficient for/to。「〜に十分な」。"}, {"word": "supply", "jp": "供給する・物資", "syn": "provide", "ant": "deprive", "ex": "The base supplies water to nearby facilities.", "grammar": "動詞・名詞。supply A with B / supply B to A。"}, {"word": "suspend", "jp": "一時停止する", "syn": "pause", "ant": "continue", "ex": "The service was suspended because of the storm.", "grammar": "動詞。suspend operations/service。"}, {"word": "update", "jp": "更新する・最新情報", "syn": "revise", "ant": "outdate", "ex": "Please update the contact list today.", "grammar": "動詞・名詞。update A with B。"}, {"word": "warn", "jp": "警告する", "syn": "alert", "ant": "reassure", "ex": "The sign warns drivers about the sharp turn.", "grammar": "動詞。warn 人 about/of + 危険。"}];
-const listeningTypes = ['意味理解','要点理解','同意語','反対語','文法'];
-const readingTypes = ['語彙','主旨','詳細理解','文法','推論'];
-const letters=['A','B','C','D'];
-function hash(s){let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return Math.abs(h)}
-function shuffle(arr,seed){let a=arr.slice(),x=seed||1;for(let i=a.length-1;i>0;i--){x=(x*1664525+1013904223)>>>0;let j=x%(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
-function makeQuestions(type){let qs=[];for(let i=0;i<500;i++){const v=bank[i%100],variant=Math.floor(i/100),id=(type==='L'?'L':'R')+(i+1);let script,passage,q,correct,wrong,grammar=v.grammar,ex=v.ex;let options=[];
-if(type==='L'){
- const scripts=[`A: Please remember to ${v.word} the details before the briefing.\nB: Understood. I will check them now.`,`Supervisor: We need to ${v.word} the issue before the team leaves.\nStaff: I will take care of it right away.`,`A: Why is ${v.word} important for this task?\nB: It helps us complete the work safely and on time.`,`A: The report mentions “${v.word}.” What should we do?\nB: We should follow the instruction and confirm the details.`,`Instructor: Use “${v.word}” correctly in your report.\nTrainee: I will review the example before submitting it.`];
- script=scripts[variant];
- if(variant===0){q=`会話で使われている “${v.word}” の意味として最も近いものはどれですか。`;correct=v.jp;wrong=shuffle(bank.filter(x=>x.word!==v.word).map(x=>x.jp),hash(id)).slice(0,3)}
- else if(variant===1){q='会話の主な目的は何ですか。';correct=`作業を適切に進めるため、指示された内容を確認・実行すること`;wrong=['旅行の予約を取り消すこと','休暇の日程を相談すること','新しい機器を購入すること']}
- else if(variant===2){q=`“${v.word}” と最も近い意味の語はどれですか。`;correct=v.syn;wrong=shuffle(bank.filter(x=>x.word!==v.word).map(x=>x.syn),hash(id)).slice(0,3)}
- else if(variant===3){q=`“${v.word}” の反対の意味として最も適切なものはどれですか。`;correct=v.ant==='—'?'明確な反対語は一般的ではない':v.ant;wrong=shuffle(bank.filter(x=>x.word!==v.word && x.ant!=='—').map(x=>x.ant),hash(id)).slice(0,3)}
- else {q=`次の文の空欄に最も適切な語を入れてください。 “The team must ______ the instruction carefully.”`;correct=v.word;wrong=shuffle(bank.filter(x=>x.word!==v.word).map(x=>x.word),hash(id)).slice(0,3)}
- passage='';
-}else{
- const passages=[`During the morning briefing, the supervisor explained why the team needed to ${v.word} the latest information. Everyone was asked to review the details and report any problems before departure. The supervisor emphasized that careful preparation helps the unit work safely and efficiently.`,`The training center introduced a new procedure this month. Staff members were told to ${v.word} the instructions, ask questions when necessary, and record the results. The change is intended to improve communication and reduce avoidable errors.`,`Before the scheduled exercise, the team checked the equipment and discussed the plan. One member reminded the group to ${v.word} the relevant information instead of relying on memory. The team agreed that accurate records make later decisions easier.`,`The transport office sent a message about a change to the daily schedule. Personnel were asked to ${v.word} the update and contact the office if they needed clarification. The office said it would provide additional information as soon as it became available.`,`At the end of the exercise, the instructor reviewed the results with the trainees. The instructor asked everyone to ${v.word} what had gone well and what needed improvement. The next session will focus on practical examples and clear communication.`];
- passage=passages[variant];
- if(variant===0){q=`本文中の “${v.word}” の意味として最も近いものはどれですか。`;correct=v.jp;wrong=shuffle(bank.filter(x=>x.word!==v.word).map(x=>x.jp),hash(id)).slice(0,3)}
- else if(variant===1){q='本文の主旨として最も適切なものはどれですか。';correct='手順や情報を確認し、訓練・業務を確実に進めること';wrong=['訓練を中止して帰宅すること','新しい職員を採用すること','交通費の払い戻しを申請すること']}
- else if(variant===2){q='本文によると、参加者に求められていることは何ですか。';correct='情報や指示を確認し、必要な場合は質問・報告すること';wrong=['指示を読まずに作業を始めること','記録をすべて削除すること','予定を個人の判断で変更すること']}
- else if(variant===3){q=`次の文の空欄に最も適切な語を入れてください。 “The staff were asked to ______ the new procedure.”`;correct=v.word;wrong=shuffle(bank.filter(x=>x.word!==v.word).map(x=>x.word),hash(id)).slice(0,3)}
- else {q='本文から推測できることはどれですか。';correct='事前の確認や記録は、誤りを減らし、判断を助ける';wrong=['記録は業務の結果に影響しない','質問することは禁止されている','訓練では準備をする必要がない']}
- script='';
-}
- options=shuffle([{text:correct,ok:true},...wrong.map(text=>({text,ok:false}))],hash(id+'opt'));
- const answer=options.findIndex(o=>o.ok);
- let expl;
- if(type==='L'&&variant===0) expl=`会話中の “${v.word}” は「${v.jp}」という意味です。前後では指示された内容を確認・実行する文脈で使われています。`;
- else if(type==='L'&&variant===1) expl='話者は作業前の確認や指示の実行について話しています。会話の目的を、細部の単語ではなく全体の状況から判断します。';
- else if(type==='L'&&variant===2) expl=`“${v.word}” の同意語は “${v.syn}” です。同意語は文脈によって完全に置き換えられない場合もあるため、基本的な意味を確認しましょう。`;
- else if(type==='L'&&variant===3) expl=`“${v.word}” の反対語は “${v.ant}” です。${v.ant==='—'?'この語には一般的な一語の反対語がないため、文脈で対比を考えます。':'意味をペアで覚えると語彙問題に役立ちます。'}`;
- else if(type==='L') expl=`空欄の文では “${v.word}” が文意に合います。語の意味だけでなく、文中での使い方も合わせて覚えましょう。`;
- else if(variant===0) expl=`本文中の “${v.word}” は「${v.jp}」という意味です。周囲の文が、手順や情報を確認する状況を説明している点に注目します。`;
- else if(variant===1) expl='本文全体は、指示・情報の確認と、業務を安全かつ効率的に進めることについて述べています。主旨問題では一文だけでなく全体を要約します。';
- else if(variant===2) expl='本文では、指示や情報を確認し、必要に応じて質問・報告することが求められています。本文に書かれていない選択肢は選ばないようにしましょう。';
- else if(variant===3) expl=`“${v.word}” は文の意味に合う語です。${v.grammar} 空欄の前後の語と文法的につながるか確認します。`;
- else expl='本文は準備・確認・記録が業務の質を高めると述べています。推論問題では、本文から自然に導ける結論を選び、極端な表現や根拠のない情報を避けます。';
- qs.push({id,type,index:i+1,word:v.word,jp:v.jp,syn:v.syn,ant:v.ant,example:v.ex,grammar:v.grammar,script,passage,question:q,options,answer,explanation:expl,variant});
-}return qs}
-const listening=makeQuestions('L'),reading=makeQuestions('R');let section='L',pos=0,selected=null,checked=false,voices=[];const $=id=>document.getElementById(id);const storageKey='ecl1000_progress_v1';let record=JSON.parse(localStorage.getItem(storageKey)||'{"answers":{},"history":[]}');
-function currentList(){return section==='L'?listening:reading}function chooseIndex(){let list=currentList(),mode=$('mode').value;if(mode==='random')return Math.floor(Math.random()*list.length);if(mode==='unanswered'){let candidates=list.map((q,i)=>i).filter(i=>!record.answers[q.id]);if(candidates.length)return candidates[Math.floor(Math.random()*candidates.length)]}return ((pos%list.length)+list.length)%list.length}
-function render(){let list=currentList();if($('mode').value!=='all'||pos<0||pos>=list.length)pos=chooseIndex();let q=list[pos];selected=null;checked=false;$('kind').textContent=section==='L'?'LISTENING':'READING';$('number').textContent=`問題 ${q.index} / 500`; $('audioBox').classList.toggle('hidden',section!=='L');$('readingBox').classList.toggle('hidden',section!=='R');$('script').textContent=q.script;$('passage').textContent=q.passage;$('question').textContent=q.question;$('options').innerHTML='';q.options.forEach((o,i)=>{let b=document.createElement('button');b.className='opt';b.textContent=`${letters[i]}. ${o.text}`;b.onclick=()=>{if(checked)return;selected=i;[...$('options').children].forEach(x=>x.classList.remove('selected'));b.classList.add('selected')};$('options').appendChild(b)});$('feedback').classList.add('hidden');$('nextBtn').disabled=true;$('checkBtn').disabled=false;updateStats();}
-function speak(){let q=currentList()[pos];if(!('speechSynthesis'in window)){alert('このブラウザでは音声読み上げが利用できません。Safariで開き直してください。');return}speechSynthesis.cancel();let vs=speechSynthesis.getVoices(),en=vs.filter(v=>/^en/i.test(v.lang));let va=$('voiceA').value==='auto'?null:vs[+$('voiceA').value],vb=$('voiceB').value==='auto'?null:vs[+$('voiceB').value];if(!va)va=en.find(v=>/male|david|alex|daniel|fred|aaron/i.test(v.name))||en[0]||null;if(!vb)vb=en.find(v=>/female|samantha|victoria|zira|karen|moira|ava/i.test(v.name))||en[1]||en[0]||null;let lines=q.script.split('\n').filter(Boolean),idx=0;function nextLine(){if(idx>=lines.length)return;let u=new SpeechSynthesisUtterance(lines[idx]);let voice=(idx%2===0?va:vb);u.voice=voice;u.lang=voice?voice.lang:'en-US';u.rate=0.86;u.onend=()=>{idx++;nextLine()};speechSynthesis.speak(u)}nextLine()}
-function check(){if(selected===null){alert('選択肢を一つ選んでください。');return}checked=true;let q=currentList()[pos],ok=selected===q.answer;[...$('options').children].forEach((b,i)=>{if(i===q.answer)b.classList.add('correct');if(i===selected&&!ok)b.classList.add('wrong')});record.answers[q.id]={ok,section:q.type,word:q.word,date:new Date().toLocaleString('ja-JP')};record.history.unshift({id:q.id,ok,word:q.word,date:new Date().toLocaleString('ja-JP'),type:q.type});record.history=record.history.slice(0,30);localStorage.setItem(storageKey,JSON.stringify(record));$('feedback').classList.remove('hidden');$('feedback').innerHTML=`<h3 style="color:${ok?'#176b45':'#a32b35'}">${ok?'正解です！':'不正解です。正解：'+letters[q.answer]}</h3><p>${q.explanation}</p><div class="exgrid"><div class="exitem"><b>単語・意味</b>${q.word}：${q.jp}</div><div class="exitem"><b>同意語（Synonym）</b>${q.syn}</div><div class="exitem"><b>反対語（Antonym）</b>${q.ant==='—'?'一般的な一語の反対語はありません。文脈で確認しましょう。':q.ant}</div><div class="exitem"><b>文法解説</b>${q.grammar}</div><div class="exitem"><b>問題文以外の例文</b><div>${q.example}</div></div></div>`;$('checkBtn').disabled=true;$('nextBtn').disabled=false;updateStats()}
-function updateStats(){let vals=Object.values(record.answers),done=vals.length,correct=vals.filter(x=>x.ok).length;$('doneN').textContent=done;$('rateN').textContent=done?Math.round(correct/done*100)+'%':'—';$('progress').style.width=Math.min(100,done/10)+'%';let l=vals.filter(x=>x.section==='L'&&x.ok).length,r=vals.filter(x=>x.section==='R'&&x.ok).length;$('listenScore').textContent=l+'/500';$('readScore').textContent=r+'/500';$('accuracy').textContent=done?Math.round(correct/done*100)+'%':'0%';$('history').innerHTML=record.history.length?record.history.map(h=>`<div class="historyrow">${h.ok?'✅':'❌'} ${h.id}｜${h.word}｜${h.date}</div>`).join(''):'まだ回答履歴がありません。'}
-function setSection(s){section=s;pos=0;$('listenTab').classList.toggle('active',s==='L');$('readTab').classList.toggle('active',s==='R');$('statsTab').classList.remove('active');$('quiz').classList.remove('hidden');$('settings').classList.remove('hidden');$('stats').classList.add('hidden');render()}
-$('listenTab').onclick=()=>setSection('L');$('readTab').onclick=()=>setSection('R');$('statsTab').onclick=()=>{$('statsTab').classList.add('active');$('listenTab').classList.remove('active');$('readTab').classList.remove('active');$('quiz').classList.add('hidden');$('settings').classList.add('hidden');$('stats').classList.remove('hidden');updateStats()};$('playBtn').onclick=speak;$('stopBtn').onclick=()=>speechSynthesis.cancel();$('checkBtn').onclick=check;$('nextBtn').onclick=()=>{if($('mode').value==='all')pos++;render()};$('mode').onchange=()=>render();$('resetBtn').onclick=()=>{if(confirm('成績記録をすべて消去しますか？')){record={answers:{},history:[]};localStorage.setItem(storageKey,JSON.stringify(record));updateStats()}};
-function loadVoices(){if(!('speechSynthesis'in window))return;voices=speechSynthesis.getVoices();['voiceA','voiceB'].forEach(id=>{let el=$(id),old=el.value;el.innerHTML='<option value="auto">自動選択</option>';voices.forEach((v,i)=>{if(/^en/i.test(v.lang)){let o=document.createElement('option');o.value=i;o.textContent=`${v.name} (${v.lang})`;el.appendChild(o)}});el.value=old||'auto'})}if('speechSynthesis'in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices}render();
-</script></body></html>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>ECL対策 1000問マスター・トレーナー</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f8fafc;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- ヘッダー -->
+    <header class="bg-indigo-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-2">
+            <div>
+                <h1 class="text-xl font-bold flex items-center gap-2">
+                    <i class="fa-solid font-bold fa-headphones text-indigo-400"></i> ECL 1000問 Master Trainer
+                </h1>
+                <p class="text-xs text-indigo-200 mt-0.5">リスニング 500問 ＋ リーディング 500問｜自動保存機能・詳細解説付き</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-xs bg-indigo-800 text-indigo-200 px-3 py-1 rounded-full font-semibold border border-indigo-700">
+                    <i class="fa-solid fa-floppy-disk mr-1"></i> 学習記録自動保存
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="max-w-4xl mx-auto w-full px-4 py-6 flex-grow space-y-6">
+
+        <!-- 全体進捗バー & サマリー -->
+        <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
+            <div class="grid grid-cols-3 gap-3 text-center mb-4">
+                <div class="bg-indigo-50/60 p-3 rounded-xl border border-indigo-100">
+                    <span class="text-xs font-semibold text-indigo-600 block mb-0.5">全問題数</span>
+                    <strong class="text-xl font-bold text-indigo-950" id="statTotal">1000</strong>
+                </div>
+                <div class="bg-emerald-50/60 p-3 rounded-xl border border-emerald-100">
+                    <span class="text-xs font-semibold text-emerald-600 block mb-0.5">回答済み</span>
+                    <strong class="text-xl font-bold text-emerald-950" id="statDone">0</strong>
+                </div>
+                <div class="bg-amber-50/60 p-3 rounded-xl border border-amber-100">
+                    <span class="text-xs font-semibold text-amber-600 block mb-0.5">全体正答率</span>
+                    <strong class="text-xl font-bold text-amber-950" id="statAccuracy">—</strong>
+                </div>
+            </div>
+            
+            <!-- プログレスバー -->
+            <div>
+                <div class="flex justify-between text-xs text-slate-500 font-medium mb-1.5">
+                    <span>全体の進捗状況</span>
+                    <span id="progressText">0 / 1000 (0%)</span>
+                </div>
+                <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div id="progressBar" class="h-full bg-indigo-600 transition-all duration-300 w-0"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- コントロール & タブナビゲーション -->
+        <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 space-y-4">
+            <!-- タブ切替 -->
+            <div class="grid grid-cols-3 gap-2 p-1 bg-slate-100 rounded-xl font-medium text-sm">
+                <button id="tabListening" class="py-2.5 rounded-lg transition text-indigo-900 bg-white shadow-sm font-semibold flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-headphones text-indigo-600"></i>
+                    <span>リスニング <span class="text-xs opacity-75 font-normal">(500)</span></span>
+                </button>
+                <button id="tabReading" class="py-2.5 rounded-lg transition text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-book-open text-slate-500"></i>
+                    <span>リーディング <span class="text-xs opacity-75 font-normal">(500)</span></span>
+                </button>
+                <button id="tabStats" class="py-2.5 rounded-lg transition text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-chart-line text-slate-500"></i>
+                    <span>学習記録・分析</span>
+                </button>
+            </div>
+
+            <!-- 設定パネル -->
+            <div id="settingsPanel" class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 text-sm border-t border-slate-100">
+                <div>
+                    <label for="selectMode" class="block text-xs font-semibold text-slate-600 mb-1">
+                        <i class="fa-solid fa-sliders text-slate-400 mr-1"></i>出題モード
+                    </label>
+                    <select id="selectMode" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <option value="all">全問題から順番に出題</option>
+                        <option value="random">ランダムに出題</option>
+                        <option value="unanswered">未回答の問題のみ優先</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="voiceMale" class="block text-xs font-semibold text-slate-600 mb-1">
+                        <i class="fa-solid fa-mars text-blue-500 mr-1"></i>男性音声 (Speaker A)
+                    </label>
+                    <select id="voiceMale" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <option value="auto">自動選択 (Default)</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="voiceFemale" class="block text-xs font-semibold text-slate-600 mb-1">
+                        <i class="fa-solid fa-venus text-pink-500 mr-1"></i>女性音声 (Speaker B)
+                    </label>
+                    <select id="voiceFemale" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <option value="auto">自動選択 (Default)</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- クイズセクション -->
+        <section id="quizSection" class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-slate-200/80 space-y-5">
+            <!-- クイズヘッダーバッジ -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-2">
+                    <span id="badgeCategory" class="bg-indigo-100 text-indigo-800 text-xs px-2.5 py-1 rounded-md font-bold tracking-wider uppercase">
+                        LISTENING
+                    </span>
+                    <span id="badgeNumber" class="bg-slate-100 text-slate-700 text-xs px-2.5 py-1 rounded-md font-medium">
+                        問題 1 / 500
+                    </span>
+                </div>
+                <span class="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded border border-amber-200/60 font-medium">
+                    ECL Standard Level
+                </span>
+            </div>
+
+            <!-- リスニング用 音声再生エリア -->
+            <div id="audioContainer" class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xs font-bold text-slate-500 tracking-wider uppercase flex items-center gap-1.5">
+                        <i class="fa-solid fa-volume-high text-indigo-500"></i> 音声スクリプト (対話/テキスト)
+                    </h3>
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs text-slate-500 font-medium">速度:</label>
+                        <select id="speechRate" class="text-xs bg-white border border-slate-300 rounded px-2 py-1">
+                            <option value="0.75">0.75x</option>
+                            <option value="0.9" selected>0.9x (標準)</option>
+                            <option value="1.0">1.0x</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="scriptText" class="text-slate-800 font-medium text-sm md:text-base leading-relaxed bg-white p-3 rounded-lg border border-slate-200/60 whitespace-pre-line">
+                    <!-- スクリプト文章がここに入ります -->
+                </div>
+                <div class="flex items-center gap-2 pt-1">
+                    <button id="btnPlayAudio" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-2 shadow-sm">
+                        <i class="fa-solid fa-play"></i> 音声を再生
+                    </button>
+                    <button id="btnStopAudio" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold text-sm py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-square"></i> 停止
+                    </button>
+                </div>
+            </div>
+
+            <!-- リーディング用 英文読解エリア -->
+            <div id="readingContainer" class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-2 hidden">
+                <h3 class="text-xs font-bold text-slate-500 tracking-wider uppercase flex items-center gap-1.5">
+                    <i class="fa-solid fa-file-lines text-indigo-500"></i> 英文読解パッセージ
+                </h3>
+                <div id="passageText" class="text-slate-800 font-medium text-sm md:text-base leading-relaxed bg-white p-3 rounded-lg border border-slate-200/60">
+                    <!-- パッセージ文章がここに入ります -->
+                </div>
+            </div>
+
+            <!-- 設問 -->
+            <div>
+                <h2 id="questionText" class="text-base md:text-lg font-bold text-slate-900 leading-snug">
+                    <!-- 設問テキスト -->
+                </h2>
+            </div>
+
+            <!-- 選択肢リスト -->
+            <div id="optionsList" class="grid grid-cols-1 gap-2.5">
+                <!-- 選択肢ボタンが動的に挿入されます -->
+            </div>
+
+            <!-- アクションボタン（解答確認 / 次へ） -->
+            <div class="flex items-center gap-3 pt-2">
+                <button id="btnCheckAnswer" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl transition shadow-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-circle-check"></i> 解答・詳細解説を見る
+                </button>
+                <button id="btnNextQuestion" disabled class="flex-1 bg-slate-200 text-slate-400 font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 cursor-not-allowed">
+                    次の問題へ <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- 解説表示カード (初期非表示) -->
+            <div id="explanationCard" class="hidden bg-slate-50 border border-slate-200 rounded-xl p-4 md:p-5 space-y-4">
+                <div id="resultBanner" class="p-3 rounded-lg font-bold text-center text-sm md:text-base">
+                    <!-- 正解 / 不正解 の表示 -->
+                </div>
+                
+                <div>
+                    <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">【解説】</h4>
+                    <p id="explText" class="text-sm text-slate-700 leading-relaxed"></p>
+                </div>
+
+                <!-- 語彙・文法・例文グリッド -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 text-xs md:text-sm">
+                    <div class="bg-white p-3 rounded-lg border border-slate-200">
+                        <span class="font-bold text-indigo-900 block mb-1">
+                            <i class="fa-solid fa-spell-check text-indigo-500 mr-1"></i>ターゲット単語・意味
+                        </span>
+                        <div id="explWord" class="text-slate-700"></div>
+                    </div>
+
+                    <div class="bg-white p-3 rounded-lg border border-slate-200">
+                        <span class="font-bold text-indigo-900 block mb-1">
+                            <i class="fa-solid fa-link text-emerald-500 mr-1"></i>同意語 (Synonym) & 反対語 (Antonym)
+                        </span>
+                        <div id="explSynAnt" class="text-slate-700"></div>
+                    </div>
+
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 md:col-span-2">
+                        <span class="font-bold text-indigo-900 block mb-1">
+                            <i class="fa-solid fa-code-branch text-amber-500 mr-1"></i>文法ポイント
+                        </span>
+                        <div id="explGrammar" class="text-slate-700"></div>
+                    </div>
+
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 md:col-span-2">
+                        <span class="font-bold text-indigo-900 block mb-1">
+                            <i class="fa-solid fa-quote-left text-blue-500 mr-1"></i>追加の実践例文
+                        </span>
+                        <div id="explExample" class="text-slate-700 italic"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 学習記録・成績分析セクション (初期非表示) -->
+        <section id="statsSection" class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-slate-200/80 space-y-6 hidden">
+            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-chart-pie text-indigo-600"></i> 学習成績とデータ分析
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <span class="text-xs font-semibold text-slate-500 block mb-1">🎧 リスニング 正解数</span>
+                    <strong id="scoreListening" class="text-2xl font-bold text-indigo-900">0 / 500</strong>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <span class="text-xs font-semibold text-slate-500 block mb-1">📖 リーディング 正解数</span>
+                    <strong id="scoreReading" class="text-2xl font-bold text-indigo-900">0 / 500</strong>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <span class="text-xs font-semibold text-slate-500 block mb-1">🎯 全体精度</span>
+                    <strong id="scoreAccuracy" class="text-2xl font-bold text-emerald-600">0%</strong>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-sm font-bold text-slate-700 mb-3 flex items-center justify-between">
+                    <span><i class="fa-solid fa-history mr-1"></i> 最近の回答履歴 (直近30件)</span>
+                    <span class="text-xs font-normal text-slate-500">ブラウザ内に自動保持されています</span>
+                </h3>
+                <div id="historyList" class="max-h-60 overflow-y-auto custom-scrollbar border border-slate-200 rounded-xl divide-y divide-slate-100 text-xs md:text-sm">
+                    <!-- 履歴データが入ります -->
+                </div>
+            </div>
+
+            <div class="pt-2 flex justify-end">
+                <button id="btnResetStats" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-semibold px-4 py-2 rounded-xl text-xs md:text-sm transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-trash-can"></i> 成績データをリセット
+                </button>
+            </div>
+        </section>
+
+        <!-- 使い方ガイド -->
+        <section class="bg-slate-100 rounded-2xl p-5 border border-slate-200 text-xs md:text-sm text-slate-600 space-y-2">
+            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-info text-indigo-600"></i> ECLマスター・トレーナーの使い方
+            </h3>
+            <ol class="list-decimal list-inside space-y-1 text-slate-600 leading-relaxed">
+                <li>「リスニング」「リーディング」タブを切り替えて問題を選択できます。</li>
+                <li>リスニング問題では「音声を再生」ボタンを押すと対話テキストが読み上げられます。速度や声質の調整も可能です。</li>
+                <li>解答を選択し「解答・詳細解説を見る」を押すと、同意語・反対語・文法・例文などの包括的な解説が確認できます。</li>
+                <li><strong>学習履歴や成績はブラウザ内に保存されます。</strong>次回ページを開いた際も自動的に続きから再開できます。</li>
+            </ol>
+        </section>
+    </main>
+
+    <!-- フッター -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500">
+        <div class="max-w-4xl mx-auto px-4">
+            <p>ECL Test Preparation 1000 Practice Questions Engine with Persistent Storage.</p>
+        </div>
+    </footer>
+
+    <!-- カスタムダイアログ/通知用モーダル -->
+    <div id="modalAlert" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl p-5 max-w-sm w-full shadow-xl border border-slate-200 text-center space-y-4">
+            <div id="modalAlertIcon" class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto text-xl">
+                <i class="fa-solid fa-circle-info"></i>
+            </div>
+            <p id="modalAlertText" class="text-sm font-medium text-slate-800 leading-normal"></p>
+            <button id="btnModalClose" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-xl text-sm transition">
+                確認
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript ロジック -->
+    <script>
+        // --- 1. 語彙・基本データバンク ---
+        const wordBank = [
+            { word: "abandon", jp: "放棄する・見捨てる", syn: "give up", ant: "continue", ex: "The crew had to abandon the damaged vehicle.", grammar: "動詞。abandon + 名詞で「〜を放棄する」。" },
+            { word: "accurate", jp: "正確な・精密な", syn: "correct", ant: "incorrect", ex: "Please provide accurate information on the form.", grammar: "形容詞。名詞形は accuracy、反対語は inaccurate。" },
+            { word: "achieve", jp: "達成する・成し遂げる", syn: "accomplish", ant: "fail", ex: "The team achieved its goal ahead of schedule.", grammar: "動詞。achieve a goal / target のコロケーションで頻出。" },
+            { word: "adequate", jp: "十分な・適切な", syn: "sufficient", ant: "insufficient", ex: "We have adequate supplies for the trip.", grammar: "形容詞。adequate for + 名詞。「〜に十分な」。" },
+            { word: "admit", jp: "認める・許可する", syn: "acknowledge", ant: "deny", ex: "He admitted that he had made a mistake.", grammar: "動詞。admit that + 文、または admit doing の形。" },
+            { word: "advance", jp: "前進する・進歩する", syn: "progress", ant: "retreat", ex: "The unit advanced slowly through the valley.", grammar: "動詞・名詞。advance toward + 目的地。" },
+            { word: "advantage", jp: "利点・強み", syn: "benefit", ant: "disadvantage", ex: "One advantage of planning is saving time.", grammar: "名詞。an advantage of + 名詞/動名詞。" },
+            { word: "affect", jp: "影響を与える", syn: "influence", ant: "leave unchanged", ex: "Heavy rain may affect the flight schedule.", grammar: "動詞。affectは動詞、effectは多くの場合名詞。" },
+            { word: "alert", jp: "警戒した・警告する", syn: "watchful", ant: "unaware", ex: "The guard remained alert throughout the night.", grammar: "形容詞・動詞。remain alert で「警戒を怠らない」。" },
+            { word: "allow", jp: "許可する・可能にする", syn: "permit", ant: "forbid", ex: "The officer allowed us to enter the building.", grammar: "動詞。allow + 人 + to不定詞「人が〜するのを許す」。" },
+            { word: "announce", jp: "発表する・告知する", syn: "declare", ant: "conceal", ex: "The airport announced a delay due to fog.", grammar: "動詞。announce a decision / schedule。" },
+            { word: "anxious", jp: "心配して・切望して", syn: "worried", ant: "calm", ex: "She was anxious about the inspection.", grammar: "形容詞。anxious about (心配) / anxious to do (切望)。" },
+            { word: "apparent", jp: "明らかな・一目瞭然の", syn: "obvious", ant: "unclear", ex: "It became apparent that the road was closed.", grammar: "形容詞。It is apparent that + 節。" },
+            { word: "approach", jp: "近づく・接近する", syn: "come near", ant: "withdraw", ex: "The vehicle approached the checkpoint slowly.", grammar: "動詞。approachは他動詞のため前置詞toは不要。" },
+            { word: "appropriate", jp: "ふさわしい・適切な", syn: "suitable", ant: "inappropriate", ex: "Wear appropriate clothing for cold weather.", grammar: "形容詞。appropriate for + 名詞。" },
+            { word: "arrange", jp: "手配する・整列させる", syn: "organize", ant: "disorganize", ex: "We arranged transportation for the visitors.", grammar: "動詞。arrange to do / arrange for + 名詞。" },
+            { word: "assess", jp: "評価する・査定する", syn: "evaluate", ant: "ignore", ex: "The supervisor assessed the risk before departure.", grammar: "動詞。assess the situation / risk / performance。" },
+            { word: "assist", jp: "支援する・手伝う", syn: "help", ant: "hinder", ex: "Two technicians assisted with the repair.", grammar: "動詞。assist 人 with 名詞 / assist in doing。" },
+            { word: "assume", jp: "仮定する・引き受ける", syn: "suppose", ant: "know for certain", ex: "Do not assume the gate is open.", grammar: "動詞。assume that + 文「〜と思い込む」。" },
+            { word: "attempt", jp: "試みる・挑戦する", syn: "try", ant: "give up", ex: "They attempted to restart the engine.", grammar: "動詞・名詞。attempt to do「〜することを試みる」。" },
+            { word: "available", jp: "利用可能な・入手できる", syn: "accessible", ant: "unavailable", ex: "A doctor is available after 1400 hours.", grammar: "形容詞。be available for / to。" },
+            { word: "avoid", jp: "避ける・回避する", syn: "prevent", ant: "face", ex: "Avoid using your phone during the briefing.", grammar: "動詞。avoid の後ろは動名詞 (-ing) を取る。" },
+            { word: "brief", jp: "簡潔な・要約する", syn: "short", ant: "lengthy", ex: "The pilot gave a brief report after landing.", grammar: "形容詞・動詞。brief someone on + 内容。" },
+            { word: "confirm", jp: "確認する・確証する", syn: "verify", ant: "deny", ex: "Please confirm your arrival time by email.", grammar: "動詞。confirm a reservation / details。" },
+            { word: "consider", jp: "検討する・よく考える", syn: "think about", ant: "dismiss", ex: "We should consider another route.", grammar: "動詞。consider の目的語は動名詞 (-ing)。" },
+            { word: "consistent", jp: "一貫した・ブレない", syn: "steady", ant: "inconsistent", ex: "Her performance has been consistent this month.", grammar: "形容詞。be consistent with「〜と一致している」。" },
+            { word: "contribute", jp: "貢献する・寄付する", syn: "help", ant: "undermine", ex: "Every member contributed to the success.", grammar: "動詞。contribute to + 名詞/動名詞。" },
+            { word: "convenient", jp: "便利な・都合が良い", syn: "practical", ant: "inconvenient", ex: "The earlier bus is more convenient for us.", grammar: "形容詞。convenient for 人。" },
+            { word: "decline", jp: "辞退する・減少する", syn: "refuse", ant: "accept", ex: "He declined the offer because he was busy.", grammar: "動詞・名詞。decline an offer「申し出を断る」。" },
+            { word: "delay", jp: "遅らせる・延期する", syn: "postpone", ant: "advance", ex: "The storm delayed our departure by two hours.", grammar: "動詞・名詞。delay A by 時間。" }
+        ];
+
+        // 決定論的疑似乱数（ハッシュ）関数
+        function hashCode(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = (hash * 31 + str.charCodeAt(i)) | 0;
+            }
+            return Math.abs(hash);
+        }
+
+        function seededShuffle(array, seed) {
+            let arr = array.slice();
+            let x = seed || 1;
+            for (let i = arr.length - 1; i > 0; i--) {
+                x = (x * 1664525 + 1013904223) >>> 0;
+                let j = x % (i + 1);
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // --- 2. 問題生成エンジン ---
+        function generateQuestions(type) {
+            const questions = [];
+            const isL = (type === 'L');
+            const totalCount = 500;
+
+            for (let i = 0; i < totalCount; i++) {
+                const baseItem = wordBank[i % wordBank.length];
+                const variant = Math.floor(i / wordBank.length) % 5;
+                const qId = (isL ? 'L' : 'R') + (i + 1);
+                const seed = hashCode(qId);
+
+                let script = "";
+                let passage = "";
+                let question = "";
+                let correct = "";
+                let wrong = [];
+
+                if (isL) {
+                    const scripts = [
+                        `Speaker A: Please remember to ${baseItem.word} the details before the briefing.\nSpeaker B: Understood. I will check them right away.`,
+                        `Supervisor: We need to ${baseItem.word} the issue before the team leaves.\nStaff: I will take care of it immediately.`,
+                        `Speaker A: Why is "${baseItem.word}" important for this mission?\nSpeaker B: It helps us complete the operation safely and on time.`,
+                        `Speaker A: The report emphasizes "${baseItem.word}." What is our next action?\nSpeaker B: We must follow the procedure precisely.`,
+                        `Instructor: Please use "${baseItem.word}" correctly in your final report.\nTrainee: I will review the guidelines carefully.`
+                    ];
+                    script = scripts[variant];
+
+                    if (variant === 0) {
+                        question = `会話で使用されている "${baseItem.word}" の意味として最も適切なものはどれですか。`;
+                        correct = baseItem.jp;
+                        wrong = seededShuffle(wordBank.filter(x => x.word !== baseItem.word).map(x => x.jp), seed).slice(0, 3);
+                    } else if (variant === 1) {
+                        question = `会話の主な目的・要点は何ですか。`;
+                        correct = `指示された内容（${baseItem.word}）を適切に確認・実行すること`;
+                        wrong = ["予定されている訓練をキャンセルすること", "新しい機材を購入する申請をすること", "休暇の日程を変更すること"];
+                    } else if (variant === 2) {
+                        question = `"${baseItem.word}" の同意語 (Synonym) として最も適切なものはどれですか。`;
+                        correct = baseItem.syn;
+                        wrong = seededShuffle(wordBank.filter(x => x.word !== baseItem.word).map(x => x.syn), seed).slice(0, 3);
+                    } else if (variant === 3) {
+                        question = `"${baseItem.word}" の反対語 (Antonym) として最も適切なものはどれですか。`;
+                        correct = baseItem.ant;
+                        wrong = seededShuffle(wordBank.filter(x => x.word !== baseItem.word).map(x => x.ant), seed).slice(0, 3);
+                    } else {
+                        question = `空欄に入る最適な単語を選びなさい: "The team must ______ the guidelines before departure."`;
+                        correct = baseItem.word;
+                        wrong = seededShuffle(wordBank.filter(x => x.word !== baseItem.word).map(x => x.word), seed).slice(0, 3);
+                    }
+                } else {
+                    const passages = [
+                        `During the morning briefing, the supervisor explained why the team needed to ${baseItem.word} the latest information. Everyone was asked to review the details and report any problems before departure. Careful preparation ensures overall safety.`,
+                        `The training center introduced a new procedure this month. Personnel were instructed to ${baseItem.word} all directives, ask questions when necessary, and record the results to reduce potential errors.`,
+                        `Before the exercise, the unit checked their gear and reviewed the checklist. One officer reminded the group to ${baseItem.word} relevant facts instead of relying on memory. Accurate records facilitate better decisions.`,
+                        `The operations office sent an urgent update regarding the revised schedule. Personnel were requested to ${baseItem.word} the new instructions and contact the duty officer for clarification if needed.`,
+                        `At the conclusion of the exercise, the instructor evaluated the performance. Everyone was encouraged to ${baseItem.word} what went well and what required further improvement in future sessions.`
+                    ];
+                    passage = passages[variant];
+
+                    if (variant === 0) {
+                        question = `本文中の "${baseItem.word}" の意味として最も適切なものはどれですか。`;
+                        correct = baseItem.jp;
+                        wrong = seededShuffle(wordBank.filter(x => x.word !== baseItem.word).map(x => x.jp), seed).slice(0, 3);
+                    } else if (variant === 1) {
+                        question = `本文の主旨・要約として最も適しているものはどれですか。`;
+                        correct = `指示や情報を確実に確認・実行し、業務の安全と正確性を高めること`;
+                        wrong = ["古い手順をすべて廃止し自由に行動すること", "天候の悪化に伴い全ての業務を中断すること", "外部の民間企業に業務を委託すること"];
+                    } else if (variant === 2) {
+                        question = `本文によると、担当者に求められている対応は何ですか。`;
+                        correct = `内容を確認し、問題や不明点があれば報告・質問すること`;
+                        wrong = ["確認せずに即座に作業を開始すること", "すべての記録文書を消去すること", "個人の判断でスケジュールを変更すること"];
+                    } else if (variant === 3) {
+                        question = `空欄に入る最も適切な語を選びなさい: "Staff were instructed to ______ the standard procedure."`;
+                        correct = baseItem.word;
+                        wrong = seededShuffle(wordBank.filter(x => x.word !== baseItem.word).map(x => x.word), seed).slice(0, 3);
+                    } else {
+                        question = `本文から推測できる妥当な結論はどれですか。`;
+                        correct = `事前の確認と正確な記録は、エラーを防ぎ効率的な判断につながる`;
+                        wrong = ["記憶だけに頼る方が作業効率が向上する", "事前の準備は時間の無駄である", "インストラクターの指示は無視してもよい"];
+                    }
+                }
+
+                const rawOptions = [{ text: correct, isCorrect: true }, ...wrong.map(w => ({ text: w, isCorrect: false }))];
+                const options = seededShuffle(rawOptions, seed + 999);
+                const answerIndex = options.findIndex(o => o.isCorrect);
+
+                let explanation = `文脈における "${baseItem.word}" は「${baseItem.jp}」を意味します。`;
+                if (variant === 1) explanation += ` 文章全体が示す「指示・情報の確認と正確な実行」という要点をつかむことがポイントです。`;
+                if (variant === 2) explanation += ` 同意語は ${baseItem.syn} です。語彙の置き換え知識を問う問題です。`;
+                if (variant === 3) explanation += ` 反対語は ${baseItem.ant} です。対比概念を整理しておきましょう。`;
+
+                questions.push({
+                    id: qId,
+                    type: isL ? 'L' : 'R',
+                    index: i + 1,
+                    wordItem: baseItem,
+                    script,
+                    passage,
+                    question,
+                    options,
+                    answerIndex,
+                    explanation
+                });
+            }
+            return questions;
+        }
+
+        const listeningDataset = generateQuestions('L');
+        const readingDataset = generateQuestions('R');
+
+        // --- 3. アプリケーション状態 & localStorage 管理 ---
+        const STORAGE_KEY = "ECL_1000_TRAINER_PROGRESS_V3";
+
+        function loadSavedData() {
+            try {
+                const data = localStorage.getItem(STORAGE_KEY);
+                return data ? JSON.parse(data) : { answers: {}, history: [] };
+            } catch (e) {
+                console.error("Failed to load progress:", e);
+                return { answers: {}, history: [] };
+            }
+        }
+
+        let userRecords = loadSavedData();
+        let currentSection = 'L'; // 'L' or 'R'
+        let currentPos = 0;
+        let selectedOptionIndex = null;
+        let isChecked = false;
+
+        const alphabet = ['A', 'B', 'C', 'D'];
+        const $ = id => document.getElementById(id);
+
+        const modalAlert = $('modalAlert');
+        const modalAlertText = $('modalAlertText');
+        const btnModalClose = $('btnModalClose');
+
+        function showAlert(msg) {
+            modalAlertText.textContent = msg;
+            modalAlert.classList.remove('hidden');
+        }
+        btnModalClose.onclick = () => modalAlert.classList.add('hidden');
+
+        // --- 4. Web Speech API (音声読み上げ) ---
+        let availableVoices = [];
+
+        function initVoices() {
+            if (!('speechSynthesis' in window)) return;
+            availableVoices = speechSynthesis.getVoices();
+
+            const maleSelect = $('voiceMale');
+            const femaleSelect = $('voiceFemale');
+
+            const oldM = maleSelect.value;
+            const oldF = femaleSelect.value;
+
+            maleSelect.innerHTML = '<option value="auto">自動選択 (Male Default)</option>';
+            femaleSelect.innerHTML = '<option value="auto">自動選択 (Female Default)</option>';
+
+            const enVoices = availableVoices.filter(v => /^en/i.test(v.lang));
+
+            enVoices.forEach((v) => {
+                const realIndex = availableVoices.indexOf(v);
+                const optM = document.createElement('option');
+                optM.value = realIndex;
+                optM.textContent = `${v.name} (${v.lang})`;
+                maleSelect.appendChild(optM);
+
+                const optF = document.createElement('option');
+                optF.value = realIndex;
+                optF.textContent = `${v.name} (${v.lang})`;
+                femaleSelect.appendChild(optF);
+            });
+
+            if (oldM) maleSelect.value = oldM;
+            if (oldF) femaleSelect.value = oldF;
+        }
+
+        if ('speechSynthesis' in window) {
+            initVoices();
+            speechSynthesis.onvoiceschanged = initVoices;
+        }
+
+        function speakText() {
+            if (!('speechSynthesis' in window)) {
+                showAlert('お使いのブラウザは音声読み上げ機能(SpeechSynthesis)に対応していません。SafariまたはChromeをご利用ください。');
+                return;
+            }
+
+            speechSynthesis.cancel();
+            const q = getCurrentList()[currentPos];
+            if (!q || !q.script) return;
+
+            const lines = q.script.split('\n').filter(Boolean);
+            const rate = parseFloat($('speechRate').value || '0.9');
+
+            const enVoices = availableVoices.filter(v => /^en/i.test(v.lang));
+            let voiceA = null;
+            let voiceB = null;
+
+            const valM = $('voiceMale').value;
+            const valF = $('voiceFemale').value;
+
+            if (valM !== 'auto' && availableVoices[valM]) voiceA = availableVoices[valM];
+            if (valF !== 'auto' && availableVoices[valF]) voiceB = availableVoices[valF];
+
+            if (!voiceA) voiceA = enVoices.find(v => /male|david|alex|daniel|george/i.test(v.name)) || enVoices[0] || null;
+            if (!voiceB) voiceB = enVoices.find(v => /female|samantha|victoria|zira|karen|mary/i.test(v.name)) || enVoices[1] || enVoices[0] || null;
+
+            let lineIndex = 0;
+
+            function playNextLine() {
+                if (lineIndex >= lines.length) return;
+
+                const line = lines[lineIndex];
+                const utterance = new SpeechSynthesisUtterance(line);
+                const isSpeakerA = line.startsWith("Speaker A") || line.startsWith("Supervisor") || line.startsWith("Instructor");
+
+                const chosenVoice = isSpeakerA ? voiceA : voiceB;
+                if (chosenVoice) {
+                    utterance.voice = chosenVoice;
+                    utterance.lang = chosenVoice.lang;
+                } else {
+                    utterance.lang = 'en-US';
+                }
+
+                utterance.rate = rate;
+                utterance.onend = () => {
+                    lineIndex++;
+                    playNextLine();
+                };
+
+                speechSynthesis.speak(utterance);
+            }
+
+            playNextLine();
+        }
+
+        // --- 5. クイズ表示 & 出題ロジック ---
+        function getCurrentList() {
+            return currentSection === 'L' ? listeningDataset : readingDataset;
+        }
+
+        function getNextIndex() {
+            const list = getCurrentList();
+            const mode = $('selectMode').value;
+
+            if (mode === 'random') {
+                return Math.floor(Math.random() * list.length);
+            } else if (mode === 'unanswered') {
+                const unansweredIndices = list.map((q, idx) => idx).filter(idx => !userRecords.answers[list[idx].id]);
+                if (unansweredIndices.length > 0) {
+                    return unansweredIndices[Math.floor(Math.random() * unansweredIndices.length)];
+                }
+            }
+            return (currentPos % list.length);
+        }
+
+        function renderQuiz() {
+            const list = getCurrentList();
+
+            if ($('selectMode').value !== 'all' || currentPos < 0 || currentPos >= list.length) {
+                currentPos = getNextIndex();
+            }
+
+            const q = list[currentPos];
+            selectedOptionIndex = null;
+            isChecked = false;
+
+            $('badgeCategory').textContent = currentSection === 'L' ? 'LISTENING' : 'READING';
+            $('badgeNumber').textContent = `問題 ${q.index} / 500`;
+
+            if (currentSection === 'L') {
+                $('audioContainer').classList.remove('hidden');
+                $('readingContainer').classList.add('hidden');
+                $('scriptText').textContent = q.script;
+            } else {
+                $('audioContainer').classList.add('hidden');
+                $('readingContainer').classList.remove('hidden');
+                $('passageText').textContent = q.passage;
+            }
+
+            $('questionText').textContent = q.question;
+
+            const optionsList = $('optionsList');
+            optionsList.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `option-btn w-full text-left p-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition text-sm font-medium text-slate-800 flex items-start gap-3 shadow-sm`;
+                btn.innerHTML = `
+                    <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5 border border-slate-200">
+                        ${alphabet[idx]}
+                    </span>
+                    <span class="flex-grow">${opt.text}</span>
+                `;
+                btn.onclick = () => {
+                    if (isChecked) return;
+                    selectedOptionIndex = idx;
+                    document.querySelectorAll('.option-btn').forEach((b, i) => {
+                        b.classList.remove('border-indigo-600', 'bg-indigo-50/60', 'ring-2', 'ring-indigo-500/20');
+                        if (i === idx) {
+                            b.classList.add('border-indigo-600', 'bg-indigo-50/60', 'ring-2', 'ring-indigo-500/20');
+                        }
+                    });
+                };
+                optionsList.appendChild(btn);
+            });
+
+            $('explanationCard').classList.add('hidden');
+            $('btnCheckAnswer').disabled = false;
+            $('btnCheckAnswer').className = "flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl transition shadow-sm flex items-center justify-center gap-2";
+            
+            $('btnNextQuestion').disabled = true;
+            $('btnNextQuestion').className = "flex-1 bg-slate-200 text-slate-400 font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 cursor-not-allowed";
+
+            updateSummaryStats();
+        }
+
+        function checkAnswer() {
+            if (selectedOptionIndex === null) {
+                showAlert('回答の選択肢をひとつ選択してください。');
+                return;
+            }
+
+            isChecked = true;
+            const q = getCurrentList()[currentPos];
+            const isCorrect = (selectedOptionIndex === q.answerIndex);
+
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === q.answerIndex) {
+                    btn.classList.remove('bg-white', 'border-slate-200', 'bg-indigo-50/60');
+                    btn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-950', 'font-semibold');
+                }
+                if (idx === selectedOptionIndex && !isCorrect) {
+                    btn.classList.remove('bg-white', 'border-slate-200', 'bg-indigo-50/60');
+                    btn.classList.add('bg-rose-50', 'border-rose-400', 'text-rose-950');
+                }
+            });
+
+            // 保存データ構造の更新
+            userRecords.answers[q.id] = {
+                isCorrect,
+                section: q.type,
+                word: q.wordItem.word,
+                timestamp: new Date().toLocaleString('ja-JP')
+            };
+
+            userRecords.history.unshift({
+                id: q.id,
+                isCorrect,
+                word: q.wordItem.word,
+                type: q.type,
+                timestamp: new Date().toLocaleString('ja-JP')
+            });
+            userRecords.history = userRecords.history.slice(0, 30);
+
+            // localStorage に確実に永続化
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(userRecords));
+            } catch (e) {
+                console.error("Storage save failed:", e);
+            }
+
+            const banner = $('resultBanner');
+            if (isCorrect) {
+                banner.className = "p-3 rounded-lg font-bold text-center text-sm md:text-base bg-emerald-100 text-emerald-800 border border-emerald-200";
+                banner.innerHTML = `<i class="fa-solid fa-circle-check mr-1.5"></i> 正解です！ Good Job!`;
+            } else {
+                banner.className = "p-3 rounded-lg font-bold text-center text-sm md:text-base bg-rose-100 text-rose-800 border border-rose-200";
+                banner.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1.5"></i> 不正解です。 正解： ${alphabet[q.answerIndex]}. ${q.options[q.answerIndex].text}`;
+            }
+
+            $('explText').textContent = q.explanation;
+            $('explWord').innerHTML = `<strong class="text-indigo-900">${q.wordItem.word}</strong> : ${q.wordItem.jp}`;
+            $('explSynAnt').innerHTML = `同意語: <span class="font-semibold text-emerald-700">${q.wordItem.syn}</span> ／ 反対語: <span class="font-semibold text-rose-700">${q.wordItem.ant}</span>`;
+            $('explGrammar').textContent = q.wordItem.grammar;
+            $('explExample').textContent = `"${q.wordItem.ex}"`;
+
+            $('explanationCard').classList.remove('hidden');
+
+            $('btnCheckAnswer').disabled = true;
+            $('btnCheckAnswer').className = "flex-1 bg-slate-200 text-slate-400 font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 cursor-not-allowed";
+
+            $('btnNextQuestion').disabled = false;
+            $('btnNextQuestion').className = "flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl transition shadow-sm flex items-center justify-center gap-2";
+
+            updateSummaryStats();
+        }
+
+        // --- 6. 成績統計更新 ---
+        function updateSummaryStats() {
+            const answers = Object.values(userRecords.answers);
+            const totalDone = answers.length;
+            const correctCount = answers.filter(a => a.isCorrect).length;
+            const accuracy = totalDone > 0 ? Math.round((correctCount / totalDone) * 100) : 0;
+
+            $('statDone').textContent = totalDone;
+            $('statAccuracy').textContent = totalDone > 0 ? `${accuracy}%` : '—';
+            $('progressText').textContent = `${totalDone} / 1000 (${Math.round((totalDone / 1000) * 100)}%)`;
+            $('progressBar').style.width = `${Math.min(100, (totalDone / 1000) * 100)}%`;
+
+            const listenCorrect = answers.filter(a => a.section === 'L' && a.isCorrect).length;
+            const readCorrect = answers.filter(a => a.section === 'R' && a.isCorrect).length;
+
+            $('scoreListening').textContent = `${listenCorrect} / 500`;
+            $('scoreReading').textContent = `${readCorrect} / 500`;
+            $('scoreAccuracy').textContent = `${accuracy}%`;
+
+            const historyList = $('historyList');
+            if (userRecords.history.length === 0) {
+                historyList.innerHTML = `<div class="p-4 text-center text-slate-400">まだ回答履歴はありません。</div>`;
+            } else {
+                historyList.innerHTML = userRecords.history.map(item => `
+                    <div class="p-3 flex items-center justify-between hover:bg-slate-50 transition">
+                        <div class="flex items-center gap-2.5">
+                            <span class="${item.isCorrect ? 'text-emerald-500' : 'text-rose-500'} font-bold text-base">
+                                ${item.isCorrect ? '<i class="fa-solid fa-circle-check"></i>' : '<i class="fa-solid fa-circle-xmark"></i>'}
+                            </span>
+                            <div>
+                                <span class="font-bold text-slate-800">${item.id}</span>
+                                <span class="text-xs text-slate-500 ml-1.5">(${item.word})</span>
+                            </div>
+                        </div>
+                        <span class="text-xs text-slate-400">${item.timestamp}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // --- 7. イベントリスナー定義 ---
+        $('tabListening').onclick = () => {
+            currentSection = 'L';
+            currentPos = 0;
+            switchTabUI('L');
+            renderQuiz();
+        };
+
+        $('tabReading').onclick = () => {
+            currentSection = 'R';
+            currentPos = 0;
+            switchTabUI('R');
+            renderQuiz();
+        };
+
+        $('tabStats').onclick = () => {
+            switchTabUI('Stats');
+            updateSummaryStats();
+        };
+
+        function switchTabUI(tab) {
+            const btnL = $('tabListening');
+            const btnR = $('tabReading');
+            const btnS = $('tabStats');
+
+            const quizSection = $('quizSection');
+            const statsSection = $('statsSection');
+            const settingsPanel = $('settingsPanel');
+
+            [btnL, btnR, btnS].forEach(b => {
+                b.className = "py-2.5 rounded-lg transition text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 font-medium";
+            });
+
+            if (tab === 'L') {
+                btnL.className = "py-2.5 rounded-lg transition text-indigo-900 bg-white shadow-sm font-semibold flex items-center justify-center gap-1.5";
+                quizSection.classList.remove('hidden');
+                settingsPanel.classList.remove('hidden');
+                statsSection.classList.add('hidden');
+            } else if (tab === 'R') {
+                btnR.className = "py-2.5 rounded-lg transition text-indigo-900 bg-white shadow-sm font-semibold flex items-center justify-center gap-1.5";
+                quizSection.classList.remove('hidden');
+                settingsPanel.classList.remove('hidden');
+                statsSection.classList.add('hidden');
+            } else {
+                btnS.className = "py-2.5 rounded-lg transition text-indigo-900 bg-white shadow-sm font-semibold flex items-center justify-center gap-1.5";
+                quizSection.classList.add('hidden');
+                settingsPanel.classList.add('hidden');
+                statsSection.classList.remove('hidden');
+            }
+        }
+
+        $('btnPlayAudio').onclick = speakText;
+        $('btnStopAudio').onclick = () => {
+            if ('speechSynthesis' in window) speechSynthesis.cancel();
+        };
+
+        $('btnCheckAnswer').onclick = checkAnswer;
+
+        $('btnNextQuestion').onclick = () => {
+            if ($('selectMode').value === 'all') {
+                currentPos++;
+            }
+            renderQuiz();
+        };
+
+        $('selectMode').onchange = () => renderQuiz();
+
+        $('btnResetStats').onclick = () => {
+            if (confirm('すべての成績・回答履歴をクリアしますか？')) {
+                userRecords = { answers: {}, history: [] };
+                localStorage.removeItem(STORAGE_KEY);
+                updateSummaryStats();
+                showAlert('学習記録をリセットしました。');
+            }
+        };
+
+        // 初期ロード時に過去の成績を読み込んで反映
+        updateSummaryStats();
+        renderQuiz();
+    </script>
+</body>
+</html>
