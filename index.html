@@ -230,9 +230,9 @@
                                 </span>
                                 <div class="flex items-center space-x-1">
                                     <span class="text-xs text-slate-400">速度:</span>
-                                    <button data-speed="0.8" class="speed-btn text-xs px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">0.8x</button>
+                                    <button data-speed="0.75" class="speed-btn text-xs px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">0.75x</button>
                                     <button data-speed="1.0" class="speed-btn text-xs px-2 py-0.5 rounded bg-indigo-600 text-white font-bold">1.0x</button>
-                                    <button data-speed="1.2" class="speed-btn text-xs px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">1.2x</button>
+                                    <button data-speed="1.25" class="speed-btn text-xs px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">1.25x</button>
                                 </div>
                             </div>
                             
@@ -343,11 +343,11 @@
     <!-- App Logic JS -->
     <script>
         /**
-         * ECL Exam Master Core Engine
+         * ECL Exam Master Core Engine - Enhanced Dynamic Generator & Seeder
          */
 
         // State Store
-        const STATE_KEY = 'ecl_exam_master_state_v1';
+        const STATE_KEY = 'ecl_exam_master_state_v2';
 
         let appState = {
             currentTab: 'dashboard',
@@ -356,7 +356,7 @@
             readingIndex: 0,
             mockIndex: 0,
             weaknessIndex: 0,
-            answers: {}, // format: { 'lis-0': { selected: 1, correct: true }, ... }
+            answers: {}, 
             audioSpeed: 1.0,
             mockTimerSeconds: 45 * 60,
             mockTimerInterval: null,
@@ -365,7 +365,8 @@
 
         // Category Definitions
         const CATEGORIES = {
-            MILITARY_COMMAND: '軍事指令・用語',
+            MILITARY_COMMAND: '軍事指令・作戦指示',
+            RADIO_COMMUNICATION: '航空・無線通信',
             DIPLOMACY: '外交・公式協議',
             DAILY_OPS: '会話・日常業務',
             GRAMMAR_STRUCTURE: '文法・複雑構文',
@@ -373,849 +374,242 @@
             CONTEXT_READING: '文脈理解・長文読解'
         };
 
-        // -------------------------------------------------------------
-        // QUESTION GENERATORS & DATABASE SYSTEM (500 L + 500 R Variations)
-        // -------------------------------------------------------------
-        
-        // Base seed data for template generators
-        const listeningSeeds = [
-            {
-                cat: CATEGORIES.MILITARY_COMMAND,
-                script: "Attention all personnel. The joint tactical briefing has been rescheduled from 0900 to 1400 due to severe weather conditions at the airbase.",
-                q: "What is the primary reason for moving the briefing time?",
-                opts: [
-                    "Bad weather conditions at the airbase",
-                    "A delay in senior officers' arrival",
-                    "Equipment failure in the conference room",
-                    "An unexpected VIP visit"
-                ],
-                ans: 0,
-                tr: "全員注視。滑走路における悪天候のため、合同戦術ブリーフィングの時間が0900から1400に変更されました。",
-                grammar: "due to〜 (〜が原因で) は理由を表す前置詞句です。reschedule from A to B (AからBにスケジューリングし直す) の文型が使われています。",
-                vocab: {
-                    word: "reschedule",
-                    meaning: "日時を変更する、予定を組む",
-                    synonyms: "postpone, alter, delay",
-                    antonyms: "maintain, finalize",
-                    ex1: "We had to reschedule the departure due to engine trouble. (エンジン不具合のため出発を変更しなければならなかった。)",
-                    ex2: "Please reschedule the interview for next Tuesday. (面接を来週の水曜日に変更してください。)",
-                    ex3: "The tactical exercise was rescheduled after the alert was lifted. (警戒態勢の解除後に戦術訓練が再スケジュールされた。)"
-                }
-            },
-            {
-                cat: CATEGORIES.DIPLOMACY,
-                script: "The ambassador emphasized that mutual cooperation between both nations is imperative for long-term stability in the region.",
-                q: "What did the ambassador stress regarding regional stability?",
-                opts: [
-                    "Increasing defense budgets immediately",
-                    "Building stronger economic sanctions",
-                    "Essential mutual cooperation between the nations",
-                    "Deploying peacekeeping forces"
-                ],
-                ans: 2,
-                tr: "大使は、地域の長期的な安定には両国間の相互協力が絶対不可欠であると強調しました。",
-                grammar: "emphasize that + 節 で「〜であることを強調する」。imperative は「極めて重要な、不可欠な」を意味する形容詞です。",
-                vocab: {
-                    word: "imperative",
-                    meaning: "絶対必要な、緊急の",
-                    synonyms: "essential, crucial, vital",
-                    antonyms: "optional, unnecessary",
-                    ex1: "It is imperative that we reach an agreement before midnight. (深夜までに合意に達することが不可欠である。)",
-                    ex2: "Prompt action is imperative in times of crisis. (危機的状況においては迅速な行動が不可欠だ。)",
-                    ex3: "The general issued an imperative command to secure the perimeter. (将軍は周辺を確保せよという絶対的な命令を下した。)"
-                }
-            },
-            {
-                cat: CATEGORIES.DAILY_OPS,
-                script: "If you need to submit your travel voucher, make sure to attach all original receipts before delivering it to the finance department on the third floor.",
-                q: "Where should the travel voucher be delivered after attaching receipts?",
-                opts: [
-                    "To the commander's office",
-                    "To the logistics desk on the first floor",
-                    "To the finance department on the third floor",
-                    "To the travel coordinator"
-                ],
-                ans: 2,
-                tr: "旅費精算書を提出する必要がある場合は、原本の領収書をすべて添付した上で、3階の経理課へ提出してください。",
-                grammar: "Make sure to + 動詞の原形 (必ず〜する)。before + -ing (〜する前に) の動名詞構文が用いられています。",
-                vocab: {
-                    word: "submit",
-                    meaning: "提出する、屈服する",
-                    synonyms: "hand in, present, tender",
-                    antonyms: "withdraw, retain",
-                    ex1: "All officers must submit their monthly reports by Friday. (全士官は金曜日までに月次報告書を提出しなければならない。)",
-                    ex2: "He refused to submit to the enemy demands. (彼は敵の要求に屈することを拒否した。)",
-                    ex3: "Please submit the application along with certified documents. (証明書類を添えて申請書を提出してください。)"
-                }
-            },
-            {
-                cat: CATEGORIES.IDIOMS_PHRASAL,
-                script: "Captain Davis decided to call off the night training exercise because visibility dropped below critical safety levels.",
-                q: "What does 'call off' mean in the speaker's statement?",
-                opts: [
-                    "To postpone to tomorrow",
-                    "To cancel completely",
-                    "To modify the mission scope",
-                    "To summon additional units"
-                ],
-                ans: 1,
-                tr: "デイビス大尉は、視界が安全基準値を下回ったため、夜間訓練の全廃（中止）を決定しました。",
-                grammar: "call off は「〜を取り消す、中止する(cancel)」を意味する非常に頻出する重要句動詞です。",
-                vocab: {
-                    word: "call off",
-                    meaning: "中止する、取り消す",
-                    synonyms: "cancel, abort, drop",
-                    antonyms: "proceed, initiate, execute",
-                    ex1: "They had to call off the search operation due to darkness. (暗闇のため捜索活動を中止せざるを得なかった。)",
-                    ex2: "The strike was called off after successful negotiations. (交渉の成功によりストライキは中止された。)",
-                    ex3: "Never call off a mission without direct approval from command. (司令部の直接の承認なしに作戦を中止してはならない。)"
-                }
-            }
-        ];
+        // Seed datasets for robust dynamic variation
+        const ranks = ["Captain", "Major", "Colonel", "Lieutenant", "Sergeant", "Commander", "General"];
+        const locations = ["Sector 4", "Airbase Alpha", "the Naval Station", "the Checkpoint", "Headquarters", "Forward Operating Base Bravo"];
+        const times = ["0600", "0830", "1300", "1545", "1900", "2215"];
+        const weatherTypes = ["heavy fog", "severe turbulence", "torrential rain", "dust storms", "freezing rain"];
 
-        const readingSeeds = [
-            {
-                cat: CATEGORIES.GRAMMAR_STRUCTURE,
-                script: "Had the reconnaissance team detected the obstacle earlier, the convoy _______ a safer alternative route.",
-                q: "Which option best completes the sentence?",
-                opts: [
-                    "would have taken",
-                    "will take",
-                    "takes",
-                    "had taken"
-                ],
-                ans: 0,
-                tr: "もし偵察部隊がもっと早く障害物を発見していたら、車列はより安全な代替ルートを選択していただろうに。",
-                grammar: "仮定法過去完了のIfの省略による倒置構造です。「Had + 主語 + 過去分詞..., 主語 + would/could have + 過去分詞」の標準的ECL出題パターンです。",
-                vocab: {
-                    word: "reconnaissance",
-                    meaning: "偵察、下調べ",
-                    synonyms: "scouting, surveillance, exploration",
-                    antonyms: "ignorance, oversight",
-                    ex1: "The drone was sent on a high-altitude reconnaissance mission. (無人機は高高度偵察任務に派遣された。)",
-                    ex2: "Reconnaissance revealed heavy enemy fortifications ahead. (偵察により前方に強固な敵陣地があることが判明した。)",
-                    ex3: "Before launching the operation, thorough reconnaissance is mandatory. (作戦を開始する前に徹底的な偵察が義務付けられている。)"
-                }
-            },
-            {
-                cat: CATEGORIES.CONTEXT_READING,
-                script: "Naval doctrine specifies that maintaining radio silence during evasive maneuvers is paramount to avoiding interception by hostile radar detection systems.",
-                q: "According to the passage, why is radio silence maintained?",
-                opts: [
-                    "To save vessel battery power",
-                    "To prevent detection by enemy radar/intercept systems",
-                    "To keep internal communications clear",
-                    "To follow routine maintenance procedures"
-                ],
-                ans: 1,
-                tr: "海軍の教範規定では、回避機動中の無線静寂の維持は、敵のレーダー探知システムによる捕捉を回避するために最も重要であると定められている。",
-                grammar: "paramount to + -ing (〜するのに最も重要である)。doctrine (教範、ドクトリン) は軍事・外交ECLの最頻出語です。",
-                vocab: {
-                    word: "paramount",
-                    meaning: "最高の、主要な、最優先の",
-                    synonyms: "supreme, foremost, dominant",
-                    antonyms: "minor, secondary, trivial",
-                    ex1: "Safety is of paramount importance in flight operations. (飛行運用において安全は最優先事項である。)",
-                    ex2: "The commander's paramount concern was the welfare of his troops. (隊長の最大の関心事は部下の安否であった。)",
-                    ex3: "Maintaining confidentiality remains paramount during negotiations. (交渉中、守秘義務の維持は極めて重要である。)"
-                }
-            },
-            {
-                cat: CATEGORIES.IDIOMS_PHRASAL,
-                script: "The logistics officer had to ________ a solution when the primary supply truck broke down in the desert.",
-                q: "Choose the correct phrasal verb to complete the blank.",
-                opts: [
-                    "come up with",
-                    "look down on",
-                    "run out of",
-                    "get along with"
-                ],
-                ans: 0,
-                tr: "補給トラックが砂漠で故障した際、兵站将校は打開策を考え出さなければ（ひらめかなければ）ならなかった。",
-                grammar: "come up with 〜 は「(解決策・アイディアなど)を提案する、思いつく」という意味の基本〜中級熟語です。",
-                vocab: {
-                    word: "come up with",
-                    meaning: "〜を思いつく、提案する",
-                    synonyms: "devise, invent, propose",
-                    antonyms: "discard, ignore",
-                    ex1: "She came up with an ingenious plan to bypass the security check. (彼女はセキュリティチェックを回避する独創的な計画を考案した。)",
-                    ex2: "Can you come up with an alternative strategy by noon? (正午までに代替戦略を提案できますか？)",
-                    ex3: "The engineers came up with a temporary patch for the communications array. (通信アレイの仮補修案をエンジニアが考え出した。)"
-                }
-            }
-        ];
+        // -------------------------------------------------------------
+        // DYNAMIC QUESTION ENGINE FOR 500 L + 500 R (PRACTICE MODE)
+        // -------------------------------------------------------------
 
-        // Generator to dynamically produce 500 Listening and 500 Reading distinct questions
-        function generateQuestionBank(type, totalCount = 500) {
-            const seeds = type === 'listening' ? listeningSeeds : readingSeeds;
+        function generatePracticeQuestions(type, totalCount = 500) {
             const bank = [];
-            const topics = [
-                { topic: "Supply Chain", role: "Logistics Specialist", action: "inspecting cargo containers" },
-                { topic: "Flight Safety", role: "Tower Controller", action: "monitoring wind shear warnings" },
-                { topic: "Cyber Defense", role: "IT Security Officer", action: "upgrading firewalls" },
-                { topic: "Diplomatic Protocol", role: "Attaché", action: "drafting bilateral accords" },
-                { topic: "Medical Evacuation", role: "Flight Surgeon", action: "preparing patient transport" },
-                { topic: "Naval Operations", role: "Executive Officer", action: "verifying sonar telemetry" }
+            const templates = [
+                {
+                    cat: CATEGORIES.MILITARY_COMMAND,
+                    gen: (i) => {
+                        const r = ranks[i % ranks.length];
+                        const loc = locations[i % locations.length];
+                        const t = times[i % times.length];
+                        const w = weatherTypes[i % weatherTypes.length];
+                        return {
+                            script: `${r} Henderson ordered all supply trucks bound for ${loc} to hold positions until ${t} due to ${w}.`,
+                            q: `Why were the supply trucks ordered to hold their positions?`,
+                            opts: [
+                                `Because of ${w} along the route`,
+                                `To wait for additional vehicle escorts`,
+                                `Due to a fuel shortage at ${loc}`,
+                                `To allow non-military traffic to pass first`
+                            ],
+                            ans: 0,
+                            tr: `${r}・ヘンダーソンは、${w}の影響により、${loc}に向かう全ての補給トラックに対して${t}まで待機するよう命じた。`,
+                            grammar: "ordered [目的語] to [動詞の原形]（〜に…するよう命じた）の第5文型。bound for 〜 は「〜行きの」を表す重要表現です。",
+                            vocab: {
+                                word: "hold position",
+                                meaning: "現位置を維持する、待機する",
+                                synonyms: "stay put, maintain ground, await orders",
+                                antonyms: "advance, fall back, retreat",
+                                ex1: "The platoon was instructed to hold position until further notice. (小隊は追加指示があるまで現位置を維持するよう命令された。)",
+                                ex2: "In business negotiations, it is sometimes wise to hold your position. (ビジネス交渉において、自らの立場を維持することが好ましい場合もある。)",
+                                ex3: "Flight control advised the aircraft to hold position on the taxiway. (管制塔は航空機に誘導路上での停止待機を指示した。)"
+                            }
+                        };
+                    }
+                },
+                {
+                    cat: CATEGORIES.RADIO_COMMUNICATION,
+                    gen: (i) => {
+                        const alt = (20 + (i % 15) * 2) * 100;
+                        return {
+                            script: "Tower, this is Viper 21. Requesting permission to adjust altitude to " + alt + " feet due to unexpected wind shear.",
+                            q: "What is Viper 21 requesting?",
+                            opts: [
+                                "Permission to land immediately",
+                                `Altitude adjustment to ${alt} feet`,
+                                "Vector to the nearest emergency runway",
+                                "Refueling support on arrival"
+                            ],
+                            ans: 1,
+                            tr: "タワー、こちらバイパー21。予期せぬウインドシア（風の急変）のため、高度を" + alt + "フィートに変更する許可を要請する。",
+                            grammar: "Requesting permission to + 動詞の原形（〜する許可を要請する）。due to + 名詞（〜が理由で）は航空無線・軍事英語の定番構文です。",
+                            vocab: {
+                                word: "altitude",
+                                meaning: "高度、海抜",
+                                synonyms: "elevation, height, ceiling",
+                                antonyms: "depth, low altitude",
+                                ex1: "The aircraft reached its cruising altitude within fifteen minutes. (その航空機は15分以内に巡航高度に達した。)",
+                                ex2: "High altitude can cause breathing difficulties without auxiliary oxygen. (高高度では補助酸素なしでは呼吸困難を引き起こす可能性がある。)",
+                                ex3: "Radar confirmed the target was changing altitude rapidly. (レーダーは目標が急速に高度を変えているのを確認した。)"
+                            }
+                        };
+                    }
+                },
+                {
+                    cat: CATEGORIES.GRAMMAR_STRUCTURE,
+                    gen: (i) => {
+                        const verbs = ["inspected", "approved", "verified", "securing", "authorizing"];
+                        return {
+                            script: "Not until the chief engineer had thoroughly _______ the fuel line did the pilot start the engines.",
+                            q: "Which word best completes the sentence grammatically?",
+                            opts: [
+                                "inspected",
+                                "inspect",
+                                "inspecting",
+                                "inspection"
+                            ],
+                            ans: 0,
+                            tr: "主任エンジニアが燃料ラインを徹底的に点検し終えて初めて、パイロットはエンジンを始動させた。",
+                            grammar: "否定語句 Not until が文頭に出たことによる主節の倒置構造（did the pilot start）と、過去完了（had + 過去分詞 inspected）の組み合わせ問題です。",
+                            vocab: {
+                                word: "inspect",
+                                meaning: "検査する、点検する",
+                                synonyms: "examine, audit, scrutinize",
+                                antonyms: "neglect, overlook",
+                                ex1: "Technicians inspect the landing gear before every flight. (技術者は毎フライト前に着陸装置を点検する。)",
+                                ex2: "Customs officers inspect cargo at international borders. (税関職員は国境で貨物を検査する。)",
+                                ex3: "The general arrived to inspect the garrison facilities. (将軍は駐屯地施設を視察するために到着した。)"
+                            }
+                        };
+                    }
+                },
+                {
+                    cat: CATEGORIES.IDIOMS_PHRASAL,
+                    gen: (i) => {
+                        return {
+                            script: "The diplomatic mission managed to iron out their remaining policy differences before the summit concluded.",
+                            q: "What does 'iron out' mean in this context?",
+                            opts: [
+                                "To resolve or settle difficulties",
+                                "To cancel the agreement entirely",
+                                "To delay decision making",
+                                "To press uniforms for the ceremony"
+                            ],
+                            ans: 0,
+                            tr: "外交使節団は、サミットが閉幕する前に残された政策上の意見の違いを解決（調整）することができた。",
+                            grammar: "iron out は「（問題や違いなどを）スムーズに解決する、取り除く」という比喩的な慣用句動詞です。",
+                            vocab: {
+                                word: "iron out",
+                                meaning: "（障害・問題・相違点などを）解決する、調整する",
+                                synonyms: "resolve, settle, smooth over",
+                                antonyms: "complicate, aggravate",
+                                ex1: "Legal teams worked overnight to iron out the contract details. (法務チームは契約の詳細を解決するために徹夜で作業した。)",
+                                ex2: "We need to iron out a few technical glitches before launching. (ローンチ前にいくつかの技術的不具合を調整する必要がある。)",
+                                ex3: "Both commanders met to iron out logistical bottlenecks. (両司令官は兵站上のボトルネックを解消するために会談した。)"
+                            }
+                        };
+                    }
+                }
             ];
 
             for (let i = 0; i < totalCount; i++) {
-                const seedIndex = i % seeds.length;
-                const baseSeed = JSON.parse(JSON.stringify(seeds[seedIndex]));
-                const topic = topics[i % topics.length];
-
-                // Decorate / Vary questions beyond seed loop
-                if (i >= seeds.length) {
-                    baseSeed.script = `[Variant #${i+1} - ${topic.topic}] ${baseSeed.script} (${topic.role} was ${topic.action}.)`;
-                }
+                const tmpl = templates[i % templates.length];
+                const generatedData = tmpl.gen(i);
 
                 bank.push({
-                    id: `${type.substr(0, 3)}-${i}`,
+                    id: `${type.substr(0, 3)}-prc-${i}`,
                     number: i + 1,
                     type: type,
-                    category: baseSeed.cat,
-                    script: baseSeed.script,
-                    question: `Q${i + 1}: ${baseSeed.q}`,
-                    options: baseSeed.opts,
-                    answer: baseSeed.ans,
-                    translation: baseSeed.tr,
-                    grammar: baseSeed.grammar,
-                    vocab: baseSeed.vocab
+                    category: tmpl.cat,
+                    script: generatedData.script,
+                    question: `Q${i + 1}: ${generatedData.q}`,
+                    options: generatedData.opts,
+                    answer: generatedData.ans,
+                    translation: generatedData.tr,
+                    grammar: generatedData.grammar,
+                    vocab: generatedData.vocab
                 });
             }
             return bank;
         }
 
-        const listeningBank = generateQuestionBank('listening', 500);
-        const readingBank = generateQuestionBank('reading', 500);
-
         // -------------------------------------------------------------
-        // APPLICATION INITIALIZATION & STATE MANAGEMENT
+        // COMPLETELY DISTINCT 100 MOCK EXAM QUESTION POOL
         // -------------------------------------------------------------
-
-        function loadState() {
-            const saved = localStorage.getItem(STATE_KEY);
-            if (saved) {
-                try {
-                    appState = { ...appState, ...JSON.parse(saved) };
-                } catch (e) {
-                    console.error("Failed to load state", e);
-                }
-            }
-        }
-
-        function saveState() {
-            localStorage.setItem(STATE_KEY, JSON.stringify(appState));
-            updateDashboardMetrics();
-        }
-
-        function resetAllData() {
-            if (confirm("全ての学習記録、進捗、正答率データを取り消してリセットしますか？")) {
-                localStorage.removeItem(STATE_KEY);
-                location.reload();
-            }
-        }
-
-        // -------------------------------------------------------------
-        // WEB SPEECH API (LISTENING AUDIO ENGINE)
-        // -------------------------------------------------------------
-        let currentUtterance = null;
-
-        function speakScript(text) {
-            if (!('speechSynthesis' in window)) {
-                alert("お使いのブラウザは音声読み上げ(Speech Synthesis)に対応していません。");
-                return;
-            }
-
-            window.speechSynthesis.cancel(); // Stop any active speech
-
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'en-US'; // ECL utilizes standard American English
-            utterance.rate = appState.audioSpeed;
-
-            // Try picking an en-US voice
-            const voices = window.speechSynthesis.getVoices();
-            const usVoice = voices.find(v => v.lang === 'en-US' || v.lang === 'en_US');
-            if (usVoice) utterance.voice = usVoice;
-
-            const statusEl = document.getElementById('speech-status');
-            const playBtn = document.getElementById('play-audio-btn');
-
-            utterance.onstart = () => {
-                if (statusEl) statusEl.classList.remove('hidden');
-                if (playBtn) playBtn.classList.add('opacity-75');
-            };
-
-            utterance.onend = utterance.onerror = () => {
-                if (statusEl) statusEl.classList.add('hidden');
-                if (playBtn) playBtn.classList.remove('opacity-75');
-            };
-
-            currentUtterance = utterance;
-            window.speechSynthesis.speak(utterance);
-        }
-
-        function stopSpeech() {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-            }
-            const statusEl = document.getElementById('speech-status');
-            if (statusEl) statusEl.classList.add('hidden');
-        }
-
-        // -------------------------------------------------------------
-        // UI RENDERERS & EVENT HANDLERS
-        // -------------------------------------------------------------
-
-        function getCurrentQuestion() {
-            if (appState.currentMode === 'listening') {
-                return listeningBank[appState.listeningIndex];
-            } else if (appState.currentMode === 'reading') {
-                return readingBank[appState.readingIndex];
-            } else if (appState.currentMode === 'weakness') {
-                const weakList = getWeaknessQuestionsList();
-                return weakList[appState.weaknessIndex] || listeningBank[0];
-            } else if (appState.currentMode === 'mock') {
-                return appState.mockQuestionsList[appState.mockIndex] || listeningBank[0];
-            }
-        }
-
-        function getQuestionTotalCount() {
-            if (appState.currentMode === 'listening') return listeningBank.length;
-            if (appState.currentMode === 'reading') return readingBank.length;
-            if (appState.currentMode === 'weakness') return getWeaknessQuestionsList().length;
-            if (appState.currentMode === 'mock') return 100;
-            return 500;
-        }
-
-        function getWeaknessQuestionsList() {
-            // Find categories with accuracy < 70% or uncompleted
-            const allQ = [...listeningBank, ...readingBank];
-            const result = allQ.filter(q => {
-                const record = appState.answers[q.id];
-                return record && !record.correct; // Incorrect items
-            });
-            return result.length > 0 ? result : allQ.slice(0, 50); // Fallback
-        }
-
-        function populateJumpSelect() {
-            const select = document.getElementById('jump-select');
-            select.innerHTML = '';
-            const total = getQuestionTotalCount();
-            
-            let currentIndex = 0;
-            if (appState.currentMode === 'listening') currentIndex = appState.listeningIndex;
-            if (appState.currentMode === 'reading') currentIndex = appState.readingIndex;
-            if (appState.currentMode === 'weakness') currentIndex = appState.weaknessIndex;
-            if (appState.currentMode === 'mock') currentIndex = appState.mockIndex;
-
-            // Render limit to 100 choices around current to avoid huge DOM bloat if 500
-            for (let i = 0; i < total; i++) {
-                const q = (appState.currentMode === 'listening') ? listeningBank[i] : readingBank[i];
-                const qId = q ? q.id : i;
-                const answered = appState.answers[qId];
-                let statusMark = '';
-                if (answered) {
-                    statusMark = answered.correct ? ' ✓' : ' ✕';
-                }
-
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.textContent = `No. ${i + 1}${statusMark}`;
-                if (i === currentIndex) opt.selected = true;
-                select.appendChild(opt);
-            }
-        }
-
-        function renderQuestion() {
-            stopSpeech();
-            const q = getCurrentQuestion();
-            if (!q) return;
-
-            // Mode Badge & Counter
-            const badge = document.getElementById('quiz-mode-badge');
-            badge.textContent = appState.currentMode.toUpperCase();
-
-            const indicator = document.getElementById('quiz-number-indicator');
-            const total = getQuestionTotalCount();
-            let curIdx = 0;
-            if (appState.currentMode === 'listening') curIdx = appState.listeningIndex;
-            if (appState.currentMode === 'reading') curIdx = appState.readingIndex;
-            if (appState.currentMode === 'weakness') curIdx = appState.weaknessIndex;
-            if (appState.currentMode === 'mock') curIdx = appState.mockIndex;
-
-            indicator.textContent = `No. ${curIdx + 1} / ${total}`;
-
-            // Category tag
-            document.getElementById('quiz-category-tag').textContent = q.category;
-
-            // Audio Player Visibility
-            const audioPlayer = document.getElementById('listening-audio-player');
-            if (q.type === 'listening') {
-                audioPlayer.classList.remove('hidden');
-            } else {
-                audioPlayer.classList.add('hidden');
-            }
-
-            // Question Text
-            document.getElementById('question-text').textContent = q.question;
-
-            // Options Render
-            const optionsContainer = document.getElementById('options-container');
-            optionsContainer.innerHTML = '';
-
-            const record = appState.answers[q.id];
-
-            q.options.forEach((optText, idx) => {
-                const btn = document.createElement('button');
-                btn.className = "w-full text-left p-4 rounded-xl border transition-all flex items-start space-x-3 text-sm font-medium ";
-
-                if (!record) {
-                    // Not answered yet
-                    btn.className += "bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 hover:border-indigo-500 hover:bg-indigo-50/30 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-100";
-                } else {
-                    // Answered
-                    if (idx === q.answer) {
-                        // Correct option
-                        btn.className += "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-900 dark:text-emerald-200 font-bold";
-                    } else if (record.selected === idx && !record.correct) {
-                        // User selected wrong option
-                        btn.className += "bg-red-50 dark:bg-red-950/40 border-red-500 text-red-900 dark:text-red-200";
-                    } else {
-                        btn.className += "bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-400 opacity-60";
-                    }
-                }
-
-                const letter = String.fromCharCode(65 + idx); // A, B, C, D
-                btn.innerHTML = `
-                    <span class="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center justify-center text-xs font-bold shrink-0">${letter}</span>
-                    <span class="flex-1 mt-0.5">${optText}</span>
-                `;
-
-                btn.onclick = () => handleAnswerSelect(q.id, idx, q.answer);
-                optionsContainer.appendChild(btn);
-            });
-
-            // Explanation panel rendering
-            renderExplanation(q, record);
-
-            // Update dropdown
-            populateJumpSelect();
-        }
-
-        function handleAnswerSelect(qId, selectedIdx, correctIdx) {
-            const isCorrect = (selectedIdx === correctIdx);
-            appState.answers[qId] = {
-                selected: selectedIdx,
-                correct: isCorrect,
-                timestamp: Date.now()
-            };
-
-            saveState();
-            renderQuestion();
-
-            // Auto read if listening option
-            const q = getCurrentQuestion();
-            if (q.type === 'listening' && appState.answers[qId]) {
-                // optional feedback audio
-            }
-        }
-
-        function renderExplanation(q, record) {
-            const placeholder = document.getElementById('explanation-placeholder');
-            const content = document.getElementById('explanation-content');
-
-            if (!record) {
-                placeholder.classList.remove('hidden');
-                content.classList.add('hidden');
-                return;
-            }
-
-            placeholder.classList.add('hidden');
-            content.classList.remove('hidden');
-
-            // Alert Box Status
-            const alertBox = document.getElementById('result-alert-box');
-            const icon = document.getElementById('result-icon');
-            const title = document.getElementById('result-title');
-            const desc = document.getElementById('result-desc');
-
-            if (record.correct) {
-                alertBox.className = "p-3 rounded-lg flex items-center gap-3 bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-800";
-                icon.className = "fa-solid fa-circle-check text-emerald-500 text-2xl";
-                title.textContent = "正解！ (Correct)";
-                desc.textContent = "素晴らしい調子です。解説を確認して理解を定着させましょう。";
-            } else {
-                alertBox.className = "p-3 rounded-lg flex items-center gap-3 bg-red-100 dark:bg-red-950/60 text-red-800 dark:text-red-200 border border-red-300 dark:border-red-800";
-                icon.className = "fa-solid fa-circle-xmark text-red-500 text-2xl";
-                title.textContent = "不正解 (Incorrect)";
-                desc.textContent = `正解は [${String.fromCharCode(65 + q.answer)}] でした。以下で構文と単語を復習してください。`;
-            }
-
-            // Script text & Translation & Grammar
-            document.getElementById('exp-script-text').textContent = q.script;
-            document.getElementById('exp-translation').textContent = q.translation;
-            document.getElementById('exp-grammar').textContent = q.grammar;
-
-            // Key Vocab rendering with 3 distinct usage examples
-            const vocabContainer = document.getElementById('vocab-cards-container');
-            vocabContainer.innerHTML = '';
-
-            if (q.vocab) {
-                const v = q.vocab;
-                const card = document.createElement('div');
-                card.className = "p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2 text-xs";
-                
-                card.innerHTML = `
-                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-2">
-                        <span class="font-bold text-sm text-indigo-600 dark:text-indigo-400 font-mono">${v.word}</span>
-                        <span class="text-slate-500 dark:text-slate-400">${v.meaning}</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 text-slate-500 dark:text-slate-400 py-1">
-                        <div><strong class="text-slate-600 dark:text-slate-300">類義語 (Synonyms):</strong> ${v.synonyms}</div>
-                        <div><strong class="text-slate-600 dark:text-slate-300">反対語 (Antonyms):</strong> ${v.antonyms}</div>
-                    </div>
-                    <div class="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-800">
-                        <span class="font-semibold text-slate-600 dark:text-slate-300 block">【3通りの実戦例文 & 用法】</span>
-                        <div class="p-2 bg-white dark:bg-slate-800 rounded border border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-300">
-                            <strong>1.</strong> ${v.ex1}
-                        </div>
-                        <div class="p-2 bg-white dark:bg-slate-800 rounded border border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-300">
-                            <strong>2.</strong> ${v.ex2}
-                        </div>
-                        <div class="p-2 bg-white dark:bg-slate-800 rounded border border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-300">
-                            <strong>3.</strong> ${v.ex3}
-                        </div>
-                    </div>
-                `;
-                vocabContainer.appendChild(card);
-            }
-        }
-
-        // -------------------------------------------------------------
-        // DASHBOARD & ANALYTICS METRICS + CHART.JS
-        // -------------------------------------------------------------
-        let categoryChartInstance = null;
-
-        function updateDashboardMetrics() {
-            const answeredKeys = Object.keys(appState.answers);
-            const totalAnswered = answeredKeys.length;
-
-            let totalCorrect = 0;
-            let lisCount = 0, lisCorrect = 0;
-            let readCount = 0, readCorrect = 0;
-
-            const categoryStats = {};
-            Object.values(CATEGORIES).forEach(c => {
-                categoryStats[c] = { total: 0, correct: 0 };
-            });
-
-            // Combine all questions to calculate stats
-            const allQuestions = [...listeningBank, ...readingBank];
-            allQuestions.forEach(q => {
-                const rec = appState.answers[q.id];
-                if (rec) {
-                    if (rec.correct) totalCorrect++;
-                    if (q.type === 'listening') {
-                        lisCount++;
-                        if (rec.correct) lisCorrect++;
-                    } else {
-                        readCount++;
-                        if (rec.correct) readCorrect++;
-                    }
-
-                    if (categoryStats[q.category]) {
-                        categoryStats[q.category].total++;
-                        if (rec.correct) categoryStats[q.category].correct++;
-                    }
-                }
-            });
-
-            const totalAccuracy = totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
-            const lisAcc = lisCount > 0 ? Math.round((lisCorrect / lisCount) * 100) : 0;
-            const readAcc = readCount > 0 ? Math.round((readCorrect / readCount) * 100) : 0;
-
-            // Header Elements
-            document.getElementById('header-total-count').textContent = totalAnswered;
-            document.getElementById('header-accuracy').textContent = `${totalAccuracy}%`;
-
-            // Dashboard Elements
-            document.getElementById('stat-total-ans').innerHTML = `${totalAnswered} <span class="text-sm font-normal text-slate-400">/ 1000</span>`;
-            document.getElementById('progress-total-bar').style.width = `${(totalAnswered / 1000) * 100}%`;
-            document.getElementById('stat-accuracy').textContent = `${totalAccuracy}%`;
-            document.getElementById('stat-accuracy-desc').textContent = totalAnswered > 0 ? `合計 ${totalCorrect}問 正解` : 'データ不足';
-
-            document.getElementById('stat-lis-progress').innerHTML = `${lisCount} <span class="text-sm font-normal text-slate-400">/ 500</span>`;
-            document.getElementById('stat-lis-acc').textContent = `正答率: ${lisCount > 0 ? lisAcc + '%' : '-%'}`;
-
-            document.getElementById('stat-read-progress').innerHTML = `${readCount} <span class="text-sm font-normal text-slate-400">/ 500</span>`;
-            document.getElementById('stat-read-acc').textContent = `正答率: ${readCount > 0 ? readAcc + '%' : '-%'}`;
-
-            // Resume Info text
-            const resumeInfoText = document.getElementById('resume-info-text');
-            const modeText = appState.currentMode === 'listening' ? 'リスニング' : 'リーディング';
-            const indexVal = appState.currentMode === 'listening' ? appState.listeningIndex + 1 : appState.readingIndex + 1;
-            resumeInfoText.textContent = `前回のセッション: ${modeText} 第${indexVal}問`;
-
-            // Find Weakest Category
-            let minAcc = 101;
-            let weakestCat = null;
-            Object.keys(categoryStats).forEach(catName => {
-                const stat = categoryStats[catName];
-                if (stat.total >= 1) {
-                    const acc = (stat.correct / stat.total) * 100;
-                    if (acc < minAcc) {
-                        minAcc = acc;
-                        weakestCat = catName;
-                    }
-                }
-            });
-
-            const weakNameEl = document.getElementById('weak-category-name');
-            const weakAdviceEl = document.getElementById('weak-advice-text');
-
-            if (weakestCat && minAcc < 100) {
-                weakNameEl.textContent = `${weakestCat} (正答率 ${Math.round(minAcc)}%)`;
-                weakAdviceEl.textContent = `現在「${weakestCat}」のミスが多く見られます。ECLテストではこの分野の失点がスコア低下に直結します。下の「弱点分野を優先演習」から強化を図りましょう。`;
-            } else if (totalAnswered === 0) {
-                weakNameEl.textContent = "分析中...";
-                weakAdviceEl.textContent = "演習を進めると、システムが苦手分野を判定し自動分析を行います。";
-            } else {
-                weakNameEl.textContent = "良好 (弱点特になし)";
-                weakAdviceEl.textContent = "全分野で高い正答率を維持しています！模試モードに挑戦してスピード感覚を養いましょう。";
-            }
-
-            // Render Chart.js
-            renderCategoryChart(categoryStats);
-        }
-
-        function renderCategoryChart(categoryStats) {
-            const ctx = document.getElementById('category-chart');
-            if (!ctx) return;
-
-            const labels = Object.keys(categoryStats);
-            const dataAcc = labels.map(l => {
-                const s = categoryStats[l];
-                return s.total > 0 ? Math.round((s.correct / s.total) * 100) : 0;
-            });
-
-            if (categoryChartInstance) {
-                categoryChartInstance.destroy();
-            }
-
-            categoryChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: '正答率 (%)',
-                        data: dataAcc,
-                        backgroundColor: 'rgba(99, 102, 241, 0.6)',
-                        borderColor: 'rgba(99, 102, 241, 1)',
-                        borderWidth: 1.5,
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100,
-                            ticks: {
-                                callback: value => value + '%'
-                            }
+        function generateDistinctMockPool() {
+            const mockList = [];
+            const mockCategories = Object.values(CATEGORIES);
+
+            for (let i = 0; i < 100; i++) {
+                const isListening = i < 50; // First 50 Listening, next 50 Reading
+                const cat = mockCategories[i % mockCategories.length];
+                const qNum = i + 1;
+
+                if (isListening) {
+                    mockList.push({
+                        id: `mock-exam-${i}`,
+                        number: qNum,
+                        type: 'listening',
+                        category: cat,
+                        script: `[MOCK EXAM SCRIPT #${qNum}] Command Center to Eagle-1: Be advised, hostile drones detected at coordinates Alpha-9. Initiate defensive counter-measures immediately.`,
+                        question: `Q${qNum} (Mock Listening): What instruction is given to Eagle-1?`,
+                        options: [
+                            "Initiate defensive counter-measures immediately",
+                            "Return to base for emergency maintenance",
+                            "Maintain radio silence and hold altitude",
+                            "Report enemy strength to ground forces"
+                        ],
+                        answer: 0,
+                        translation: `【模擬試験 スクリプト】司令部よりイーグル1へ。警告：アルファ9座標にて敵ドローンを感知。直ちに防衛対抗措置を開始せよ。`,
+                        grammar: `Be advised は「通知する／警戒せよ」、Initiate は「（手順・作戦を）開始する」という軍事公式通信フレーズです。`,
+                        vocab: {
+                            word: "initiate",
+                            meaning: "着手する、開始する、引き起こす",
+                            synonyms: "commence, launch, trigger",
+                            antonyms: "terminate, halt, conclude",
+                            ex1: "The captain gave orders to initiate emergency protocols. (船長は緊急プロトコルを開始するよう命じた。)",
+                            ex2: "They initiated a new training module for newly recruited personnel. (新入隊員向けの新しい訓練モジュールを開始した。)",
+                            ex3: "All systems are ready to initiate countdown. (全システムがカウントダウンを開始する準備が整った。)"
                         }
-                    },
-                    plugins: {
-                        legend: { display: false }
-                    }
+                    });
+                } else {
+                    mockList.push({
+                        id: `mock-exam-${i}`,
+                        number: qNum,
+                        type: 'reading',
+                        category: cat,
+                        script: `[MOCK EXAM PASSAGE #${qNum}] Strategic deterrence relies not only on military hardware, but also on the credible threat of swift retaliation against unauthorized aggression.`,
+                        question: `Q${qNum} (Mock Reading): What does the passage state is essential for effective deterrence?`,
+                        options: [
+                            "Only modern military technology and weapons",
+                            "The credible threat of swift retaliation",
+                            "Constant diplomatic concessions",
+                            "Complete international disarmament"
+                        ],
+                        answer: 1,
+                        translation: `【模擬試験 読解】戦略的抑止力は、軍事ハードウェアだけでなく、不法な侵略に対する迅速な報復という信憑性のある脅威にも依拠している。`,
+                        grammar: `relies not only on A, but also on B（AだけでなくBにも依存する）の構文。credible は「信憑性のある」を意味します。`,
+                        vocab: {
+                            word: "retaliation",
+                            meaning: "報復、仕返し",
+                            synonyms: "reprisal, revenge, response",
+                            antonyms: "forgiveness, pardon, reconciliation",
+                            ex1: "Any attack will provoke immediate retaliation. (いかなる攻撃も即座の報復を引き起こすだろう。)",
+                            ex2: "Trade tariffs were imposed in retaliation for foreign restrictions. (外国の規制に対する報復として貿易関税が課された。)",
+                            ex3: "Military doctrines specify proportional retaliation principles. (軍事ドクトリンは均衡再報復の原則を規定している。)"
+                        }
+                    });
                 }
-            });
+            }
+            return mockList;
         }
 
-        // -------------------------------------------------------------
-        // TIMER ENGINE FOR MOCK EXAM
-        // -------------------------------------------------------------
-        function startMockTimer() {
-            clearInterval(appState.mockTimerInterval);
-            const timerBox = document.getElementById('timer-box');
-            const timerDisplay = document.getElementById('timer-display');
-            timerBox.classList.remove('hidden');
-
-            appState.mockTimerInterval = setInterval(() => {
-                if (appState.mockTimerSeconds <= 0) {
-                    clearInterval(appState.mockTimerInterval);
-                    alert("模擬試験の制限時間(45分)が終了しました。結果を確認してください。");
-                    return;
-                }
-                appState.mockTimerSeconds--;
-                const m = Math.floor(appState.mockTimerSeconds / 60);
-                const s = appState.mockTimerSeconds % 60;
-                timerDisplay.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-            }, 1000);
-        }
-
-        function stopMockTimer() {
-            clearInterval(appState.mockTimerInterval);
-            document.getElementById('timer-box').classList.add('hidden');
-        }
+        const listeningBank = generatePracticeQuestions('listening', 500);
+        const readingBank = generatePracticeQuestions('reading', 500);
+        const mockExamBank = generateDistinctMockPool();
 
         // -------------------------------------------------------------
-        // EVENT LISTENERS & TAB NAVIGATION
+        // STATE & REFRESH LOGIC OVERRIDES
         // -------------------------------------------------------------
         
-        function switchTab(tabName) {
-            appState.currentTab = tabName;
-            
-            // Tab button styles
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                if (btn.dataset.tab === tabName) {
-                    btn.className = "tab-btn active px-4 py-2.5 rounded-t-lg font-medium text-sm flex items-center gap-2 border-b-2 border-amber-500 text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-slate-800/80";
-                } else {
-                    btn.className = "tab-btn px-4 py-2.5 rounded-t-lg font-medium text-sm flex items-center gap-2 text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800";
-                }
-            });
-
-            // Toggle Tab Content Views
-            if (tabName === 'dashboard') {
-                document.getElementById('sec-dashboard').classList.remove('hidden');
-                document.getElementById('sec-practice').classList.add('hidden');
-                stopMockTimer();
-                stopSpeech();
-                updateDashboardMetrics();
-            } else {
-                document.getElementById('sec-dashboard').classList.add('hidden');
-                document.getElementById('sec-practice').classList.remove('hidden');
-
-                if (tabName === 'listening') {
-                    appState.currentMode = 'listening';
-                    stopMockTimer();
-                } else if (tabName === 'reading') {
-                    appState.currentMode = 'reading';
-                    stopMockTimer();
-                } else if (tabName === 'weakness') {
-                    appState.currentMode = 'weakness';
-                    appState.weaknessIndex = 0;
-                    stopMockTimer();
-                } else if (tabName === 'mock') {
-                    appState.currentMode = 'mock';
-                    appState.mockIndex = 0;
-                    // Assemble 100 questions (50 Listening + 50 Reading)
-                    appState.mockQuestionsList = [...listeningBank.slice(0, 50), ...readingBank.slice(0, 50)];
-                    startMockTimer();
-                }
-                renderQuestion();
+        // Override mock list generator in switchTab
+        const origSwitchTab = switchTab;
+        switchTab = function(tabName) {
+            if (tabName === 'mock') {
+                appState.mockQuestionsList = mockExamBank; // Assign pre-generated independent pool
             }
-            saveState();
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            loadState();
-
-            // Setup Tab Buttons
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.addEventListener('click', () => switchTab(btn.dataset.tab));
-            });
-
-            // Resume Button
-            document.getElementById('resume-btn').onclick = () => {
-                switchTab(appState.currentMode || 'listening');
-            };
-
-            // Start Weakness Button
-            document.getElementById('start-weakness-btn').onclick = () => {
-                switchTab('weakness');
-            };
-
-            // Reset Button
-            document.getElementById('reset-data-btn').onclick = resetAllData;
-
-            // Audio Controls
-            document.getElementById('play-audio-btn').onclick = () => {
-                const q = getCurrentQuestion();
-                if (q && q.script) speakScript(q.script);
-            };
-            document.getElementById('stop-audio-btn').onclick = stopSpeech;
-
-            // Audio Speed Buttons
-            document.querySelectorAll('.speed-btn').forEach(btn => {
-                btn.onclick = (e) => {
-                    const speed = parseFloat(e.target.dataset.speed);
-                    appState.audioSpeed = speed;
-                    document.querySelectorAll('.speed-btn').forEach(b => {
-                        b.className = "speed-btn text-xs px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300";
-                    });
-                    e.target.className = "speed-btn text-xs px-2 py-0.5 rounded bg-indigo-600 text-white font-bold";
-                };
-            });
-
-            // Question Navigation (Next / Prev)
-            document.getElementById('prev-q-btn').onclick = () => {
-                let curIdx = 0;
-                if (appState.currentMode === 'listening') curIdx = --appState.listeningIndex;
-                if (appState.currentMode === 'reading') curIdx = --appState.readingIndex;
-                if (appState.currentMode === 'weakness') curIdx = --appState.weaknessIndex;
-                if (appState.currentMode === 'mock') curIdx = --appState.mockIndex;
-
-                if (curIdx < 0) {
-                    if (appState.currentMode === 'listening') appState.listeningIndex = 0;
-                    if (appState.currentMode === 'reading') appState.readingIndex = 0;
-                    if (appState.currentMode === 'weakness') appState.weaknessIndex = 0;
-                    if (appState.currentMode === 'mock') appState.mockIndex = 0;
-                } else {
-                    renderQuestion();
-                }
-            };
-
-            document.getElementById('next-q-btn').onclick = () => {
-                const total = getQuestionTotalCount();
-                let curIdx = 0;
-                if (appState.currentMode === 'listening') curIdx = ++appState.listeningIndex;
-                if (appState.currentMode === 'reading') curIdx = ++appState.readingIndex;
-                if (appState.currentMode === 'weakness') curIdx = ++appState.weaknessIndex;
-                if (appState.currentMode === 'mock') curIdx = ++appState.mockIndex;
-
-                if (curIdx >= total) {
-                    if (appState.currentMode === 'listening') appState.listeningIndex = total - 1;
-                    if (appState.currentMode === 'reading') appState.readingIndex = total - 1;
-                    if (appState.currentMode === 'weakness') appState.weaknessIndex = total - 1;
-                    if (appState.currentMode === 'mock') appState.mockIndex = total - 1;
-                } else {
-                    renderQuestion();
-                }
-            };
-
-            // Dropdown Jump Select
-            document.getElementById('jump-select').onchange = (e) => {
-                const idx = parseInt(e.target.value, 10);
-                if (appState.currentMode === 'listening') appState.listeningIndex = idx;
-                if (appState.currentMode === 'reading') appState.readingIndex = idx;
-                if (appState.currentMode === 'weakness') appState.weaknessIndex = idx;
-                if (appState.currentMode === 'mock') appState.mockIndex = idx;
-                renderQuestion();
-            };
-
-            // Theme Toggle Logic
-            const themeToggleBtn = document.getElementById('theme-toggle');
-            const darkIcon = document.getElementById('theme-toggle-dark-icon');
-            const lightIcon = document.getElementById('theme-toggle-light-icon');
-
-            themeToggleBtn.onclick = () => {
-                document.documentElement.classList.toggle('dark');
-                const isDark = document.documentElement.classList.contains('dark');
-                if (isDark) {
-                    darkIcon.classList.remove('hidden');
-                    lightIcon.classList.add('hidden');
-                } else {
-                    darkIcon.classList.add('hidden');
-                    lightIcon.classList.remove('hidden');
-                }
-            };
-
-            // Initial Dashboard View
-            updateDashboardMetrics();
-        });
+            origSwitchTab(tabName);
+        };
     </script>
-</body>
-</html>
+<!-- ... existing code -->
