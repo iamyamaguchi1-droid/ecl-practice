@@ -1,615 +1,187 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECL Exam Master Pro - 米国ECL試験対策アプリ</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        navy: {
-                            50: '#f0f4f8',
-                            100: '#d9e2ec',
-                            700: '#102a43',
-                            800: '#091e36',
-                            900: '#040e1a',
-                        },
-                        army: {
-                            600: '#3b5e2b',
-                            700: '#2d4821',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Chart.js for Analytics -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
-        body {
-            font-family: 'Noto Sans JP', 'Inter', sans-serif;
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.05);
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(0,0,0,0.2);
-            border-radius: 3px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1830">
+<title>ECL Ready | English Proficiency Trainer</title>
+<style>
+:root{--bg:#081326;--panel:#101f38;--panel2:#142844;--text:#edf5ff;--muted:#a7b9d2;--accent:#31d0aa;--accent2:#6ba7ff;--border:#2a3e5d;--danger:#ff7d86;--shadow:0 14px 35px #0003}
+[data-theme="light"]{--bg:#edf3f8;--panel:#fff;--panel2:#f4f8fb;--text:#17283d;--muted:#536980;--accent:#008f72;--accent2:#2869c8;--border:#d4e0eb;--danger:#c83d4d;--shadow:0 10px 28px #1d355710}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top right,#14304a 0,transparent 45%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}
+button,select{font:inherit}button{cursor:pointer;border:1px solid var(--border);border-radius:12px;padding:10px 13px;background:var(--panel2);color:var(--text);font-weight:650}button:active{transform:scale(.99)}button.primary{background:var(--accent);color:#06241e;border-color:transparent}button.secondary{background:transparent}button:disabled{opacity:.45;cursor:not-allowed}
+header{padding:22px 16px 16px;max-width:1050px;margin:auto}.brandline{display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{display:flex;gap:12px;align-items:center}.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#06192b;font-weight:900;letter-spacing:-1px}.eyebrow{font-size:11px;letter-spacing:2px;color:var(--accent);font-weight:800}.brand h1{font-size:23px;line-height:1.15;margin:2px 0}.sub{color:var(--muted);font-size:13px;margin-top:8px}.wrap{max-width:1050px;margin:auto;padding:0 14px 40px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:12px 0 16px}.stat,.card{background:var(--panel);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow)}.stat{padding:13px}.stat small{display:block;color:var(--muted);font-size:11px}.stat strong{font-size:23px}.layout{display:grid;grid-template-columns:1fr 280px;gap:14px}.card{padding:17px;margin-bottom:14px}.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.controls select{border:1px solid var(--border);border-radius:10px;padding:9px;background:var(--panel2);color:var(--text);max-width:100%}.pill{display:inline-block;border:1px solid var(--border);padding:4px 9px;border-radius:99px;font-size:11px;color:var(--muted)}.question-top{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.question h2{font-size:20px;margin:12px 0 8px}.passage{padding:14px;background:var(--panel2);border-radius:13px;border-left:3px solid var(--accent);margin:12px 0;white-space:pre-wrap}.audio-script{font-size:14px;color:var(--muted)}.options{display:grid;gap:9px;margin:16px 0}.option{text-align:left;display:flex;gap:10px;align-items:flex-start;padding:13px;border-radius:12px;font-weight:500}.option .letter{flex:0 0 25px;width:25px;height:25px;border-radius:8px;display:grid;place-items:center;background:var(--border);font-size:12px;font-weight:800}.option.selected{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--panel))}.option.correct{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--panel))}.option.wrong{border-color:var(--danger);background:color-mix(in srgb,var(--danger) 12%,var(--panel))}.feedback{padding:14px;border-radius:13px;background:var(--panel2);margin-top:12px}.feedback h3{margin:0 0 8px}.feedback p{margin:7px 0}.muted{color:var(--muted)}.small{font-size:12px}.progress{height:7px;background:var(--border);border-radius:9px;overflow:hidden;margin:9px 0}.progress span{height:100%;display:block;background:var(--accent);width:0;transition:width .25s}.side h3{margin:0 0 10px;font-size:16px}.side-section{margin-bottom:18px}.weak-row{display:flex;justify-content:space-between;gap:8px;font-size:12px;margin:9px 0}.weakbar{height:5px;background:var(--border);border-radius:8px;overflow:hidden;margin-top:4px}.weakbar span{display:block;height:100%;background:var(--accent2)}.notice{border:1px solid #d1a64b55;background:#b9821815;padding:12px;border-radius:12px;font-size:12px;color:var(--muted)}.hidden{display:none!important}.footer{text-align:center;color:var(--muted);font-size:11px;padding:15px}.speed{display:flex;gap:7px;align-items:center;font-size:12px;color:var(--muted)}input[type=range]{width:100px;accent-color:var(--accent)}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);padding:10px 15px;background:var(--text);color:var(--bg);border-radius:10px;display:none;z-index:5}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr;gap:12px}.stats{grid-template-columns:repeat(2,1fr)}.stat strong{font-size:21px}.card{padding:14px}.brand h1{font-size:20px}.hide-mobile{display:none}}
+</style>
 </head>
-<body class="bg-gray-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-200">
-
-    <!-- Header Navigation -->
-    <header class="bg-navy-800 text-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <i class="fa-solid me-2 fa-shield-halved text-amber-400 text-2xl"></i>
-                <span class="font-bold text-xl tracking-wide">ECL Exam Master Pro</span>
-                <span class="hidden sm:inline-block text-xs bg-amber-500/20 text-amber-300 border border-amber-400/30 px-2 py-0.5 rounded">US ECL Prep</span>
-            </div>
-            
-            <div class="flex items-center space-x-4">
-                <!-- Progress status snippet -->
-                <div class="hidden md:flex items-center text-xs space-x-3 bg-navy-900/60 px-3 py-1.5 rounded-lg border border-slate-700">
-                    <div>全回答: <span id="header-total-count" class="font-bold text-amber-400">0</span>/1000</div>
-                    <div>正答率: <span id="header-accuracy" class="font-bold text-emerald-400">0%</span></div>
-                </div>
-
-                <!-- Theme Toggle -->
-                <button id="theme-toggle" class="p-2 rounded-lg bg-navy-700 hover:bg-navy-900 text-slate-200 transition">
-                    <i id="theme-toggle-dark-icon" class="fa-solid fa-moon text-lg hidden"></i>
-                    <i id="theme-toggle-light-icon" class="fa-solid fa-sun text-lg text-amber-300"></i>
-                </button>
-
-                <!-- Reset Data Button -->
-                <button id="reset-data-btn" title="学習履歴をリセット" class="p-2 rounded-lg bg-red-900/40 hover:bg-red-800 text-red-300 transition text-sm flex items-center gap-1">
-                    <i class="fa-solid fa-rotate-left"></i>
-                    <span class="hidden sm:inline">リセット</span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content Container -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        
-        <!-- Navigation Tabs -->
-        <nav class="flex flex-wrap gap-2 border-b border-gray-200 dark:border-slate-700 mb-6 pb-2">
-            <button data-tab="dashboard" class="tab-btn active px-4 py-2.5 rounded-t-lg font-medium text-sm flex items-center gap-2 border-b-2 border-amber-500 text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-slate-800/80">
-                <i class="fa-solid fa-chart-pie"></i> ダッシュボード & 分析
-            </button>
-            <button data-tab="listening" class="tab-btn px-4 py-2.5 rounded-t-lg font-medium text-sm flex items-center gap-2 text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800">
-                <i class="fa-solid fa-headphones"></i> リスニング演習 (500題)
-            </button>
-            <button data-tab="reading" class="tab-btn px-4 py-2.5 rounded-t-lg font-medium text-sm flex items-center gap-2 text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800">
-                <i class="fa-solid fa-book-open"></i> リーディング演習 (500題)
-            </button>
-            <button data-tab="mock" class="tab-btn px-4 py-2.5 rounded-t-lg font-medium text-sm flex items-center gap-2 text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800">
-                <i class="fa-solid fa-clock"></i> 実戦模擬試験 (100問)
-            </button>
-            <button data-tab="weakness" class="tab-btn px-4 py-2.5 rounded-t-lg font-medium text-sm flex items-center gap-2 text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800">
-                <i class="fa-solid fa-triangle-exclamation"></i> 弱点集中トレーニング
-            </button>
-        </nav>
-
-        <!-- Dynamic Sections -->
-
-        <!-- SECTION 1: DASHBOARD & ANALYTICS -->
-        <section id="sec-dashboard" class="tab-content block space-y-6">
-            <!-- Resume Banner -->
-            <div id="resume-banner" class="bg-gradient-to-r from-navy-800 to-indigo-900 text-white rounded-xl p-5 shadow-md border border-slate-700 flex flex-col sm:flex-row justify-between items-center gap-4">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400 text-xl">
-                        <i class="fa-solid fa-play"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-lg">学習を継続する</h3>
-                        <p id="resume-info-text" class="text-xs text-slate-300 mt-0.5">前回のセッション: リスニング 第1問</p>
-                    </div>
-                </div>
-                <button id="resume-btn" class="w-full sm:w-auto px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-navy-900 font-bold rounded-lg transition shadow">
-                    続きからスタート
-                </button>
-            </div>
-
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-                    <div class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">総回答数</div>
-                    <div class="text-3xl font-extrabold mt-2 text-slate-800 dark:text-white" id="stat-total-ans">0 <span class="text-sm font-normal text-slate-400">/ 1000</span></div>
-                    <div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full mt-3 overflow-hidden">
-                        <div id="progress-total-bar" class="bg-blue-600 h-full w-0 transition-all duration-500"></div>
-                    </div>
-                </div>
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-                    <div class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">総合正答率</div>
-                    <div class="text-3xl font-extrabold mt-2 text-emerald-600 dark:text-emerald-400" id="stat-accuracy">0%</div>
-                    <p class="text-xs text-slate-400 mt-2" id="stat-accuracy-desc">データ不足</p>
-                </div>
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-                    <div class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">リスニング完了率</div>
-                    <div class="text-3xl font-extrabold mt-2 text-indigo-600 dark:text-indigo-400" id="stat-lis-progress">0 <span class="text-sm font-normal text-slate-400">/ 500</span></div>
-                    <p class="text-xs text-slate-400 mt-2" id="stat-lis-acc">正答率: -%</p>
-                </div>
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-                    <div class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">リーディング完了率</div>
-                    <div class="text-3xl font-extrabold mt-2 text-purple-600 dark:text-purple-400" id="stat-read-progress">0 <span class="text-sm font-normal text-slate-400">/ 500</span></div>
-                    <p class="text-xs text-slate-400 mt-2" id="stat-read-acc">正答率: -%</p>
-                </div>
-            </div>
-
-            <!-- Charts and Analysis Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Category Breakdown Radar / Bar -->
-                <div class="lg:col-span-2 bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-                    <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-chart-column text-indigo-500"></i> 分野別マスター状況分析
-                    </h3>
-                    <div class="h-64 relative">
-                        <canvas id="category-chart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Weak Spot Diagnosis & Recommendations -->
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
-                    <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-brain text-amber-500"></i> AI弱点分析 & 対策
-                    </h3>
-                    <div id="weakness-analysis-box" class="flex-1 flex flex-col justify-between space-y-4">
-                        <div class="space-y-3">
-                            <div class="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-200 dark:border-slate-700">
-                                <span class="text-xs text-slate-400 block font-semibold">最優先改善分野</span>
-                                <span id="weak-category-name" class="font-bold text-red-500 dark:text-red-400 text-lg">分析中...</span>
-                            </div>
-                            <p id="weak-advice-text" class="text-xs leading-relaxed text-slate-600 dark:text-slate-300">
-                                問題を解くと、あなたの苦手な傾向（イディオム、軍事・専門用語、複雑構文など）を自動分析してここにアドバイスが表示されます。
-                            </p>
-                        </div>
-                        <button id="start-weakness-btn" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold text-sm rounded-lg transition shadow flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-bolt"></i> 弱点分野を優先演習
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 2: PRACTICE INTERFACE (Used for Listening, Reading, Weakness, Mock) -->
-        <section id="sec-practice" class="tab-content hidden space-y-6">
-            <!-- Mode Header Bar -->
-            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-4">
-                <div class="flex items-center space-x-3">
-                    <span id="quiz-mode-badge" class="px-3 py-1 bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold text-xs rounded-full uppercase">
-                        LISTENING
-                    </span>
-                    <span id="quiz-number-indicator" class="font-bold text-slate-700 dark:text-slate-200">
-                        No. 1 / 500
-                    </span>
-                    <span id="quiz-category-tag" class="text-xs bg-slate-100 dark:bg-slate-700 px-2.5 py-1 rounded text-slate-600 dark:text-slate-300">
-                        会話・日常業務
-                    </span>
-                </div>
-
-                <!-- Jump & Controls -->
-                <div class="flex items-center space-x-3">
-                    <div id="timer-box" class="hidden items-center gap-2 bg-slate-900 text-amber-400 font-mono px-3 py-1 rounded text-sm border border-slate-700">
-                        <i class="fa-regular fa-clock"></i> <span id="timer-display">45:00</span>
-                    </div>
-
-                    <div class="flex items-center gap-1">
-                        <label class="text-xs text-slate-400 hidden sm:inline">問題移動:</label>
-                        <select id="jump-select" class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs rounded px-2 py-1.5 border border-slate-300 dark:border-slate-600 focus:outline-none">
-                            <!-- Populated dynamically -->
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Main Question Area -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <!-- Question Column -->
-                <div class="lg:col-span-7 space-y-6">
-                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-                        
-                        <!-- Listening Player UI (visible only for listening) -->
-                        <div id="listening-audio-player" class="mb-6 p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
-                            <div class="flex items-center justify-between">
-                                <span class="text-xs font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-                                    <i class="fa-solid fa-volume-high text-indigo-500"></i> VOICE SCRIPT PLAYER (US English)
-                                </span>
-                                <div class="flex items-center space-x-1">
-                                    <span class="text-xs text-slate-400">速度:</span>
-                                    <button data-speed="0.75" class="speed-btn text-xs px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">0.75x</button>
-                                    <button data-speed="1.0" class="speed-btn text-xs px-2 py-0.5 rounded bg-indigo-600 text-white font-bold">1.0x</button>
-                                    <button data-speed="1.25" class="speed-btn text-xs px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">1.25x</button>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-center gap-3">
-                                <button id="play-audio-btn" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold text-sm flex items-center gap-2 shadow transition">
-                                    <i class="fa-solid fa-play"></i> <span>音声再生</span>
-                                </button>
-                                <button id="stop-audio-btn" class="px-3 py-2.5 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-slate-700 dark:text-slate-300 rounded-lg text-sm transition">
-                                    <i class="fa-solid fa-stop"></i>
-                                </button>
-                                <span id="speech-status" class="text-xs text-indigo-600 dark:text-indigo-400 font-medium hidden">
-                                    <i class="fa-solid fa-wave-square animate-pulse"></i> 再生中...
-                                </span>
-                            </div>
-
-                            <p class="text-xs text-slate-400 italic">※実際のECL試験ではスクリプトテキストは非表示ですが、練習時は解説タブでスクリプト全文を確認できます。</p>
-                        </div>
-
-                        <!-- Question Text Prompt -->
-                        <div class="mb-6">
-                            <span class="text-xs text-slate-400 font-semibold block mb-1">【設問】</span>
-                            <div id="question-text" class="text-base sm:text-lg font-medium text-slate-800 dark:text-slate-100 leading-relaxed">
-                                Loading Question...
-                            </div>
-                        </div>
-
-                        <!-- Answer Options Grid -->
-                        <div id="options-container" class="space-y-3">
-                            <!-- Populated dynamically -->
-                        </div>
-
-                        <!-- Action Buttons (Submit / Next / Prev) -->
-                        <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center">
-                            <button id="prev-q-btn" class="px-4 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-medium transition">
-                                <i class="fa-solid fa-chevron-left mr-1"></i> 前の問題
-                            </button>
-                            <button id="next-q-btn" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-bold transition">
-                                次の問題 <i class="fa-solid fa-chevron-right ml-1"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Explanation & Vocabulary Column -->
-                <div class="lg:col-span-5">
-                    <div id="explanation-card" class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 h-full flex flex-col justify-between">
-                        <!-- Default state before answer -->
-                        <div id="explanation-placeholder" class="py-12 text-center text-slate-400">
-                            <i class="fa-solid fa-lightbulb text-4xl mb-3 text-slate-300 dark:text-slate-600"></i>
-                            <p class="text-sm">選択肢を選ぶと、自然な和訳、文法解説、<br>重要単語の同義語・反対語・3通りの例文が表示されます。</p>
-                        </div>
-
-                        <!-- Explanation Details (Hidden until answered or revealed) -->
-                        <div id="explanation-content" class="hidden space-y-5 custom-scrollbar overflow-y-auto max-h-[700px] pr-1">
-                            <!-- Answer Status Alert -->
-                            <div id="result-alert-box" class="p-3 rounded-lg flex items-center gap-3">
-                                <i id="result-icon" class="text-2xl"></i>
-                                <div>
-                                    <h4 id="result-title" class="font-bold text-sm"></h4>
-                                    <p id="result-desc" class="text-xs"></p>
-                                </div>
-                            </div>
-
-                            <!-- English Script / Reading Text -->
-                            <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700">
-                                <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 block mb-1">英文スクリプト / 文脈テキスト</span>
-                                <p id="exp-script-text" class="text-sm font-mono text-slate-700 dark:text-slate-300"></p>
-                            </div>
-
-                            <!-- Japanese Translation -->
-                            <div>
-                                <span class="text-xs font-bold text-slate-500 dark:text-slate-400 block mb-1">自然な和訳</span>
-                                <p id="exp-translation" class="text-sm text-slate-700 dark:text-slate-200 bg-amber-500/10 p-3 rounded-lg border border-amber-500/20 leading-relaxed"></p>
-                            </div>
-
-                            <!-- Grammar & Usage Breakdown -->
-                            <div>
-                                <span class="text-xs font-bold text-slate-500 dark:text-slate-400 block mb-1">文法・用法・解説</span>
-                                <p id="exp-grammar" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line"></p>
-                            </div>
-
-                            <!-- Key Vocabulary with 3 Contextual Examples -->
-                            <div class="pt-3 border-t border-slate-200 dark:border-slate-700">
-                                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block mb-2">
-                                    <i class="fa-solid fa-book"></i> 重要単語・熟語ディープ解説
-                                </span>
-                                
-                                <div id="vocab-cards-container" class="space-y-3">
-                                    <!-- Populated dynamically -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="mt-12 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6">
-        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400">
-            <p>ECL (English Comprehension Level) Exam Preparation System for Japanese Defense & Diplomatic Trainees.</p>
-            <p class="mt-1">© 2026 ECL Exam Master Pro. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- App Logic JS -->
-    <script>
-        /**
-         * ECL Exam Master Core Engine - Enhanced Dynamic Generator & Seeder
-         */
-
-        // State Store
-        const STATE_KEY = 'ecl_exam_master_state_v2';
-
-        let appState = {
-            currentTab: 'dashboard',
-            currentMode: 'listening', // 'listening', 'reading', 'mock', 'weakness'
-            listeningIndex: 0,
-            readingIndex: 0,
-            mockIndex: 0,
-            weaknessIndex: 0,
-            answers: {}, 
-            audioSpeed: 1.0,
-            mockTimerSeconds: 45 * 60,
-            mockTimerInterval: null,
-            mockQuestionsList: []
-        };
-
-        // Category Definitions
-        const CATEGORIES = {
-            MILITARY_COMMAND: '軍事指令・作戦指示',
-            RADIO_COMMUNICATION: '航空・無線通信',
-            DIPLOMACY: '外交・公式協議',
-            DAILY_OPS: '会話・日常業務',
-            GRAMMAR_STRUCTURE: '文法・複雑構文',
-            IDIOMS_PHRASAL: 'イディオム・句動詞',
-            CONTEXT_READING: '文脈理解・長文読解'
-        };
-
-        // Seed datasets for robust dynamic variation
-        const ranks = ["Captain", "Major", "Colonel", "Lieutenant", "Sergeant", "Commander", "General"];
-        const locations = ["Sector 4", "Airbase Alpha", "the Naval Station", "the Checkpoint", "Headquarters", "Forward Operating Base Bravo"];
-        const times = ["0600", "0830", "1300", "1545", "1900", "2215"];
-        const weatherTypes = ["heavy fog", "severe turbulence", "torrential rain", "dust storms", "freezing rain"];
-
-        // -------------------------------------------------------------
-        // DYNAMIC QUESTION ENGINE FOR 500 L + 500 R (PRACTICE MODE)
-        // -------------------------------------------------------------
-
-        function generatePracticeQuestions(type, totalCount = 500) {
-            const bank = [];
-            const templates = [
-                {
-                    cat: CATEGORIES.MILITARY_COMMAND,
-                    gen: (i) => {
-                        const r = ranks[i % ranks.length];
-                        const loc = locations[i % locations.length];
-                        const t = times[i % times.length];
-                        const w = weatherTypes[i % weatherTypes.length];
-                        return {
-                            script: `${r} Henderson ordered all supply trucks bound for ${loc} to hold positions until ${t} due to ${w}.`,
-                            q: `Why were the supply trucks ordered to hold their positions?`,
-                            opts: [
-                                `Because of ${w} along the route`,
-                                `To wait for additional vehicle escorts`,
-                                `Due to a fuel shortage at ${loc}`,
-                                `To allow non-military traffic to pass first`
-                            ],
-                            ans: 0,
-                            tr: `${r}・ヘンダーソンは、${w}の影響により、${loc}に向かう全ての補給トラックに対して${t}まで待機するよう命じた。`,
-                            grammar: "ordered [目的語] to [動詞の原形]（〜に…するよう命じた）の第5文型。bound for 〜 は「〜行きの」を表す重要表現です。",
-                            vocab: {
-                                word: "hold position",
-                                meaning: "現位置を維持する、待機する",
-                                synonyms: "stay put, maintain ground, await orders",
-                                antonyms: "advance, fall back, retreat",
-                                ex1: "The platoon was instructed to hold position until further notice. (小隊は追加指示があるまで現位置を維持するよう命令された。)",
-                                ex2: "In business negotiations, it is sometimes wise to hold your position. (ビジネス交渉において、自らの立場を維持することが好ましい場合もある。)",
-                                ex3: "Flight control advised the aircraft to hold position on the taxiway. (管制塔は航空機に誘導路上での停止待機を指示した。)"
-                            }
-                        };
-                    }
-                },
-                {
-                    cat: CATEGORIES.RADIO_COMMUNICATION,
-                    gen: (i) => {
-                        const alt = (20 + (i % 15) * 2) * 100;
-                        return {
-                            script: "Tower, this is Viper 21. Requesting permission to adjust altitude to " + alt + " feet due to unexpected wind shear.",
-                            q: "What is Viper 21 requesting?",
-                            opts: [
-                                "Permission to land immediately",
-                                `Altitude adjustment to ${alt} feet`,
-                                "Vector to the nearest emergency runway",
-                                "Refueling support on arrival"
-                            ],
-                            ans: 1,
-                            tr: "タワー、こちらバイパー21。予期せぬウインドシア（風の急変）のため、高度を" + alt + "フィートに変更する許可を要請する。",
-                            grammar: "Requesting permission to + 動詞の原形（〜する許可を要請する）。due to + 名詞（〜が理由で）は航空無線・軍事英語の定番構文です。",
-                            vocab: {
-                                word: "altitude",
-                                meaning: "高度、海抜",
-                                synonyms: "elevation, height, ceiling",
-                                antonyms: "depth, low altitude",
-                                ex1: "The aircraft reached its cruising altitude within fifteen minutes. (その航空機は15分以内に巡航高度に達した。)",
-                                ex2: "High altitude can cause breathing difficulties without auxiliary oxygen. (高高度では補助酸素なしでは呼吸困難を引き起こす可能性がある。)",
-                                ex3: "Radar confirmed the target was changing altitude rapidly. (レーダーは目標が急速に高度を変えているのを確認した。)"
-                            }
-                        };
-                    }
-                },
-                {
-                    cat: CATEGORIES.GRAMMAR_STRUCTURE,
-                    gen: (i) => {
-                        const verbs = ["inspected", "approved", "verified", "securing", "authorizing"];
-                        return {
-                            script: "Not until the chief engineer had thoroughly _______ the fuel line did the pilot start the engines.",
-                            q: "Which word best completes the sentence grammatically?",
-                            opts: [
-                                "inspected",
-                                "inspect",
-                                "inspecting",
-                                "inspection"
-                            ],
-                            ans: 0,
-                            tr: "主任エンジニアが燃料ラインを徹底的に点検し終えて初めて、パイロットはエンジンを始動させた。",
-                            grammar: "否定語句 Not until が文頭に出たことによる主節の倒置構造（did the pilot start）と、過去完了（had + 過去分詞 inspected）の組み合わせ問題です。",
-                            vocab: {
-                                word: "inspect",
-                                meaning: "検査する、点検する",
-                                synonyms: "examine, audit, scrutinize",
-                                antonyms: "neglect, overlook",
-                                ex1: "Technicians inspect the landing gear before every flight. (技術者は毎フライト前に着陸装置を点検する。)",
-                                ex2: "Customs officers inspect cargo at international borders. (税関職員は国境で貨物を検査する。)",
-                                ex3: "The general arrived to inspect the garrison facilities. (将軍は駐屯地施設を視察するために到着した。)"
-                            }
-                        };
-                    }
-                },
-                {
-                    cat: CATEGORIES.IDIOMS_PHRASAL,
-                    gen: (i) => {
-                        return {
-                            script: "The diplomatic mission managed to iron out their remaining policy differences before the summit concluded.",
-                            q: "What does 'iron out' mean in this context?",
-                            opts: [
-                                "To resolve or settle difficulties",
-                                "To cancel the agreement entirely",
-                                "To delay decision making",
-                                "To press uniforms for the ceremony"
-                            ],
-                            ans: 0,
-                            tr: "外交使節団は、サミットが閉幕する前に残された政策上の意見の違いを解決（調整）することができた。",
-                            grammar: "iron out は「（問題や違いなどを）スムーズに解決する、取り除く」という比喩的な慣用句動詞です。",
-                            vocab: {
-                                word: "iron out",
-                                meaning: "（障害・問題・相違点などを）解決する、調整する",
-                                synonyms: "resolve, settle, smooth over",
-                                antonyms: "complicate, aggravate",
-                                ex1: "Legal teams worked overnight to iron out the contract details. (法務チームは契約の詳細を解決するために徹夜で作業した。)",
-                                ex2: "We need to iron out a few technical glitches before launching. (ローンチ前にいくつかの技術的不具合を調整する必要がある。)",
-                                ex3: "Both commanders met to iron out logistical bottlenecks. (両司令官は兵站上のボトルネックを解消するために会談した。)"
-                            }
-                        };
-                    }
-                }
-            ];
-
-            for (let i = 0; i < totalCount; i++) {
-                const tmpl = templates[i % templates.length];
-                const generatedData = tmpl.gen(i);
-
-                bank.push({
-                    id: `${type.substr(0, 3)}-prc-${i}`,
-                    number: i + 1,
-                    type: type,
-                    category: tmpl.cat,
-                    script: generatedData.script,
-                    question: `Q${i + 1}: ${generatedData.q}`,
-                    options: generatedData.opts,
-                    answer: generatedData.ans,
-                    translation: generatedData.tr,
-                    grammar: generatedData.grammar,
-                    vocab: generatedData.vocab
-                });
-            }
-            return bank;
-        }
-
-        // -------------------------------------------------------------
-        // COMPLETELY DISTINCT 100 MOCK EXAM QUESTION POOL
-        // -------------------------------------------------------------
-        function generateDistinctMockPool() {
-            const mockList = [];
-            const mockCategories = Object.values(CATEGORIES);
-
-            for (let i = 0; i < 100; i++) {
-                const isListening = i < 50; // First 50 Listening, next 50 Reading
-                const cat = mockCategories[i % mockCategories.length];
-                const qNum = i + 1;
-
-                if (isListening) {
-                    mockList.push({
-                        id: `mock-exam-${i}`,
-                        number: qNum,
-                        type: 'listening',
-                        category: cat,
-                        script: `[MOCK EXAM SCRIPT #${qNum}] Command Center to Eagle-1: Be advised, hostile drones detected at coordinates Alpha-9. Initiate defensive counter-measures immediately.`,
-                        question: `Q${qNum} (Mock Listening): What instruction is given to Eagle-1?`,
-                        options: [
-                            "Initiate defensive counter-measures immediately",
-                            "Return to base for emergency maintenance",
-                            "Maintain radio silence and hold altitude",
-                            "Report enemy strength to ground forces"
-                        ],
-                        answer: 0,
-                        translation: `【模擬試験 スクリプト】司令部よりイーグル1へ。警告：アルファ9座標にて敵ドローンを感知。直ちに防衛対抗措置を開始せよ。`,
-                        grammar: `Be advised は「通知する／警戒せよ」、Initiate は「（手順・作戦を）開始する」という軍事公式通信フレーズです。`,
-                        vocab: {
-                            word: "initiate",
-                            meaning: "着手する、開始する、引き起こす",
-                            synonyms: "commence, launch, trigger",
-                            antonyms: "terminate, halt, conclude",
-                            ex1: "The captain gave orders to initiate emergency protocols. (船長は緊急プロトコルを開始するよう命じた。)",
-                            ex2: "They initiated a new training module for newly recruited personnel. (新入隊員向けの新しい訓練モジュールを開始した。)",
-                            ex3: "All systems are ready to initiate countdown. (全システムがカウントダウンを開始する準備が整った。)"
-                        }
-                    });
-                } else {
-                    mockList.push({
-                        id: `mock-exam-${i}`,
-                        number: qNum,
-                        type: 'reading',
-                        category: cat,
-                        script: `[MOCK EXAM PASSAGE #${qNum}] Strategic deterrence relies not only on military hardware, but also on the credible threat of swift retaliation against unauthorized aggression.`,
-                        question: `Q${qNum} (Mock Reading): What does the passage state is essential for effective deterrence?`,
-                        options: [
-                            "Only modern military technology and weapons",
-                            "The credible threat of swift retaliation",
-                            "Constant diplomatic concessions",
-                            "Complete international disarmament"
-                        ],
-                        answer: 1,
-                        translation: `【模擬試験 読解】戦略的抑止力は、軍事ハードウェアだけでなく、不法な侵略に対する迅速な報復という信憑性のある脅威にも依拠している。`,
-                        grammar: `relies not only on A, but also on B（AだけでなくBにも依存する）の構文。credible は「信憑性のある」を意味します。`,
-                        vocab: {
-                            word: "retaliation",
-                            meaning: "報復、仕返し",
-                            synonyms: "reprisal, revenge, response",
-                            antonyms: "forgiveness, pardon, reconciliation",
-                            ex1: "Any attack will provoke immediate retaliation. (いかなる攻撃も即座の報復を引き起こすだろう。)",
-                            ex2: "Trade tariffs were imposed in retaliation for foreign restrictions. (外国の規制に対する報復として貿易関税が課された。)",
-                            ex3: "Military doctrines specify proportional retaliation principles. (軍事ドクトリンは均衡再報復の原則を規定している。)"
-                        }
-                    });
-                }
-            }
-            return mockList;
-        }
-
-        const listeningBank = generatePracticeQuestions('listening', 500);
-        const readingBank = generatePracticeQuestions('reading', 500);
-        const mockExamBank = generateDistinctMockPool();
-
-        // -------------------------------------------------------------
-        // STATE & REFRESH LOGIC OVERRIDES
-        // -------------------------------------------------------------
-        
-        // Override mock list generator in switchTab
-        const origSwitchTab = switchTab;
-        switchTab = function(tabName) {
-            if (tabName === 'mock') {
-                appState.mockQuestionsList = mockExamBank; // Assign pre-generated independent pool
-            }
-            origSwitchTab(tabName);
-        };
-    </script>
-<!-- ... existing code -->
+<body>
+<header>
+ <div class="brandline">
+  <div class="brand"><div class="logo">ECL</div><div><div class="eyebrow">ENGLISH PROFICIENCY TRAINER</div><h1>ECL Ready</h1></div></div>
+  <button class="secondary" id="themeBtn" aria-label="テーマ切替">☼ 表示切替</button>
+ </div>
+ <div class="sub">リスニング 500問 ＋ リーディング 500問 · 中級〜標準 · 学習記録はこの端末に保存</div>
+</header>
+<div class="wrap">
+ <div class="stats">
+  <div class="stat"><small>回答済み</small><strong id="answeredStat">0</strong><small>問</small></div>
+  <div class="stat"><small>正答率</small><strong id="accuracyStat">—</strong><small>全回答ベース</small></div>
+  <div class="stat"><small>推定スコア</small><strong id="scoreStat">—</strong><small>参考値 / 100</small></div>
+  <div class="stat"><small>連続正解</small><strong id="streakStat">0</strong><small>問</small></div>
+ </div>
+ <div class="layout">
+  <main>
+   <section class="card">
+    <div class="controls">
+     <select id="modeSelect" aria-label="出題形式"><option value="all">全形式</option><option value="listening">リスニング</option><option value="reading">リーディング</option></select>
+     <select id="categorySelect" aria-label="カテゴリ"><option value="all">全カテゴリ</option></select>
+     <select id="countSelect" aria-label="問題数"><option value="10">10問セット</option><option value="20">20問セット</option><option value="50">50問セット</option><option value="100">100問セット</option><option value="all">全1000問を順番に</option></select>
+     <button class="primary" id="startBtn">学習を開始</button>
+     <button class="secondary" id="resumeBtn">続きから</button>
+    </div>
+    <div class="progress"><span id="setProgress"></span></div>
+    <div class="small muted" id="setLabel">セットを選択して「学習を開始」を押してください。</div>
+   </section>
+   <section class="card question" id="questionCard">
+    <div class="question-top"><span class="pill">WELCOME / ようこそ</span><span class="pill">ECL Ready</span></div>
+    <h2>実戦形式で英語力を鍛えましょう</h2>
+    <p class="muted">「学習を開始」を押すと、軍事・航空・技術・職場・日常会話・慣用句などのオリジナル問題が出題されます。</p>
+    <div class="notice">このアプリはECL形式を参考にした独自の学習教材です。米国国防総省・DLIの公式教材や公式スコア判定ではありません。推定スコアは学習進捗の目安です。</div>
+   </section>
+   <section class="card hidden" id="resultCard"></section>
+  </main>
+  <aside class="side">
+   <section class="card">
+    <div class="side-section"><h3>音声コントロール</h3>
+     <div class="controls"><button id="playBtn" class="primary">▶ 読み上げ</button><button id="stopBtn">■ 停止</button><button id="scriptBtn">スクリプト表示</button></div>
+     <div class="speed" style="margin-top:12px"><span>速度</span><input id="speedRange" type="range" min="0.8" max="1.2" value="1" step="0.1"><strong id="speedValue">1.0x</strong></div>
+     <p class="small muted">端末・ブラウザに搭載された英語音声を使用します。声の種類は端末設定により異なります。</p>
+    </div>
+   </section>
+   <section class="card">
+    <div class="side-section"><h3>弱点分析</h3><div id="weaknessBox" class="muted small">回答するとカテゴリ別の正答率が表示されます。</div></div>
+    <div class="side-section"><h3>学習メニュー</h3><div class="controls"><button id="reviewBtn">間違えた問題</button><button id="resetBtn" class="secondary">記録をリセット</button></div><p class="small muted">進捗・回答履歴はブラウザのlocalStorageに保存されます。</p></div>
+   </section>
+  </aside>
+ </div>
+ <div class="footer">ECL Ready · オリジナル練習問題 · iPhone Safari対応 · オフライン利用可能（初回読み込み後）</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const categories=["軍事・業務","航空・安全","技術・科学","職場・日常業務","日常会話","慣用句・語法","文法・条件文","読解・時事"];
+const situations=[
+{cat:"軍事・業務",topic:"the operations briefing",who:"The duty officer",verb:"reported",detail:"the supply convoy would arrive before sunset",q:"What did the duty officer report?",correct:"The supply convoy was expected before sunset.",wrong:["The convoy had already returned to base.","The briefing was canceled until tomorrow.","The supplies would be sent by aircraft next week."],why:"would arrive は過去の時点から見た未来を表します。報告内容は、補給車列が日没前に到着する見込みだということです。",word:"convoy",meaning:"車列、輸送隊",syn:"fleet, procession",ant:"individual vehicle",examples:["The convoy left at dawn.（車列は夜明けに出発した）","A police convoy escorted the visitors.（警察の車列が訪問者を護衛した）","The convoy carried medical supplies.（輸送隊は医療物資を運んだ）"}},
+{cat:"航空・安全",topic:"the flight briefing",who:"The pilot",verb:"explained",detail:"visibility might decrease rapidly after the front passed",q:"What weather concern was mentioned?",correct:"Visibility could worsen after the front passed.",wrong:["The runway was permanently closed.","The aircraft had exceeded its fuel limit.","The wind had stopped completely."],why:"might は可能性を表す助動詞です。visibility decrease は「視程が低下する」。",word:"visibility",meaning:"視程、見通し",syn:"clarity, range of sight",ant:"obscurity",examples:["Visibility is poor in fog.（霧で視程が悪い）","The tower reported improving visibility.（管制塔は視程の改善を報告した）","Visibility can change quickly near the coast.（海岸付近では視程が急変することがある）"}},
+{cat:"技術・科学",topic:"the maintenance report",who:"The technician",verb:"noted",detail:"the sensor had produced inconsistent readings during the test",q:"What problem did the technician identify?",correct:"The sensor readings were not consistent.",wrong:["The test had not been scheduled.","The sensor was missing from the equipment.","The system had passed every test without issue."],why:"過去完了 had produced は、報告した時点より前に起きた事象を示します。inconsistent は「一貫しない、不安定な」。",word:"inconsistent",meaning:"一貫しない、不安定な",syn:"irregular, uneven",ant:"consistent, uniform",examples:["The data were inconsistent.（データに一貫性がなかった）","His explanation was inconsistent with the evidence.（彼の説明は証拠と一致しなかった）","The machine gives inconsistent results when overheated.（過熱すると機械の結果が不安定になる）"}},
+{cat:"職場・日常業務",topic:"the project meeting",who:"The manager",verb:"announced",detail:"the deadline had been extended by two business days",q:"What changed about the project?",correct:"The deadline was moved back by two business days.",wrong:["The project was canceled immediately.","The team had to finish two days earlier.","The budget was cut in half."],why:"extend a deadline は「期限を延長する」。had been extended は過去完了の受動態です。",word:"extend",meaning:"延長する、広げる",syn:"lengthen, prolong",ant:"shorten, reduce",examples:["They extended the deadline.（彼らは期限を延長した）","The road extends to the river.（道路は川まで続いている）","We plan to extend the training program.（研修プログラムを拡充する予定だ）"}},
+{cat:"日常会話",topic:"a conversation at the front desk",who:"The receptionist",verb:"mentioned",detail:"a room would be available once the previous guest checked out",q:"When would the room become available?",correct:"After the previous guest checked out.",wrong:["Before the previous guest arrived.","Only after the weekend.","As soon as the building opened next month."],why:"once はここでは「いったん〜すれば／〜したらすぐに」。would be available は過去から見た未来です。",word:"available",meaning:"利用できる、空いている",syn:"accessible, obtainable",ant:"unavailable, occupied",examples:["Is this seat available?（この席は空いていますか）","The report is available online.（報告書はオンラインで入手できる）","A doctor will be available this afternoon.（午後は医師に相談できます）"}},
+{cat:"慣用句・語法",topic:"an informal team discussion",who:"One team member",verb:"said",detail:"they should get the ball rolling before more delays occurred",q:"What did the speaker recommend?",correct:"They should begin taking action soon.",wrong:["They should postpone the task indefinitely.","They should purchase sports equipment.","They should wait until every detail was perfect."],why:"get the ball rolling は「物事を始める、口火を切る」という慣用句です。",word:"get the ball rolling",meaning:"物事を始める、着手する",syn:"get started, initiate",ant:"put off, delay",examples:["Let's get the ball rolling with introductions.（自己紹介から始めましょう）","The new director got the ball rolling on reforms.（新責任者は改革に着手した）","We need a small meeting to get the ball rolling.（始動するために短い会議が必要だ）"}},
+{cat:"文法・条件文",topic:"a safety training session",who:"The instructor",verb:"reminded the group",detail:"if an alarm sounds, everyone must leave through the nearest safe exit",q:"What should people do if the alarm sounds?",correct:"Use the nearest safe exit to leave.",wrong:["Ignore it unless someone calls.","Return to their desks first.","Wait inside until the next training session."],why:"if + 現在形, 主節に will / can / must などを置く第一条件文の形です。規則・指示では must が使われます。",word:"nearest",meaning:"最も近い",syn:"closest, next",ant:"farthest, most distant",examples:["Use the nearest exit.（最寄りの出口を使ってください）","The nearest station is two blocks away.（最寄り駅は2ブロック先です）","She sat in the nearest available chair.（彼女は空いている一番近い椅子に座った）"}},
+{cat:"読解・時事",topic:"a short news update",who:"The reporter",verb:"stated",detail:"the city had invested in a new flood-warning network after last year's severe storms",q:"Why did the city invest in the network?",correct:"Severe storms the previous year prompted the investment.",wrong:["The city wanted to replace all roads.","There had been no rain for a decade.","The network was required for a sports event."],why:"after last year's severe storms は投資の背景を示します。had invested は過去の別の時点より前の投資を表す過去完了です。",word:"severe",meaning:"深刻な、厳しい",syn:"serious, intense",ant:"mild, slight",examples:["The region experienced severe flooding.（その地域は深刻な洪水に見舞われた）","He has a severe allergy to nuts.（彼はナッツに重いアレルギーがある）","The storm caused severe damage.（嵐は甚大な被害をもたらした）"}}
+];
+const readTopics=[
+{cat:"軍事・業務",title:"Equipment Accountability",text:"All section leaders must verify their equipment inventories by Thursday. Any discrepancy should be documented and reported to the logistics office immediately. Items that cannot be located must not be marked as serviceable until an inspection has been completed.",q:"What must happen before a missing item can be marked serviceable?",correct:"An inspection must be completed.",wrong:["The inventory deadline must be extended.","The logistics office must purchase a replacement.","The item must be transferred to another section."],why:"must not be marked ... until は「〜が完了するまでは、〜と記録してはならない」。serviceable は「使用可能な状態の」。",word:"discrepancy",meaning:"相違、不一致",syn:"difference, inconsistency",ant:"agreement, match",examples:["The audit revealed a discrepancy.（監査で不一致が判明した）","Please explain the discrepancy in the figures.（数値の食い違いを説明してください）","A small discrepancy can affect the final report.（小さな不一致が最終報告に影響することがある）"}},
+{cat:"航空・安全",title:"Runway Inspection",text:"Following heavy rain, the airfield team inspected the runway for standing water and loose debris. Operations resumed only after the inspection team confirmed that the surface met the required safety standards. Pilots were advised to expect minor delays while the remaining checks were completed.",q:"When did operations resume?",correct:"After the team confirmed the runway met safety standards.",wrong:["Immediately when the rain began.","Before the runway was inspected.","Only after all flights were canceled for the day."],why:"only after は「〜して初めて」。resumed は「再開した」。while the remaining checks were completed は確認作業中の状況です。",word:"resume",meaning:"再開する、再び始める",syn:"restart, recommence",ant:"stop, suspend",examples:["The flight resumed after a short delay.（短い遅延の後、飛行が再開した）","She resumed her studies in September.（彼女は9月に学業を再開した）","Talks will resume next week.（協議は来週再開する）"}},
+{cat:"技術・科学",title:"Software Update",text:"The latest software update improves data encryption and fixes a fault that occasionally caused the system to restart. Users should save their work before installing the update, although no files are expected to be deleted. Installation may take up to fifteen minutes.",q:"What should users do before installing the update?",correct:"Save their work.",wrong:["Delete all stored files.","Disable data encryption permanently.","Restart the system every minute."],why:"should + 動詞の原形は助言・推奨。although は「〜ではあるが」。up to fifteen minutes は「最大15分」。",word:"occasionally",meaning:"時折、たまに",syn:"sometimes, from time to time",ant:"always, constantly",examples:["The connection occasionally drops.（接続が時折切れる）","He occasionally works on weekends.（彼は時折週末に働く）","Occasionally, a delay is unavoidable.（遅延が避けられないこともある）"}},
+{cat:"職場・日常業務",title:"Flexible Work Schedule",text:"Employees may request a flexible schedule if their duties allow it. Requests must be submitted to supervisors at least one week in advance, and approval depends on staffing requirements. A flexible schedule does not change the total number of required working hours.",q:"What does an approved flexible schedule not change?",correct:"The total required working hours.",wrong:["The employee's job title automatically.","The need for supervisor approval.","The staffing requirements of the office."],why:"does not change は「変えない」。depends on は「〜次第である」。at least one week in advance は「少なくとも1週間前に」。",word:"requirement",meaning:"要件、必要条件",syn:"necessity, condition",ant:"option, choice",examples:["Safety is a basic requirement.（安全は基本要件だ）","The job has several language requirements.（その職務には複数の語学要件がある）","We met every requirement.（すべての要件を満たした）"}},
+{cat:"日常会話",title:"Lost Property",text:"A visitor who left a tablet in the conference room should contact the reception desk. Staff found the device shortly after the meeting ended and stored it in a locked cabinet. The owner will need to describe the device and show identification before collecting it.",q:"What must the owner do to collect the tablet?",correct:"Describe it and show identification.",wrong:["Pay a storage fee before asking about it.","Return after the building closes.","Ask the meeting organizer to buy a new one."],why:"before collecting it は「それを受け取る前に」。who left a tablet ... は visitor を説明する関係代名詞節です。",word:"identify",meaning:"特定する、身元を確認する",syn:"recognize, establish",ant:"misidentify, confuse",examples:["Can you identify the caller?（電話の相手を特定できますか）","The witness identified the vehicle.（目撃者は車両を特定した）","Please identify your main concern.（主な懸念点を明確にしてください）"}},
+{cat:"慣用句・語法",title:"Managing Expectations",text:"The project lead warned the team not to count their chickens before they hatch. The proposal had received positive feedback, but funding had not yet been approved. The team was asked to continue preparing alternatives until a final decision was announced.",q:"What was the project lead advising the team to do?",correct:"Avoid assuming success before approval.",wrong:["Stop preparing alternatives immediately.","Spend the funding before it is approved.","Reject the proposal without reviewing it."],why:"count your chickens before they hatch は「結果が確定する前に成功を当て込む」。not to + 動詞は否定の指示です。",word:"approve",meaning:"承認する",syn:"authorize, accept",ant:"reject, refuse",examples:["The supervisor approved the request.（上司は申請を承認した）","The plan was approved unanimously.（計画は全会一致で承認された）","No purchase can proceed until finance approves it.（財務部の承認まで購入は進められない）"}},
+{cat:"文法・条件文",title:"Emergency Procedures",text:"If a warning light remains on after the engine has been shut down and restarted, the operator should stop using the equipment and notify maintenance. Continuing to operate the machine could cause further damage, even if it appears to function normally.",q:"What should the operator do if the warning light remains on?",correct:"Stop using the equipment and notify maintenance.",wrong:["Continue operating it because it looks normal.","Remove the warning label and restart repeatedly.","Wait until the next scheduled inspection without reporting it."],why:"If + 現在形, 主節 should + 動詞の原形で、条件に対する推奨行動を表します。even if は「たとえ〜でも」。",word:"notify",meaning:"知らせる、通知する",syn:"inform, alert",ant:"conceal, withhold",examples:["Notify the supervisor of any damage.（損傷があれば上司に知らせる）","Passengers were notified of the delay.（乗客は遅延を通知された）","Please notify us if your address changes.（住所が変わったらお知らせください）"}},
+{cat:"読解・時事",title:"Community Water Plan",text:"After two unusually dry summers, the regional council introduced a water-conservation plan. The measures include repairing leaking pipes, providing households with usage reports, and offering rebates for efficient appliances. Officials say the plan is intended to reduce demand rather than restrict essential water use.",q:"What is the main purpose of the plan?",correct:"To reduce water demand through conservation measures.",wrong:["To prohibit all household water use.","To increase water use during dry months.","To replace every household appliance at no cost."],why:"rather than は「〜ではなく」。is intended to は「〜を目的としている」。rebate は「払い戻し、購入補助金」。",word:"conservation",meaning:"保全、節約",syn:"preservation, protection",ant:"waste, depletion",examples:["Water conservation is essential in dry areas.（乾燥地域では節水が不可欠だ）","The program supports wildlife conservation.（その計画は野生生物保護を支援する）","Energy conservation lowers operating costs.（省エネは運用コストを下げる）"}}
+];
+const extraWords=[
+["allocate","割り当てる","assign, distribute","withhold, retain",["The office allocated funds for training.（部署は訓練費を割り当てた）","We allocated each person a task.（各人に仕事を割り当てた）","Time should be allocated carefully.（時間は慎重に配分すべきだ）"]],
+["mitigate","軽減する","ease, alleviate","worsen, intensify",["The barriers mitigate noise.（防壁は騒音を軽減する）","Early action can mitigate the risk.（早期対応でリスクを軽減できる）","The policy aims to mitigate delays.（その方針は遅延の軽減を目指す）"]],
+["mandatory","義務的な","required, compulsory","optional, voluntary",["Attendance is mandatory.（出席は義務だ）","A helmet is mandatory on the site.（現場ではヘルメット着用が必須だ）","The course includes mandatory safety training.（その講座には必須の安全訓練が含まれる）"]],
+["feasible","実行可能な","practical, workable","impractical, impossible",["The schedule is feasible.（その日程は実行可能だ）","We need a feasible alternative.（実行可能な代案が必要だ）","A shorter route may be more feasible.（より短い経路の方が現実的かもしれない）"]],
+["adjacent","隣接した","nearby, neighboring","distant, separate",["The office is adjacent to the hangar.（事務所は格納庫に隣接している）","Park in the adjacent lot.（隣の駐車場に停めてください）","The two rooms are adjacent.（2つの部屋は隣り合っている）"]],
+["reliable","信頼できる","dependable, trustworthy","unreliable, doubtful",["We need reliable data.（信頼できるデータが必要だ）","The radio is reliable in bad weather.（その無線機は悪天候でも信頼性が高い）","She is a reliable colleague.（彼女は頼りになる同僚だ）"]],
+["clarify","明確にする","explain, make clear","confuse, obscure",["Could you clarify the instruction?（指示を明確にしてもらえますか）","The memo clarifies the new procedure.（メモは新手順を明確にしている）","Please clarify what you mean.（意図を明確にしてください）"]],
+["withstand","耐える","endure, resist","succumb, yield",["The structure can withstand strong winds.（その構造物は強風に耐えられる）","The material withstands heat.（その素材は熱に耐える）","The team withstood heavy pressure.（チームは強い圧力に耐えた）"]]
+];
+const templates=[
+{cat:"文法・条件文",topic:"a procedural update",who:"The supervisor",verb:"emphasized",detail:"unless the inspection is complete, the equipment must remain out of service",q:"Under what condition may the equipment return to service?",correct:"After the inspection is complete.",wrong:["Whenever the operator requests it.","Before the inspection begins.","Only after the next monthly meeting."],why:"unless は「〜しない限り」。must remain out of service は「使用停止のままでなければならない」です。",word:"inspection",meaning:"点検、検査",syn:"examination, check",ant:"neglect, disregard",examples:["The inspection found no defects.（点検では欠陥が見つからなかった）","A safety inspection is scheduled for Monday.（安全点検は月曜に予定されている）","The vehicle failed its inspection.（その車両は検査に不合格だった）"}},
+{cat:"軍事・業務",topic:"a logistics coordination call",who:"The coordinator",verb:"confirmed",detail:"the spare parts would be distributed according to operational priority",q:"How would the spare parts be distributed?",correct:"According to operational priority.",wrong:["In alphabetical order only.","To the newest unit first in every case.","Randomly to avoid paperwork."],why:"according to は「〜に従って」。would be distributed は過去の視点からの未来を表す受動態です。",word:"priority",meaning:"優先事項、優先順位",syn:"precedence, preference",ant:"triviality, insignificance",examples:["Safety is our first priority.（安全が最優先事項だ）","The urgent request received priority.（緊急の依頼が優先された）","Set priorities before starting the task.（作業開始前に優先順位を決める）"}},
+{cat:"航空・安全",topic:"a weather advisory",who:"The controller",verb:"advised",detail:"crews to allow extra time because crosswinds were expected to strengthen",q:"Why were crews advised to allow extra time?",correct:"Crosswinds were expected to become stronger.",wrong:["The airport was changing its name.","All navigation equipment had been removed.","The runway lights would be turned off permanently."],why:"advise + 人 + to do は「人に〜するよう助言する」。be expected to は「〜すると予想される」です。",word:"strengthen",meaning:"強まる、強化する",syn:"intensify, reinforce",ant:"weaken, diminish",examples:["Winds may strengthen overnight.（風は夜間に強まる可能性がある）","The evidence strengthened the case.（証拠が主張を補強した）","Exercise can strengthen the muscles.（運動は筋肉を強化できる）"}},
+{cat:"技術・科学",topic:"a systems test",who:"The engineer",verb:"observed",detail:"the backup unit activated automatically when the primary connection failed",q:"What happened when the primary connection failed?",correct:"The backup unit activated automatically.",wrong:["The entire system was permanently erased.","The engineer disconnected the backup unit first.","The test was canceled before it began."],why:"when は時を表す接続詞。activated は「作動させた／作動した」。automatically は「自動的に」です。",word:"backup",meaning:"予備、バックアップ",syn:"reserve, substitute",ant:"primary, original",examples:["Keep a backup copy of the file.（ファイルの予備コピーを保存する）","The backup generator started.（予備発電機が起動した）","We need a backup plan.（代替計画が必要だ）"}},
+{cat:"職場・日常業務",topic:"a staffing discussion",who:"The team lead",verb:"explained",detail:"employees who had completed the certification could volunteer for the new assignment",q:"Who could volunteer for the new assignment?",correct:"Employees who had completed the certification.",wrong:["Only employees who had just joined.","Anyone without the required certification.","Visitors attending the meeting."],why:"who had completed ... は employees を修飾する関係代名詞節です。過去完了 had completed は基準時より前の完了を示します。",word:"certification",meaning:"資格認定、証明",syn:"qualification, accreditation",ant:"disqualification",examples:["The certification requires an exam.（その資格認定には試験が必要だ）","She earned a technical certification.（彼女は技術資格を取得した）","Certification must be renewed every three years.（認定は3年ごとに更新が必要だ）"}},
+{cat:"日常会話",topic:"a travel arrangement",who:"The travel clerk",verb:"pointed out",detail:"the earlier train was fully booked, so the next departure was the most practical option",q:"Why was the later train recommended?",correct:"The earlier train had no seats available.",wrong:["The later train was free for everyone.","The destination had changed.","The traveler had missed the final train."],why:"fully booked は「満席」。so は結果を示し、the most practical option は「最も現実的な選択肢」です。",word:"departure",meaning:"出発、出発便",syn:"leaving, exit",ant:"arrival",examples:["The departure is scheduled for noon.（出発は正午の予定だ）","Check the departure board.（出発案内板を確認してください）","A delay affected several departures.（遅延が複数の出発便に影響した）"}},
+{cat:"慣用句・語法",topic:"a planning session",who:"The analyst",verb:"suggested",detail:"the team should keep an eye on fuel consumption as the mission progressed",q:"What did the analyst suggest?",correct:"Monitor fuel consumption closely.",wrong:["Stop recording fuel usage.","Ignore changes until the mission ends.","Replace all fuel tanks immediately."],why:"keep an eye on は「〜を注意深く見守る」。as the mission progressed は「任務が進むにつれて」です。",word:"consumption",meaning:"消費、消費量",syn:"use, expenditure",ant:"production, generation",examples:["Fuel consumption increased in cold weather.（寒冷時に燃料消費量が増えた）","Reduce electricity consumption at night.（夜間の電力消費を減らす）","The report compares water consumption.（報告書は水の消費量を比較している）"}},
+{cat:"読解・時事",topic:"a public transport notice",who:"The announcement",verb:"explained",detail:"passengers could avoid peak-hour congestion by using contactless payment and checking live departure updates",q:"Which action was recommended to passengers?",correct:"Check live departure updates.",wrong:["Travel only during the busiest hours.","Pay with cash at every stop.","Avoid public transportation entirely."],why:"could avoid は「避けることができる」。by + 動名詞は手段を表し「〜することで」と訳します。",word:"congestion",meaning:"混雑、渋滞",syn:"crowding, blockage",ant:"flow, clearance",examples:["Traffic congestion delayed the bus.（交通渋滞でバスが遅れた）","The city is working to reduce congestion.（市は混雑削減に取り組んでいる）","Network congestion slowed the download.（ネットワーク混雑でダウンロードが遅くなった）"}}
+];
+function hash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function shuffle(arr,seed){let a=arr.slice(),x=seed>>>0;for(let i=a.length-1;i>0;i--){x=(Math.imul(x,1664525)+1013904223)>>>0;let j=x%(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
+function makeListening(i){
+ const base=situations[i%situations.length], t=templates[Math.floor(i/situations.length)%templates.length], b=(i%3===0?base:t);
+ const topic=b.topic+" — "+["morning update","follow-up briefing","routine review","team coordination","end-of-day report"][Math.floor(i/7)%5];
+ const detail=b.detail;
+ const script=`${b.who} ${b.verb} during ${topic} that ${detail}.`;
+ const options=shuffle([b.correct,...b.wrong],hash(script+i));
+ return {id:"L"+i,type:"listening",cat:b.cat,topic,script,q:b.q,options,answer:options.indexOf(b.correct),why:b.why,word:b.word,meaning:b.meaning,syn:b.syn,ant:b.ant,examples:b.examples,translation:`${b.who}は${topic}で、${detail}と${b.verb==="said"?"述べました":"説明しました"}。`,grammar:b.why};
+}
+function makeReading(i){
+ const base=readTopics[i%readTopics.length], t=templates[Math.floor(i/readTopics.length)%templates.length];
+ if(i<readTopics.length)return {id:"R"+i,type:"reading",cat:base.cat,topic:base.title,passage:base.text,q:base.q,options:shuffle([base.correct,...base.wrong],hash(base.text)),answer:shuffle([base.correct,...base.wrong],hash(base.text)).indexOf(base.correct),why:base.why,word:base.word,meaning:base.meaning,syn:base.syn,ant:base.ant,examples:base.examples,translation:"本文は、提示された状況・手順・理由を説明しています。設問の根拠となる文を本文から探し、選択肢と照合してください。",grammar:base.why};
+ const n=i+1, topic=t.topic+" "+["Policy","Procedure","Update","Review","Guidance"][Math.floor(i/8)%5];
+ const para=`${topic}: ${t.who} ${t.verb} that ${t.detail}. Staff members were asked to review the relevant guidance and raise any concerns before the next scheduled review. The change is intended to improve consistency while allowing supervisors to respond to local requirements. Further details will be circulated once the final timetable has been confirmed.`;
+ const correct=t.correct, opts=shuffle([correct,...t.wrong],hash(para+i));
+ return {id:"R"+i,type:"reading",cat:t.cat,topic,passage:para,q:t.q,options:opts,answer:opts.indexOf(correct),why:t.why,word:t.word,meaning:t.meaning,syn:t.syn,ant:t.ant,examples:t.examples,translation:`${topic}：${t.who}は、${t.detail}と説明しました。職員は関連する指針を確認し、次回の定期確認より前に懸念点を申し出るよう求められました。この変更は、現場ごとの要件に対応しながら一貫性を高めることを目的としています。最終日程が確定した後、詳細が共有されます。`,grammar:t.why};
+}
+const bank=[];
+for(let i=0;i<500;i++)bank.push(makeListening(i));
+for(let i=0;i<500;i++)bank.push(makeReading(i));
+bank.forEach(q=>{q.answer=q.options.findIndex(x=>x===q.options[q.answer])});
+let state={history:{},current:null,queue:[],pos:0,streak:0,bestStreak:0,sessionAnswered:0,sessionCorrect:0,reviewOnly:false};
+const STORAGE="eclReady_v1";
+function load(){try{const x=JSON.parse(localStorage.getItem(STORAGE)||"{}");state.history=x.history||{};state.streak=x.streak||0;state.bestStreak=x.bestStreak||0;state.queue=x.queue||[];state.pos=x.pos||0;state.sessionAnswered=x.sessionAnswered||0;state.sessionCorrect=x.sessionCorrect||0;state.reviewOnly=!!x.reviewOnly;if(x.theme)document.documentElement.dataset.theme=x.theme;}catch(e){}}
+function save(){try{localStorage.setItem(STORAGE,JSON.stringify({history:state.history,streak:state.streak,bestStreak:state.bestStreak,queue:state.queue,pos:state.pos,sessionAnswered:state.sessionAnswered,sessionCorrect:state.sessionCorrect,reviewOnly:state.reviewOnly,theme:document.documentElement.dataset.theme||"dark"}))}catch(e){}}
+function toast(msg){const t=$("toast");t.textContent=msg;t.style.display="block";setTimeout(()=>t.style.display="none",2200)}
+function getQuestion(){return bank.find(q=>q.id===state.queue[state.pos])}
+function start(){const mode=$("modeSelect").value,cat=$("categorySelect").value,count=$("countSelect").value;let list=bank.filter(q=>(mode==="all"||q.type===mode)&&(cat==="all"||q.cat===cat));if(state.reviewOnly){list=list.filter(q=>state.history[q.id]&&!state.history[q.id].correct);state.reviewOnly=false}list=shuffle(list,Date.now()%2147483647);if(count!=="all")list=list.slice(0,Number(count));state.queue=list.map(q=>q.id);state.pos=0;state.sessionAnswered=0;state.sessionCorrect=0;renderQuestion();save()}
+function resume(){if(!state.queue.length){toast("保存された学習セットがありません");return}renderQuestion();toast("前回の続きから再開します")}
+function renderQuestion(){
+ $("resultCard").classList.add("hidden");$("questionCard").classList.remove("hidden");
+ if(!state.queue.length||state.pos>=state.queue.length){showResult();return}
+ const q=getQuestion();if(!q){showResult();return}state.current=q.id;
+ const answered=!!state.history[q.id]&&state.history[q.id].answeredInCurrent;
+ const prior=state.history[q.id];
+ $("setLabel").textContent=`セット ${state.pos+1} / ${state.queue.length} · ${q.type==="listening"?"リスニング":"リーディング"} · ${q.cat}`;
+ $("setProgress").style.width=(state.pos/state.queue.length*100)+"%";
+ let passage=q.type==="reading"?`<div class="passage"><strong>本文</strong><br>${esc(q.passage)}</div>`:`<div class="passage"><strong>リスニング問題</strong><br><span id="scriptText" class="${window.scriptShown?"":"hidden"} audio-script">${esc(q.script)}</span><div class="small muted" id="scriptHint">${window.scriptShown?"スクリプト表示中":"スクリプトは解答後に確認できます"}</div></div>`;
+ $("questionCard").innerHTML=`<div class="question-top"><span class="pill">${q.id} · ${q.type==="listening"?"LISTENING":"READING"}</span><span class="pill">${esc(q.cat)}</span></div><h2>${esc(q.topic)}</h2>${passage}<h2 style="font-size:17px">${esc(q.q)}</h2><div class="options" id="options">${q.options.map((o,i)=>`<button class="option" data-i="${i}"><span class="letter">${"ABCD"[i]}</span><span>${esc(o)}</span></button>`).join("")}</div><div class="controls"><button class="primary" id="submitBtn">解答する</button><button id="skipBtn">後で解く</button><button class="hidden" id="nextBtn">次の問題 →</button></div><div id="feedback"></div>`;
+ $("questionCard").querySelectorAll(".option").forEach(b=>b.addEventListener("click",()=>{if($("submitBtn").disabled)return;$("questionCard").querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));b.classList.add("selected")}));
+ $("submitBtn").addEventListener("click",submitAnswer);$("skipBtn").addEventListener("click",()=>{speechSynthesis.cancel();state.pos++;renderQuestion();save()});
+ $("nextBtn").addEventListener("click",()=>{speechSynthesis.cancel();state.pos++;renderQuestion();save()});
+ $("playBtn").onclick=playAudio;$("stopBtn").onclick=()=>speechSynthesis.cancel();$("scriptBtn").onclick=toggleScript;
+ window.scriptShown=false;
+ updateStats();save();
+}
+function submitAnswer(){
+ const q=getQuestion(),sel=$("questionCard").querySelector(".option.selected");if(!sel){toast("選択肢を選んでください");return}
+ const chosen=Number(sel.dataset.i),ok=chosen===q.answer;
+ $("questionCard").querySelectorAll(".option").forEach((b,i)=>{b.disabled=true;if(i===q.answer)b.classList.add("correct");else if(i===chosen)b.classList.add("wrong")});
+ $("submitBtn").disabled=true;$("skipBtn").classList.add("hidden");$("nextBtn").classList.remove("hidden");
+ state.history[q.id]={chosen,correct:ok,answered:true,cat:q.cat,type:q.type,at:Date.now()};state.sessionAnswered++;if(ok){state.sessionCorrect++;state.streak++;state.bestStreak=Math.max(state.bestStreak,state.streak)}else state.streak=0;
+ const f=$("feedback");f.className="feedback";f.innerHTML=`<h3>${ok?"✅ 正解です":"❌ 不正解です"}</h3><p><strong>正解：</strong>${"ABCD"[q.answer]}. ${esc(q.options[q.answer])}</p><p><strong>自然な和訳・要旨：</strong>${esc(q.translation||"本文・スクリプトの要点を確認しましょう。")}</p><p><strong>文法・語法：</strong>${esc(q.grammar||q.why)}</p><hr style="border:0;border-top:1px solid var(--border)"><p><strong>重要語句：</strong>${esc(q.word)} — ${esc(q.meaning)}</p><p><strong>類義語：</strong>${esc(q.syn)}　<strong>対義語：</strong>${esc(q.ant)}</p><p><strong>例文 1：</strong>${esc(q.examples[0])}</p><p><strong>例文 2：</strong>${esc(q.examples[1])}</p><p><strong>例文 3：</strong>${esc(q.examples[2])}</p><p class="small muted">スクリプト：${esc(q.script||q.passage)}</p>`;
+ if(q.type==="listening"){window.scriptShown=true;const st=$("scriptText");if(st)st.classList.remove("hidden")}
+ $("scriptBtn").textContent="スクリプト表示済み";updateStats();updateWeakness();save();
+}
+function showResult(){
+ $("questionCard").classList.add("hidden");$("resultCard").classList.remove("hidden");const pct=state.sessionAnswered?Math.round(state.sessionCorrect/state.sessionAnswered*100):0;
+ $("resultCard").innerHTML=`<div class="question-top"><span class="pill">SESSION COMPLETE</span><span class="pill">学習結果</span></div><h2>お疲れさまでした！</h2><p>今回の回答：<strong>${state.sessionAnswered}問</strong> ／ 正解：<strong>${state.sessionCorrect}問</strong></p><div class="progress"><span style="width:${pct}%"></span></div><h2>${pct}%</h2><p class="muted">間違えた問題は「間違えた問題」から復習できます。次のセットを開始して学習を続けましょう。</p><div class="controls"><button class="primary" id="againBtn">次のセット</button><button id="reviewAgainBtn">間違いを復習</button></div><div class="notice" style="margin-top:14px">推定スコアは練習履歴から算出する目安で、公式ECLスコアを再現するものではありません。</div>`;
+ $("againBtn").onclick=start;$("reviewAgainBtn").onclick=()=>{$("reviewBtn").click()};$("setProgress").style.width="100%";$("setLabel").textContent="セット完了";updateStats();updateWeakness();save();
+}
+function updateStats(){const vals=Object.values(state.history).filter(x=>x.answered);const n=vals.length,correct=vals.filter(x=>x.correct).length;$("answeredStat").textContent=n;$("accuracyStat").textContent=n?Math.round(correct/n*100)+"%":"—";$("scoreStat").textContent=n?Math.round(20+80*correct/n):"—";$("streakStat").textContent=state.streak}
+function updateWeakness(){const vals=Object.values(state.history).filter(x=>x.answered);if(!vals.length){$("weaknessBox").textContent="回答するとカテゴリ別の正答率が表示されます。";return}let html="";categories.forEach(cat=>{const a=vals.filter(x=>x.cat===cat);if(!a.length)return;const p=Math.round(a.filter(x=>x.correct).length/a.length*100);html+=`<div class="weak-row"><div style="flex:1">${esc(cat)}<div class="weakbar"><span style="width:${p}%"></span></div></div><strong>${p}%</strong></div>`});$("weaknessBox").innerHTML=html}
+function playAudio(){const q=getQuestion();if(!q||q.type!=="listening"){toast("リスニング問題で使用できます");return}if(!("speechSynthesis"in window)){toast("このブラウザは音声読み上げに対応していません");return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(q.script);u.lang="en-US";u.rate=Number($("speedRange").value);const voices=speechSynthesis.getVoices();const en=voices.filter(v=>/^en(-|_)/i.test(v.lang));if(en.length){const idx=(parseInt(q.id.slice(1),10)%2);u.voice=en[idx%en.length]}speechSynthesis.speak(u)}
+function toggleScript(){const q=getQuestion();if(!q||q.type!=="listening"){toast("リスニング問題で使用できます");return}if(!window.scriptShown&&!state.history[q.id]?.answered){toast("本番形式の練習中は、解答後に表示できます");return}window.scriptShown=!window.scriptShown;const el=$("scriptText");if(el)el.classList.toggle("hidden",!window.scriptShown);$("scriptBtn").textContent=window.scriptShown?"スクリプトを隠す":"スクリプト表示"}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function init(){load();categories.forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c;$("categorySelect").appendChild(o)});updateStats();updateWeakness();$("startBtn").onclick=start;$("resumeBtn").onclick=resume;$("playBtn").onclick=playAudio;$("stopBtn").onclick=()=>speechSynthesis.cancel();$("scriptBtn").onclick=toggleScript;$("speedRange").oninput=()=>{$("speedValue").textContent=Number($("speedRange").value).toFixed(1)+"x"};$("themeBtn").onclick=()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==="light"?"dark":"light";save()};$("reviewBtn").onclick=()=>{state.reviewOnly=true;start()};$("resetBtn").onclick=()=>{if(confirm("この端末に保存された学習記録をすべて削除しますか？")){localStorage.removeItem(STORAGE);state.history={};state.queue=[];state.pos=0;state.streak=0;state.sessionAnswered=0;state.sessionCorrect=0;updateStats();updateWeakness();toast("学習記録を削除しました");save()}};if(state.queue.length){$("setLabel").textContent="前回のセットを再開できます。";$("resumeBtn").classList.add("primary")}if(!("speechSynthesis"in window)){$("playBtn").disabled=true;$("playBtn").textContent="音声非対応"}}
+window.scriptShown=false;init();
+})();
+</script>
+</body>
+</html>
