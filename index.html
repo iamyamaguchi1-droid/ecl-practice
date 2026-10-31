@@ -34,13 +34,13 @@
         <div class="max-w-4xl mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-2">
             <div>
                 <h1 class="text-xl font-bold flex items-center gap-2">
-                    <i class="fa-solid font-bold fa-headphones text-indigo-400"></i> ECL 1000問 Master Trainer
+                    <i class="fa-solid fa-headphones text-indigo-400"></i> ECL 1000問 Master Trainer
                 </h1>
-                <p class="text-xs text-indigo-200 mt-0.5">リスニング 500問 ＋ リーディング 500問｜自動保存機能・詳細解説付き</p>
+                <p class="text-xs text-indigo-200 mt-0.5">リスニング 500問 ＋ リーディング 500問｜自動保存・日本語訳・3パターン例文付き</p>
             </div>
             <div class="flex items-center gap-2">
                 <span class="text-xs bg-indigo-800 text-indigo-200 px-3 py-1 rounded-full font-semibold border border-indigo-700">
-                    <i class="fa-solid fa-floppy-disk mr-1"></i> 学習記録自動保存
+                    <i class="fa-solid fa-floppy-disk mr-1"></i> 自動保存機能有効
                 </span>
             </div>
         </div>
@@ -78,9 +78,8 @@
             </div>
         </section>
 
-        <!-- コントロール & タブナビゲーション -->
+        <!-- タブ ＆ 設定パネル -->
         <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 space-y-4">
-            <!-- タブ切替 -->
             <div class="grid grid-cols-3 gap-2 p-1 bg-slate-100 rounded-xl font-medium text-sm">
                 <button id="tabListening" class="py-2.5 rounded-lg transition text-indigo-900 bg-white shadow-sm font-semibold flex items-center justify-center gap-1.5">
                     <i class="fa-solid fa-headphones text-indigo-600"></i>
@@ -96,7 +95,6 @@
                 </button>
             </div>
 
-            <!-- 設定パネル -->
             <div id="settingsPanel" class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 text-sm border-t border-slate-100">
                 <div>
                     <label for="selectMode" class="block text-xs font-semibold text-slate-600 mb-1">
@@ -105,7 +103,7 @@
                     <select id="selectMode" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                         <option value="all">全問題から順番に出題</option>
                         <option value="random">ランダムに出題</option>
-                        <option value="unanswered">未回答の問題のみ優先</option>
+                        <option value="unanswered">未回答・弱点問題を優先</option>
                     </select>
                 </div>
                 <div>
@@ -129,7 +127,6 @@
 
         <!-- クイズセクション -->
         <section id="quizSection" class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-slate-200/80 space-y-5">
-            <!-- クイズヘッダーバッジ -->
             <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
                 <div class="flex items-center gap-2">
                     <span id="badgeCategory" class="bg-indigo-100 text-indigo-800 text-xs px-2.5 py-1 rounded-md font-bold tracking-wider uppercase">
@@ -159,9 +156,7 @@
                         </select>
                     </div>
                 </div>
-                <div id="scriptText" class="text-slate-800 font-medium text-sm md:text-base leading-relaxed bg-white p-3 rounded-lg border border-slate-200/60 whitespace-pre-line">
-                    <!-- スクリプト文章がここに入ります -->
-                </div>
+                <div id="scriptText" class="text-slate-800 font-medium text-sm md:text-base leading-relaxed bg-white p-3 rounded-lg border border-slate-200/60 whitespace-pre-line"></div>
                 <div class="flex items-center gap-2 pt-1">
                     <button id="btnPlayAudio" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-2 shadow-sm">
                         <i class="fa-solid fa-play"></i> 音声を再生
@@ -177,24 +172,18 @@
                 <h3 class="text-xs font-bold text-slate-500 tracking-wider uppercase flex items-center gap-1.5">
                     <i class="fa-solid fa-file-lines text-indigo-500"></i> 英文読解パッセージ
                 </h3>
-                <div id="passageText" class="text-slate-800 font-medium text-sm md:text-base leading-relaxed bg-white p-3 rounded-lg border border-slate-200/60">
-                    <!-- パッセージ文章がここに入ります -->
-                </div>
+                <div id="passageText" class="text-slate-800 font-medium text-sm md:text-base leading-relaxed bg-white p-3 rounded-lg border border-slate-200/60"></div>
             </div>
 
             <!-- 設問 -->
             <div>
-                <h2 id="questionText" class="text-base md:text-lg font-bold text-slate-900 leading-snug">
-                    <!-- 設問テキスト -->
-                </h2>
+                <h2 id="questionText" class="text-base md:text-lg font-bold text-slate-900 leading-snug"></h2>
             </div>
 
             <!-- 選択肢リスト -->
-            <div id="optionsList" class="grid grid-cols-1 gap-2.5">
-                <!-- 選択肢ボタンが動的に挿入されます -->
-            </div>
+            <div id="optionsList" class="grid grid-cols-1 gap-2.5"></div>
 
-            <!-- アクションボタン（解答確認 / 次へ） -->
+            <!-- アクションボタン -->
             <div class="flex items-center gap-3 pt-2">
                 <button id="btnCheckAnswer" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl transition shadow-sm flex items-center justify-center gap-2">
                     <i class="fa-solid fa-circle-check"></i> 解答・詳細解説を見る
@@ -204,18 +193,15 @@
                 </button>
             </div>
 
-            <!-- 解説表示カード (初期非表示) -->
+            <!-- 詳細解説カード -->
             <div id="explanationCard" class="hidden bg-slate-50 border border-slate-200 rounded-xl p-4 md:p-5 space-y-4">
-                <div id="resultBanner" class="p-3 rounded-lg font-bold text-center text-sm md:text-base">
-                    <!-- 正解 / 不正解 の表示 -->
-                </div>
+                <div id="resultBanner" class="p-3 rounded-lg font-bold text-center text-sm md:text-base"></div>
                 
                 <div>
                     <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">【解説】</h4>
                     <p id="explText" class="text-sm text-slate-700 leading-relaxed"></p>
                 </div>
 
-                <!-- 語彙・文法・例文グリッド -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 text-xs md:text-sm">
                     <div class="bg-white p-3 rounded-lg border border-slate-200">
                         <span class="font-bold text-indigo-900 block mb-1">
@@ -249,13 +235,13 @@
                         <span class="font-bold text-indigo-900 block mb-1">
                             <i class="fa-solid fa-quote-left text-blue-500 mr-1"></i>多様な用法による3つの実践例文
                         </span>
-                        <div id="explExamples" class="text-slate-700 space-y-1.5 font-sans"></div>
+                        <div id="explExamples" class="text-slate-700 space-y-1.5"></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 学習記録・成績分析セクション (初期非表示) -->
+        <!-- 学習記録・成績分析セクション -->
         <section id="statsSection" class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-slate-200/80 space-y-6 hidden">
             <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                 <i class="fa-solid fa-chart-pie text-indigo-600"></i> 学習成績とデータ分析
@@ -279,11 +265,9 @@
             <div>
                 <h3 class="text-sm font-bold text-slate-700 mb-3 flex items-center justify-between">
                     <span><i class="fa-solid fa-history mr-1"></i> 最近の回答履歴 (直近30件)</span>
-                    <span class="text-xs font-normal text-slate-500">ブラウザ内に自動保持されています</span>
+                    <span class="text-xs font-normal text-slate-500">自動保持中</span>
                 </h3>
-                <div id="historyList" class="max-h-60 overflow-y-auto custom-scrollbar border border-slate-200 rounded-xl divide-y divide-slate-100 text-xs md:text-sm">
-                    <!-- 履歴データが入ります -->
-                </div>
+                <div id="historyList" class="max-h-60 overflow-y-auto custom-scrollbar border border-slate-200 rounded-xl divide-y divide-slate-100 text-xs md:text-sm"></div>
             </div>
 
             <div class="pt-2 flex justify-end">
@@ -293,31 +277,28 @@
             </div>
         </section>
 
-        <!-- 使い方ガイド -->
+        <!-- ガイド -->
         <section class="bg-slate-100 rounded-2xl p-5 border border-slate-200 text-xs md:text-sm text-slate-600 space-y-2">
             <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
-                <i class="fa-solid fa-circle-info text-indigo-600"></i> ECLマスター・トレーナーの使い方
+                <i class="fa-solid fa-circle-info text-indigo-600"></i> 使い方ガイド
             </h3>
             <ol class="list-decimal list-inside space-y-1 text-slate-600 leading-relaxed">
-                <li>「リスニング」「リーディング」タブを切り替えて問題を選択できます。</li>
-                <li>リスニング問題では「音声を再生」ボタンを押すと対話テキストが読み上げられます。速度や声質の調整も可能です。</li>
-                <li>解答を選択し「解答・詳細解説を見る」を押すと、同意語・反対語・文法・例文などの包括的な解説が確認できます。</li>
-                <li><strong>学習履歴や成績はブラウザ内に保存されます。</strong>次回ページを開いた際も自動的に続きから再開できます。</li>
+                <li>「リスニング」「リーディング」の各500問を切り替えて回答します。</li>
+                <li>「音声を再生」で対話スクリプトが読み上げられます（男声/女声の切り替え可）。</li>
+                <li>解答後はスクリプト/本文の和訳、文法、多角的な3つの例文が即座に表示されます。</li>
+                <li>学習記録はすべて同一ブラウザ内に自動記憶されます。</li>
             </ol>
         </section>
     </main>
 
-    <!-- フッター -->
     <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500">
-        <div class="max-w-4xl mx-auto px-4">
-            <p>ECL Test Preparation 1000 Practice Questions Engine with Persistent Storage.</p>
-        </div>
+        <p>ECL Test Preparation 1000 Practice Questions Engine.</p>
     </footer>
 
-    <!-- カスタムダイアログ/通知用モーダル -->
+    <!-- ダイアログモーダル -->
     <div id="modalAlert" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl p-5 max-w-sm w-full shadow-xl border border-slate-200 text-center space-y-4">
-            <div id="modalAlertIcon" class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto text-xl">
+            <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto text-xl">
                 <i class="fa-solid fa-circle-info"></i>
             </div>
             <p id="modalAlertText" class="text-sm font-medium text-slate-800 leading-normal"></p>
@@ -327,382 +308,147 @@
         </div>
     </div>
 
-    <!-- JavaScript ロジック -->
     <script>
-        // --- 1. 語彙・基本データバンク ---
+        // --- 1. データバンク ---
         const wordBank = [
             {
-                word: "abandon",
-                jp: "放棄する・見捨てる",
-                syn: "give up",
-                ant: "continue",
+                word: "abandon", jp: "放棄する・離脱する", syn: "give up / evacuate", ant: "continue / maintain",
+                grammar: "他動詞。abandon + 目的語 (計画・車両・施設) で「〜を放棄・離脱する」。",
                 examples: [
-                    "【他動詞 (物理的放棄)】 The crew had to abandon the damaged vehicle in the desert.",
-                    "【他動詞 (計画の計画・中止)】 The unit decided to abandon the mission due to severe weather.",
-                    "【名詞 (放漫・没頭)】 He played the game with total abandon and energy."
-                ],
-                grammar: "動詞。abandon + 名詞で「〜を捨てる・中止する」。名詞形も存在。"
+                    "【物理的離脱】 The crew had to abandon the damaged vehicle in the desert.",
+                    "【計画の中断】 The unit decided to abandon the mission due to severe weather.",
+                    "【派生語・名詞】 An order for the immediate abandonment of the post was issued."
+                ]
             },
             {
-                word: "accurate",
-                jp: "正確な・精密な",
-                syn: "correct",
-                ant: "incorrect",
+                word: "accurate", jp: "正確な・精密な", syn: "correct / precise", ant: "inaccurate / imprecise",
+                grammar: "形容詞。名詞形は accuracy、反対語は inaccurate。副詞 accurately。",
                 examples: [
-                    "【形容詞 (データ・情報)】 Please provide accurate information on the registration form.",
-                    "【形容詞 (計算・測定)】 An accurate measurement is essential for structural stability.",
-                    "【派生語 (副詞 accurately)】 The radar system accurately tracked the target position."
-                ],
-                grammar: "形容詞。名詞形は accuracy、反対語は inaccurate。副詞 accurately。"
+                    "【情報の正確さ】 Please provide accurate coordinates before aircraft departure.",
+                    "【測定の精密さ】 An accurate measurement is essential for structural stability.",
+                    "【派生語・副詞】 The radar system accurately tracked the target position."
+                ]
             },
             {
-                word: "achieve",
-                jp: "達成する・成し遂げる",
-                syn: "accomplish",
-                ant: "fail",
+                word: "achieve", jp: "達成する・成し遂げる", syn: "accomplish / attain", ant: "fail / miss",
+                grammar: "動詞。achieve a goal / result のコロケーションで多用される。",
                 examples: [
-                    "【目標の達成】 The team achieved its goal ahead of the strict deadline.",
-                    "【成果・結果の達成】 She achieved excellent results on the final evaluation test.",
-                    "【派生語 (名詞 achievement)】 Finishing the training program was a major achievement."
-                ],
-                grammar: "動詞。achieve a goal / result のコロケーションで多用。"
+                    "【目標の達成】 The flight unit achieved all operational goals ahead of schedule.",
+                    "【成果の獲得】 She achieved an excellent score on the ECL evaluation test.",
+                    "【派生語・名詞】 Finishing the training program was a major achievement."
+                ]
             },
             {
-                word: "adequate",
-                jp: "十分な・適切な",
-                syn: "sufficient",
-                ant: "insufficient",
+                word: "adequate", jp: "十分な・適切な", syn: "sufficient / suitable", ant: "inadequate / insufficient",
+                grammar: "形容詞。adequate for + 名詞「〜に必要な分だけ十分な」。",
                 examples: [
-                    "【必要十分な】 We have adequate supplies for the upcoming three-day trip.",
-                    "【目的への適合】 His training was adequate for the initial task requirement.",
-                    "【前置詞連携】 Ensure the safety equipment is adequate for the conditions."
-                ],
-                grammar: "形容詞。adequate for + 名詞「〜に必要な分だけ十分な」。"
+                    "【数量の補給】 We have adequate supplies for the upcoming three-day trip.",
+                    "【能力の適合】 His training was adequate for the initial task requirement.",
+                    "【派生語・副詞】 Make sure all equipment is adequately checked before use."
+                ]
             },
             {
-                word: "admit",
-                jp: "認める・許可する",
-                syn: "acknowledge",
-                ant: "deny",
+                word: "admit", jp: "認める・許可する", syn: "acknowledge / grant entry", ant: "deny / prohibit",
+                grammar: "動詞。admit that + 節、admit doing、admit A to B（AのBへの入場を許可）。",
                 examples: [
-                    "【事実を認める】 He admitted that he had made a mistake during the briefing.",
-                    "【入場・入会を許可する】 This pass admits one person to the restricted area.",
-                    "【動名詞の目的語】 The pilot admitted making an incorrect calculation."
-                ],
-                grammar: "動詞。admit that + 節、admit doing、admit A to B（AのBへの入場を許す）。"
+                    "【過失の承認】 The pilot admitted making a procedural error during landing.",
+                    "【入場許可】 This security pass admits one person to the restricted area.",
+                    "【派生語・名詞】 Admission to the flight control center requires clearance."
+                ]
             },
             {
-                word: "advance",
-                jp: "前進する・進歩する",
-                syn: "progress",
-                ant: "retreat",
+                word: "advance", jp: "前進する・進歩する", syn: "progress / proceed", ant: "retreat / withdraw",
+                grammar: "動詞・名詞・形容詞 (in advance = 事前に, advance notice = 事前通知)。",
                 examples: [
-                    "【自動詞 (前進)】 The troops advanced slowly through the dense forest.",
-                    "【名詞 (進歩・事前)】 Scientific advances have improved flight safety significantly.",
-                    "【形容詞 (事前の)】 We received advance warning about the upcoming severe storm."
-                ],
-                grammar: "動詞・名詞・形容詞 (in advance = 事前に, advance notice = 事前通知)。"
+                    "【部隊の前進】 The unit advanced slowly through the dense forest.",
+                    "【技術の進歩】 Scientific advances have improved flight safety significantly.",
+                    "【事前の修飾】 We received advance warning about the severe storm."
+                ]
             },
             {
-                word: "advantage",
-                jp: "利点・強み",
-                syn: "benefit",
-                ant: "disadvantage",
+                word: "advantage", jp: "利点・優位性", syn: "benefit / asset", ant: "disadvantage / drawback",
+                grammar: "名詞。an advantage of 名詞 / take advantage of 〜 (〜を活用する)。",
                 examples: [
-                    "【名詞 (利点)】 One advantage of planning is saving precious time.",
-                    "【熟語 (take advantage of)】 You should take advantage of this training opportunity.",
-                    "【対比 (disadvantage)】 Knowing the terrain gives us a distinct advantage."
-                ],
-                grammar: "名詞。an advantage of 名詞 / take advantage of 〜 (〜を活用する)。"
+                    "【計画の利点】 One advantage of preparation is saving precious operational time.",
+                    "【熟語表現】 You should take advantage of this simulator training opportunity.",
+                    "【対比・優位性】 Knowing the local terrain gives our team a distinct advantage."
+                ]
             },
             {
-                word: "affect",
-                jp: "影響を与える",
-                syn: "influence",
-                ant: "leave unchanged",
+                word: "affect", jp: "影響を与える", syn: "influence / impact", ant: "leave unchanged",
+                grammar: "動詞。affectは動詞（〜に影響する）、effectは主に名詞（効果・影響）。",
                 examples: [
-                    "【動詞 (直接的影響)】 Heavy rain and fog may affect the flight schedule.",
-                    "【動詞 (感情・情緒)】 The news affected everyone in the operational unit deeply.",
-                    "【混同注意 (effectとの比較)】 The change did not affect the outcome (The effect was minimal)."
-                ],
-                grammar: "動詞。affectは動詞（〜に影響する）、effectは主に名詞（効果・影響）。"
+                    "【気象の直接影響】 Heavy rain and fog may affect the flight schedule.",
+                    "【状態の変動】 System failures can affect overall mission efficiency.",
+                    "【名詞effectの対比】 The change did not affect the outcome (The effect was minimal)."
+                ]
             },
             {
-                word: "alert",
-                jp: "警戒した・警告する",
-                syn: "watchful", ant: "unaware",
+                word: "alert", jp: "警戒した・警告する", syn: "watchful / vigilant", ant: "unaware / negligent",
+                grammar: "形容詞・動詞・名詞。remain alert (警戒を怠らない), alert A to B (AにBを警告)。",
                 examples: [
-                    "【形容詞 (状態)】 The security guard remained alert throughout the night shift.",
-                    "【動詞 (警告・注意喚起)】 The tower alerted the pilot to the changing wind conditions.",
-                    "【名詞 (警報・警戒状態)】 The base was put on high alert following the incident."
-                ],
-                grammar: "形容詞・動詞・名詞。remain alert (警戒を怠らない)、alert A to B (AにBを警告)。"
+                    "【警戒状態】 The security guard remained alert throughout the night shift.",
+                    "【警告動作】 The control tower alerted the pilot to changing wind shear.",
+                    "【名詞・警報】 The unit was put on high alert following the report."
+                ]
             },
             {
-                word: "allow",
-                jp: "許可する・可能にする",
-                syn: "permit", ant: "forbid",
+                word: "allow", jp: "許可する・可能にする", syn: "permit / enable", ant: "forbid / prohibit",
+                grammar: "動詞。allow + 人 + to不定詞 / allow for 名詞「〜を考慮に入れる」。",
                 examples: [
-                    "【allow 人 to do】 The commanding officer allowed us to enter the facility.",
-                    "【 allow for (考慮・見込み)】 We must allow for traffic delays on the main route.",
-                    "【受動態 (be allowed to)】 Smoking is not allowed anywhere inside the building."
-                ],
-                grammar: "動詞。allow + 人 + to不定詞 / allow for 名詞「〜を考慮に入れる」。"
-            },
-            {
-                word: "announce",
-                jp: "発表する・告知する",
-                syn: "declare", ant: "conceal",
-                examples: [
-                    "【公式発表】 The spokesperson announced the new policy at the press briefing.",
-                    "【アナウンス】 The airport announced a two-hour flight delay due to maintenance.",
-                    "【名詞形 (announcement)】 An important announcement will be made shortly."
-                ],
-                grammar: "動詞。announce A to B / announce that + 節。"
-            },
-            {
-                word: "anxious",
-                jp: "心配して・切望して",
-                syn: "worried", ant: "calm",
-                examples: [
-                    "【anxious about (心配)】 She was anxious about the upcoming safety inspection.",
-                    "【anxious to do (切望)】 The trainees were anxious to start their practical lessons.",
-                    "【派生語 (名詞 anxiety)】 Proper preparation can reduce anxiety before exams."
-                ],
-                grammar: "形容詞。anxious about 名詞 (〜を心配して) / anxious to do (〜したがっている)。"
-            },
-            {
-                word: "apparent",
-                jp: "明らかな・一目瞭然の",
-                syn: "obvious", ant: "unclear",
-                examples: [
-                    "【形式主語構文】 It quickly became apparent that the system had malfunctioned.",
-                    "【名詞の前修飾】 There was no apparent damage to the exterior of the aircraft.",
-                    "【副詞 (apparently)】 Apparently, the meeting has been rescheduled for tomorrow."
-                ],
-                grammar: "形容詞。It is apparent that 節 (〜なのは明らかだ)。副詞 apparently。"
-            },
-            {
-                word: "approach",
-                jp: "近づく・方法",
-                syn: "come near", ant: "withdraw",
-                examples: [
-                    "【他動詞 (接近する)】 The rescue vehicle approached the target area with caution.",
-                    "【名詞 (アプローチ・対処法)】 We need a fresh approach to solve this logistics issue.",
-                    "【名詞 (航空着陸進入)】 The aircraft is currently on final approach to runway 09."
-                ],
-                grammar: "動詞 (他動詞のため approach to a place ではなく approach a place) / 名詞。"
-            },
-            {
-                word: "appropriate",
-                jp: "ふさわしい・適切な",
-                syn: "suitable", ant: "inappropriate",
-                examples: [
-                    "【形容詞 (適切な)】 Please wear appropriate protective gear in the workshop.",
-                    "【前置詞 (appropriate for/to)】 This response is appropriate for the current situation.",
-                    "【副詞 (appropriately)】 Make sure all equipment is labeled appropriately."
-                ],
-                grammar: "形容詞。appropriate for/to 名詞。反対語は inappropriate。"
-            },
-            {
-                word: "arrange",
-                jp: "手配する・整列させる",
-                syn: "organize", ant: "disorganize",
-                examples: [
-                    "【手配・準備】 We arranged ground transportation for the visiting dignitaries.",
-                    "【arrange to do】 The mechanics arranged to meet at midnight for repairs.",
-                    "【配置・整理】 The chairs were neatly arranged in rows inside the auditorium."
-                ],
-                grammar: "動詞。arrange A for B / arrange to do / arrange A in order。"
-            },
-            {
-                word: "assess",
-                jp: "評価する・査定する",
-                syn: "evaluate", ant: "ignore",
-                examples: [
-                    "【リスク・状況の評価】 The officer assessed the operational risk before departure.",
-                    "【能力・成果の測定】 Instructors assess student performance every two weeks.",
-                    "【派生語 (名詞 assessment)】 Risk assessment is a mandatory part of flight planning."
-                ],
-                grammar: "動詞。assess the situation / risk / value / performance。"
-            },
-            {
-                word: "assist",
-                jp: "支援する・手伝う",
-                syn: "help", ant: "hinder",
-                examples: [
-                    "【assist with 名詞】 Two senior technicians assisted with the engine overhaul.",
-                    "【assist 人 in doing】 She assisted the crew in completing the paperwork.",
-                    "【名詞形 (assistance)】 Call this emergency number if you need immediate assistance."
-                ],
-                grammar: "動詞。assist 人 with 名詞 / assist 人 in doing / 名詞 assistance。"
-            },
-            {
-                word: "assume",
-                jp: "仮定する・引き受ける",
-                syn: "suppose", ant: "know for certain",
-                examples: [
-                    "【思い込む・仮定する】 Do not assume the clearance has been granted without confirmation.",
-                    "【責任・任務を引き受ける】 Commander Smith will assume command of the base next month.",
-                    "【態度・性質を帯びる】 The situation quickly assumed serious proportions."
-                ],
-                grammar: "動詞。assume that 節 / assume responsibility (責任を引き受ける)。"
-            },
-            {
-                word: "attempt",
-                jp: "試みる・挑戦する",
-                syn: "try", ant: "give up",
-                examples: [
-                    "【動詞 (attempt to do)】 The pilot attempted to land despite the heavy crosswind.",
-                    "【名詞 (試み・挑戦)】 Their first attempt to restore power was successful.",
-                    "【名詞 (at -ing)】 He made an attempt at repairing the broken communication line."
-                ],
-                grammar: "動詞・名詞。attempt to do / make an attempt at -ing。"
-            },
-            {
-                word: "available",
-                jp: "利用可能な・入手できる",
-                syn: "accessible", ant: "unavailable",
-                examples: [
-                    "【人手が空いている】 The duty officer will be available after 1400 hours.",
-                    "【モノが手に入る】 Fresh water supplies are available at the base depot.",
-                    "【available to 人 / for 用途】 This facility is available for official use only."
-                ],
-                grammar: "形容詞。be available for/to。反対語は unavailable。"
-            },
-            {
-                word: "avoid",
-                jp: "避ける・回避する",
-                syn: "prevent", ant: "face",
-                examples: [
-                    "【動名詞を伴う用法】 Drivers should avoid taking the narrow bridge during peak hours.",
-                    "【危険・衝突の回避】 The captain turned sharply to avoid a collision with debris.",
-                    "【派生語 (形容詞 avoidable)】 Double-checking helps prevent avoidable mistakes."
-                ],
-                grammar: "動詞。avoid の目的語は動名詞 (-ing)。avoid to do は不可。"
-            },
-            {
-                word: "brief",
-                jp: "簡潔な・要約する",
-                syn: "short", ant: "lengthy",
-                examples: [
-                    "【形容詞 (短時間の)】 The commander gave a brief speech before the ceremony.",
-                    "【動詞 (事前説明をする)】 The pilot briefed the crew on the expected weather conditions.",
-                    "【名詞 (in brief)】 In brief, the project was completed on time and within budget."
-                ],
-                grammar: "形容詞・動詞・名詞。brief A on B (AにBについて要点説明する)。"
-            },
-            {
-                word: "confirm",
-                jp: "確認する・確証する",
-                syn: "verify", ant: "deny",
-                examples: [
-                    "【事実・予定の確認】 Please confirm your estimated arrival time via radio.",
-                    "【confirm that 節】 Radar tracking confirmed that the target had changed heading.",
-                    "【名詞形 (confirmation)】 We are still waiting for official confirmation from headquarters."
-                ],
-                grammar: "動詞。confirm a reservation / schedule / details。"
-            },
-            {
-                word: "consider",
-                jp: "検討する・よく考える",
-                syn: "think about", ant: "dismiss",
-                examples: [
-                    "【動名詞を伴う用法】 We should consider changing our flight plan due to turbulence.",
-                    "【consider A B (AをBとみなす)】 The committee considers this issue a top priority.",
-                    "【派生語 (形容詞 considerable)】 A considerable amount of fuel was saved."
-                ],
-                grammar: "動詞。consider の目的語は動名詞 (-ing)。consider A (to be) B。"
-            },
-            {
-                word: "consistent",
-                jp: "一貫した・ブレない",
-                syn: "steady", ant: "inconsistent",
-                examples: [
-                    "【一致・一貫性】 Her performance has been consistent throughout the evaluation.",
-                    "【be consistent with】 The test results are consistent with our earlier predictions.",
-                    "【副詞 (consistently)】 He consistently achieves high scores in listening comprehension."
-                ],
-                grammar: "形容詞。be consistent with 〜 (〜と一致している)。対義語 inconsistent。"
-            },
-            {
-                word: "contribute",
-                jp: "貢献する・寄与する",
-                syn: "help", ant: "undermine",
-                examples: [
-                    "【contribute to 名詞/動名詞】 Every team member contributed to the mission's success.",
-                    "【要因となる】 Fatigue can contribute to poor decision-making during flight.",
-                    "【提供・寄付する】 Local businesses contributed supplies to the disaster relief effort."
-                ],
-                grammar: "動詞。contribute to + 名詞/動名詞 (toは前置詞)。"
-            },
-            {
-                word: "convenient",
-                jp: "便利な・都合が良い",
-                syn: "practical", ant: "inconvenient",
-                examples: [
-                    "【都合がよい】 Please visit our office at a time that is convenient for you.",
-                    "【便利・使いやすい】 The new location is convenient to public transportation.",
-                    "【It構文】 It is very convenient to have a maintenance depot nearby."
-                ],
-                grammar: "形容詞。convenient for 人 / to 場所。It is convenient to do。"
-            },
-            {
-                word: "decline",
-                jp: "辞退する・減少する",
-                syn: "refuse", ant: "accept",
-                examples: [
-                    "【丁寧な拒絶】 He politely declined the invitation to speak at the conference.",
-                    "【自動詞 (減少・低下)】 Fuel levels began to decline rapidly after the leak.",
-                    "【名詞 (減少・衰退)】 There has been a steady decline in equipment failures this year."
-                ],
-                grammar: "動詞・名詞。decline an offer (断る) / a decline in numbers (減少)。"
-            },
-            {
-                word: "delay",
-                jp: "遅らせる・延期する",
-                syn: "postpone", ant: "advance",
-                examples: [
-                    "【他動詞 (遅らせる)】 Severe thunderstorm delayed our flight departure by three hours.",
-                    "【自動詞 (停滞する)】 Do not delay in reporting any safety hazards to the supervisor.",
-                    "【名詞 (遅延)】 Passengers experienced a long delay at the security checkpoint."
-                ],
-                grammar: "動詞・名詞。delay A by [時間] / without delay (遅滞なく)。"
+                    "【許可・容認】 The commander allowed us to enter the classified building.",
+                    "【考慮・計算】 We must allow for traffic delays on the primary route.",
+                    "【受動態表現】 Unauthorized personnel are not allowed inside the hangar."
+                ]
             }
         ];
 
-        // --- 2. 問題生成エンジン ---
+        // 疑似ランダム生成ハッシュ関数
+        function hashCode(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = (hash * 31 + str.charCodeAt(i)) | 0;
+            }
+            return Math.abs(hash);
+        }
+
+        function seededShuffle(arr, seed) {
+            let a = arr.slice();
+            let x = seed || 1;
+            for (let i = a.length - 1; i > 0; i--) {
+                x = (x * 1664525 + 1013904223) >>> 0;
+                let j = x % (i + 1);
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        // --- 2. 問題作成エンジン ---
         function generateQuestions(type) {
             const questions = [];
             const isL = (type === 'L');
-            const totalCount = 500;
 
-            for (let i = 0; i < totalCount; i++) {
+            for (let i = 0; i < 500; i++) {
                 const baseItem = wordBank[i % wordBank.length];
                 const variant = Math.floor(i / wordBank.length) % 5;
                 const qId = (isL ? 'L' : 'R') + (i + 1);
                 const seed = hashCode(qId);
 
-                let script = "";
-                let passage = "";
-                let scriptJp = "";
-                let passageJp = "";
-                let question = "";
-                let correct = "";
-                let wrong = [];
+                let script = "", scriptJp = "", passage = "", passageJp = "";
+                let question = "", correct = "", wrong = [];
 
                 if (isL) {
                     const scripts = [
-                        `Speaker A: Please remember to ${baseItem.word} the details before the briefing.\nSpeaker B: Understood. I will check them right away.`,
+                        `Speaker A: Please remember to ${baseItem.word} the coordinates before the briefing.\nSpeaker B: Understood. I will check them right away.`,
                         `Supervisor: We need to ${baseItem.word} the issue before the team leaves.\nStaff: I will take care of it immediately.`,
                         `Speaker A: Why is "${baseItem.word}" important for this mission?\nSpeaker B: It helps us complete the operation safely and on time.`,
                         `Speaker A: The report emphasizes "${baseItem.word}." What is our next action?\nSpeaker B: We must follow the procedure precisely.`,
                         `Instructor: Please use "${baseItem.word}" correctly in your final report.\nTrainee: I will review the guidelines carefully.`
                     ];
                     const scriptsJp = [
-                        `話者A: ブリーフィングの前に、詳細を${baseItem.jp}することを忘れないでください。\n話者B: 了解しました。すぐに確認します。`,
+                        `話者A: ブリーフィングの前に、座標を${baseItem.jp}することを忘れないでください。\n話者B: 了解しました。すぐに確認します。`,
                         `監督者: チームが出発する前に、この問題について${baseItem.jp}する必要があります。\n担当者: 直ちに対応いたします。`,
-                        `話者A: なぜこの任務において「${baseItem.jp}（${baseItem.word}）」が重要なのですか？\n話者B: 安全かつ予定通りに作戦を完了するのに役立つからです。`,
+                        `話者A: なぜこの任務において「${baseItem.jp}（${baseItem.word}）」が重要なのですか？\n話者B: 安全かつ予定通りで作戦を完了するのに役立つからです。`,
                         `話者A: 報告書は「${baseItem.jp}（${baseItem.word}）」を強調しています。次の行動は何ですか？\n話者B: 手順通り正確に従う必要があります。`,
                         `教官: 最終報告書では「${baseItem.word}」を正確に使用してください。\n訓練生: ガイドラインを注意深く見直します。`
                     ];
@@ -801,7 +547,7 @@
         const listeningDataset = generateQuestions('L');
         const readingDataset = generateQuestions('R');
 
-        // --- 3. アプリケーション状態 & localStorage 管理 ---
+        // --- 3. localStorage 管理 ---
         const STORAGE_KEY = "ECL_1000_TRAINER_PROGRESS_V3";
 
         function loadSavedData() {
@@ -809,13 +555,12 @@
                 const data = localStorage.getItem(STORAGE_KEY);
                 return data ? JSON.parse(data) : { answers: {}, history: [] };
             } catch (e) {
-                console.error("Failed to load progress:", e);
                 return { answers: {}, history: [] };
             }
         }
 
         let userRecords = loadSavedData();
-        let currentSection = 'L'; // 'L' or 'R'
+        let currentSection = 'L';
         let currentPos = 0;
         let selectedOptionIndex = null;
         let isChecked = false;
@@ -823,15 +568,11 @@
         const alphabet = ['A', 'B', 'C', 'D'];
         const $ = id => document.getElementById(id);
 
-        const modalAlert = $('modalAlert');
-        const modalAlertText = $('modalAlertText');
-        const btnModalClose = $('btnModalClose');
-
         function showAlert(msg) {
-            modalAlertText.textContent = msg;
-            modalAlert.classList.remove('hidden');
+            $('modalAlertText').textContent = msg;
+            $('modalAlert').classList.remove('hidden');
         }
-        btnModalClose.onclick = () => modalAlert.classList.add('hidden');
+        $('btnModalClose').onclick = () => $('modalAlert').classList.add('hidden');
 
         // --- 4. Web Speech API (音声読み上げ) ---
         let availableVoices = [];
@@ -842,7 +583,6 @@
 
             const maleSelect = $('voiceMale');
             const femaleSelect = $('voiceFemale');
-
             const oldM = maleSelect.value;
             const oldF = femaleSelect.value;
 
@@ -850,7 +590,6 @@
             femaleSelect.innerHTML = '<option value="auto">自動選択 (Female Default)</option>';
 
             const enVoices = availableVoices.filter(v => /^en/i.test(v.lang));
-
             enVoices.forEach((v) => {
                 const realIndex = availableVoices.indexOf(v);
                 const optM = document.createElement('option');
@@ -887,8 +626,7 @@
             const rate = parseFloat($('speechRate').value || '0.9');
 
             const enVoices = availableVoices.filter(v => /^en/i.test(v.lang));
-            let voiceA = null;
-            let voiceB = null;
+            let voiceA = null, voiceB = null;
 
             const valM = $('voiceMale').value;
             const valF = $('voiceFemale').value;
@@ -928,7 +666,7 @@
             playNextLine();
         }
 
-        // --- 5. クイズ表示 & 出題ロジック ---
+        // --- 5. クイズ描画 ---
         function getCurrentList() {
             return currentSection === 'L' ? listeningDataset : readingDataset;
         }
@@ -1032,7 +770,6 @@
                 }
             });
 
-            // 保存データ構造の更新
             userRecords.answers[q.id] = {
                 isCorrect,
                 section: q.type,
@@ -1049,17 +786,14 @@
             });
             userRecords.history = userRecords.history.slice(0, 30);
 
-            // localStorage に確実保存
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(userRecords));
-            } catch (e) {
-                console.error("Storage save failed:", e);
-            }
+            } catch (e) {}
 
             const banner = $('resultBanner');
             if (isCorrect) {
                 banner.className = "p-3 rounded-lg font-bold text-center text-sm md:text-base bg-emerald-100 text-emerald-800 border border-emerald-200";
-                banner.innerHTML = `<i class="fa-solid fa-circle-check mr-1.5"></i> 正解です！ Good Job!`;
+                banner.innerHTML = `<i class="fa-solid fa-circle-check mr-1.5"></i> 正解です！`;
             } else {
                 banner.className = "p-3 rounded-lg font-bold text-center text-sm md:text-base bg-rose-100 text-rose-800 border border-rose-200";
                 banner.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1.5"></i> 不正解です。 正解： ${alphabet[q.answerIndex]}. ${q.options[q.answerIndex].text}`;
@@ -1068,13 +802,9 @@
             $('explText').textContent = q.explanation;
             $('explWord').innerHTML = `<strong class="text-indigo-900">${q.wordItem.word}</strong> : ${q.wordItem.jp}`;
             $('explSynAnt').innerHTML = `同意語: <span class="font-semibold text-emerald-700">${q.wordItem.syn}</span> ／ 反対語: <span class="font-semibold text-rose-700">${q.wordItem.ant}</span>`;
-            
-            // 日本語訳の挿入
             $('explTranslation').textContent = q.type === 'L' ? q.scriptJp : q.passageJp;
-
             $('explGrammar').textContent = q.wordItem.grammar;
 
-            // 3つの例文を表示
             $('explExamples').innerHTML = q.wordItem.examples.map(ex => `
                 <div class="p-2 bg-slate-50 border border-slate-200 rounded text-xs md:text-sm leading-relaxed">${ex}</div>
             `).join('');
@@ -1130,7 +860,7 @@
             }
         }
 
-        // --- 7. イベントリスナー定義 ---
+        // --- 7. タブ & イベント管理 ---
         $('tabListening').onclick = () => {
             currentSection = 'L';
             currentPos = 0;
@@ -1154,7 +884,6 @@
             const btnL = $('tabListening');
             const btnR = $('tabReading');
             const btnS = $('tabStats');
-
             const quizSection = $('quizSection');
             const statsSection = $('statsSection');
             const settingsPanel = $('settingsPanel');
@@ -1163,13 +892,8 @@
                 b.className = "py-2.5 rounded-lg transition text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 font-medium";
             });
 
-            if (tab === 'L') {
-                btnL.className = "py-2.5 rounded-lg transition text-indigo-900 bg-white shadow-sm font-semibold flex items-center justify-center gap-1.5";
-                quizSection.classList.remove('hidden');
-                settingsPanel.classList.remove('hidden');
-                statsSection.classList.add('hidden');
-            } else if (tab === 'R') {
-                btnR.className = "py-2.5 rounded-lg transition text-indigo-900 bg-white shadow-sm font-semibold flex items-center justify-center gap-1.5";
+            if (tab === 'L' || tab === 'R') {
+                (tab === 'L' ? btnL : btnR).className = "py-2.5 rounded-lg transition text-indigo-900 bg-white shadow-sm font-semibold flex items-center justify-center gap-1.5";
                 quizSection.classList.remove('hidden');
                 settingsPanel.classList.remove('hidden');
                 statsSection.classList.add('hidden');
@@ -1187,7 +911,6 @@
         };
 
         $('btnCheckAnswer').onclick = checkAnswer;
-
         $('btnNextQuestion').onclick = () => {
             if ($('selectMode').value === 'all') {
                 currentPos++;
@@ -1206,7 +929,6 @@
             }
         };
 
-        // 初期ロード時に過去の成績を読み込んで反映
         updateSummaryStats();
         renderQuiz();
     </script>
