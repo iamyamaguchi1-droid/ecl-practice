@@ -114,13 +114,32 @@ const templates=[
 ];
 function hash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
 function shuffle(arr,seed){let a=arr.slice(),x=seed>>>0;for(let i=a.length-1;i>0;i--){x=(Math.imul(x,1664525)+1013904223)>>>0;let j=x%(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
+const detailJa={
+"the supply convoy would arrive before sunset":"補給車列は日没前に到着する見込みでした",
+"visibility might decrease rapidly after the front passed":"前線が通過した後、視程が急速に悪化する可能性がありました",
+"the sensor had produced inconsistent readings during the test":"試験中、センサーの測定値にばらつきが生じていました",
+"the deadline had been extended by two business days":"締め切りが営業日で2日間延長されていました",
+"a room would be available once the previous guest checked out":"前の宿泊客がチェックアウトすれば、部屋を利用できるとのことでした",
+"they should get the ball rolling before more delays occurred":"これ以上遅れが生じる前に、作業を始めるべきだということでした",
+"if an alarm sounds, everyone must leave through the nearest safe exit":"警報が鳴った場合、全員が最寄りの安全な出口から避難しなければなりません",
+"the city had invested in a new flood-warning network after last year's severe storms":"昨年の激しい嵐を受けて、市は新しい洪水警報ネットワークに投資していました",
+"the spare parts would be distributed according to operational priority":"予備部品は、作業上の優先順位に従って配布される予定でした",
+"crews to allow extra time because crosswinds were expected to strengthen":"横風が強まると予想されたため、乗務員に余裕を持った時間設定をするよう伝えました",
+"the backup unit activated automatically when the primary connection failed":"主回線が故障すると、予備装置が自動的に作動しました",
+"employees who had completed the certification could volunteer for the new assignment":"認定を取得済みの職員は、新しい任務に自ら志願できるということでした",
+"the earlier train was fully booked, so the next departure was the most practical option":"先発の列車は満席だったため、次の列車を利用するのが最も現実的な選択肢でした",
+"the team should keep an eye on fuel consumption as the mission progressed":"任務の進行中、チームは燃料消費量を注意深く監視すべきだということでした",
+"passengers could avoid peak-hour congestion by using contactless payment and checking live departure updates":"乗客は、タッチ決済を利用し、最新の出発情報を確認することで、混雑時間帯の混雑を避けられるということでした",
+"unless the inspection is complete, the equipment must remain out of service":"点検が完了するまでは、その機材を使用停止の状態にしておかなければなりません"
+};
+function japaneseDetail(detail){return detailJa[detail]||"担当者は、業務に関する重要な変更や対応について説明しました";}
 function makeListening(i){
  const base=situations[i%situations.length], t=templates[Math.floor(i/situations.length)%templates.length], b=(i%3===0?base:t);
  const topic=b.topic+" — "+["morning update","follow-up briefing","routine review","team coordination","end-of-day report"][Math.floor(i/7)%5];
  const detail=b.detail;
  const script=`${b.who} ${b.verb} during ${topic} that ${detail}.`;
  const options=shuffle([b.correct,...b.wrong],hash(script+i));
- return {id:"L"+i,type:"listening",cat:b.cat,topic,script,q:b.q,options,answer:options.indexOf(b.correct),why:b.why,word:b.word,meaning:b.meaning,syn:b.syn,ant:b.ant,examples:b.examples,translation:`${b.who}は${topic}で、${detail}と${b.verb==="said"?"述べました":"説明しました"}。`,grammar:b.why};
+ return {id:"L"+i,type:"listening",cat:b.cat,topic,script,q:b.q,options,answer:options.indexOf(b.correct),why:b.why,word:b.word,meaning:b.meaning,syn:b.syn,ant:b.ant,examples:b.examples,translation:`${japaneseDetail(detail)}。`,grammar:b.why};
 }
 function makeReading(i){
  const base=readTopics[i%readTopics.length], t=templates[Math.floor(i/readTopics.length)%templates.length];
@@ -128,7 +147,7 @@ function makeReading(i){
  const n=i+1, topic=t.topic+" "+["Policy","Procedure","Update","Review","Guidance"][Math.floor(i/8)%5];
  const para=`${topic}: ${t.who} ${t.verb} that ${t.detail}. Staff members were asked to review the relevant guidance and raise any concerns before the next scheduled review. The change is intended to improve consistency while allowing supervisors to respond to local requirements. Further details will be circulated once the final timetable has been confirmed.`;
  const correct=t.correct, opts=shuffle([correct,...t.wrong],hash(para+i));
- return {id:"R"+i,type:"reading",cat:t.cat,topic,passage:para,q:t.q,options:opts,answer:opts.indexOf(correct),why:t.why,word:t.word,meaning:t.meaning,syn:t.syn,ant:t.ant,examples:t.examples,translation:`${topic}：${t.who}は、${t.detail}と説明しました。職員は関連する指針を確認し、次回の定期確認より前に懸念点を申し出るよう求められました。この変更は、現場ごとの要件に対応しながら一貫性を高めることを目的としています。最終日程が確定した後、詳細が共有されます。`,grammar:t.why};
+ return {id:"R"+i,type:"reading",cat:t.cat,topic,passage:para,q:t.q,options:opts,answer:opts.indexOf(correct),why:t.why,word:t.word,meaning:t.meaning,syn:t.syn,ant:t.ant,examples:t.examples,translation:`${japaneseDetail(t.detail)}。職員には、関連する指針を確認し、次回の定期確認より前に懸念点を申し出るよう求められました。この変更は、現場ごとの要件に対応しながら、手順の一貫性を高めることを目的としています。最終日程が確定した後、詳細が共有されます。`,grammar:t.why};
 }
 const bank=[];
 for(let i=0;i<500;i++)bank.push(makeListening(i));
